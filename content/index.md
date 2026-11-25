@@ -58,6 +58,24 @@ description: Empieza por la sección que responde tu pregunta. Todo está enlaza
 
     ::::u-page-card
     ---
+    title: Arquitectura
+    description: Qué hace cada servicio, las reglas de la mensajería, los exchanges, las colas y los reintentos.
+    icon: i-lucide-boxes
+    to: /arquitectura/servicios
+    ---
+    ::::
+
+    ::::u-page-card
+    ---
+    title: Decisiones
+    description: Registros cortos y fechados de por qué el sistema es como es.
+    icon: i-lucide-scale
+    to: /decisiones/webhooks-puerta-sin-exchange
+    ---
+    ::::
+
+    ::::u-page-card
+    ---
     title: Para una IA
     description: Todo el contenido en texto plano, listo para pasárselo a un asistente. Usa llms.txt para el índice y llms-full.txt para todo.
     icon: i-lucide-bot

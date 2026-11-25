@@ -1,0 +1,7 @@
+name: categoría
+type: entity
+domain: catalogo
+summary: 'Agrupa productos en un árbol (hoy de dos niveles). Tiene ícono y póster opcionales.'
+owner: api
+relations: [product]
+details: 'El nombre es único. Buscar por una categoría trae también los productos de sus subcategorías.'

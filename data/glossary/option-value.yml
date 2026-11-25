@@ -1,0 +1,6 @@
+name: valor de una opción
+type: concept
+domain: proveedores
+summary: 'De cada propiedad de AliExpress hay dos candidatos: el alias del vendedor y el valor estándar. Se muestra el que dice más.'
+relations: [variant]
+details: 'Letras ganan a otro contenido, que gana a un número suelto, que gana a vacío; empate queda el alias. Dos números distintos se muestran juntos, por ejemplo "2 (0)". Si ninguno dice nada, la vista previa avisa antes de importar. La propiedad "envía desde" no es una opción: es el origen de la variante.'

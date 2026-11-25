@@ -1,0 +1,25 @@
+title: Salud del producto en el proveedor
+domain: catalogo
+summary: 'supplier.state de un producto importado. Solo lo escribe el proveedor (importación, sincronización, cotización del checkout o de la compra), nunca el admin. No hay sondeo: cambia cuando alguien lee al proveedor.'
+term: product-supplier-state
+order: 1
+flags:
+  - id: action
+    label: revisar
+    description: El admin filtra y cuenta los productos por este estado para que el comerciante los revise.
+states:
+  - { id: 'null', col: 0, row: 1, initial: true, summary: 'Ninguna lectura lo marcó todavía.' }
+  - { id: OK, col: 1, row: 1, summary: 'Todo coincide con el proveedor. La importación nace así.' }
+  - { id: PRICE_CHANGED, col: 2, row: 0, flags: [action], summary: 'El costo cambió. El precio de venta ya se recalculó con el mismo margen.' }
+  - { id: SYNC_NEEDED, col: 2, row: 1, flags: [action], summary: 'Hay variantes que el proveedor ya no ofrece, o nuevas que todavía no están en el catálogo.' }
+  - { id: OUT_OF_STOCK, col: 2, row: 2, flags: [action], summary: 'Ninguna variante activa tiene stock en el proveedor.' }
+  - { id: UNAVAILABLE, col: 3, row: 1, flags: [action], summary: 'El proveedor dice que el producto ya no existe.' }
+transitions:
+  - { from: 'null', to: OK, by: aliexpress, trigger: 'Importación o sincronización sin cambios' }
+  - { from: OK, to: PRICE_CHANGED, by: aliexpress, trigger: 'Una sincronización, o un checkout que encuentra otro costo' }
+  - { from: OK, to: SYNC_NEEDED, by: aliexpress, trigger: 'La sincronización encuentra variantes que faltan o nuevas' }
+  - { from: OK, to: OUT_OF_STOCK, by: aliexpress, trigger: 'La sincronización no encuentra stock' }
+  - { from: PRICE_CHANGED, to: OK, by: aliexpress, trigger: 'Sincronización sin cambios' }
+  - { from: SYNC_NEEDED, to: OK, by: aliexpress, trigger: 'Sincronización sin cambios' }
+  - { from: OUT_OF_STOCK, to: OK, by: aliexpress, trigger: 'Sincronización con stock' }
+  - { from: OK, to: UNAVAILABLE, by: aliexpress, trigger: 'Sincronización, lectura del admin o checkout: el producto no existe (desde cualquier estado)' }

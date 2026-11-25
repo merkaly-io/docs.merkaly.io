@@ -1,0 +1,5 @@
+name: ventana de pago del proveedor
+type: concept
+domain: proveedores
+summary: 'Cada pedido sin pagar en AliExpress tiene su plazo para pagarlo: de 2 horas a 20 días según la tienda. Si no se paga, se cierra solo.'
+relations: [purchase, sale-status-to-pay]

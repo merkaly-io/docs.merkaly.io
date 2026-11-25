@@ -1,0 +1,8 @@
+name: producto
+type: entity
+domain: catalogo
+summary: 'Lo que la tienda vende. Solo nace de una importación del proveedor; no se crea a mano.'
+owner: api
+relations: [variant, category, brand, product-supplier-state, supplier-vendor]
+details: 'active decide si el store lo ofrece; los importados nacen activos. Tiene una variante principal y su póster es una imagen de alguna de sus variantes. No guarda precios propios: salen de la variante principal. No se borra si una venta lo usa.'
+source: api.merkaly.io src/domain/catalog

@@ -1,0 +1,46 @@
+title: Conectar la cuenta de AliExpress
+domain: proveedores
+summary: Cada tienda conecta su propia cuenta de AliExpress. Sin esa conexión, ninguna llamada al proveedor funciona.
+order: 1
+map: catalog
+steps:
+  - from: merchant
+    to: admin
+    kind: http
+    label: Conectar
+    title: El comerciante conecta
+    description: Integraciones > Proveedores.
+  - from: admin
+    to: aliexpress
+    kind: http
+    label: oauth/authorize
+    title: AliExpress pide permiso
+    description: El comerciante entra con su cuenta y autoriza a Merkaly. Vuelve al admin con un código.
+  - from: admin
+    to: api
+    kind: http
+    label: POST .../connection { code }
+    title: El admin manda el código
+  - from: api
+    to: aliexpress
+    kind: http
+    label: token/create
+    title: El api cambia el código por tokens
+  - node: api
+    kind: command
+    label: guarda la conexión
+    title: Guarda la conexión
+    description: Tokens (nunca salen en una respuesta), vencimiento y el id de vendedor de la cuenta.
+    term: supplier-connection
+  - from: api
+    to: auth0
+    kind: http
+    label: aliexpressSellerId
+    title: Asocia el vendedor a la tienda
+    description: Así los avisos de AliExpress, que solo traen el vendedor, encuentran la tienda. Si falla, solo se registra en el log.
+  - node: api
+    kind: reply
+    label: READY
+    title: Lista para importar y pedir
+    description: El token se renueva solo cuando le quedan menos de 5 minutos. Si vence y no se puede renovar, EXPIRED y hay que reconectar.
+    term: supplier-connection

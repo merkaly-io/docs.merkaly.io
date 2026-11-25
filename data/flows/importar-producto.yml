@@ -1,0 +1,52 @@
+title: Importar un producto
+domain: catalogo
+summary: El comerciante pega el link de un producto de AliExpress, ve la vista previa y lo importa. El producto nace con todas sus variantes, activo y con el margen elegido.
+order: 1
+map: catalog
+steps:
+  - from: merchant
+    to: admin
+    kind: http
+    label: link del producto
+    title: El comerciante pega el link
+  - from: admin
+    to: api
+    kind: http
+    label: POST .../products/preview
+    title: El admin pide la vista previa
+  - from: api
+    to: aliexpress
+    kind: http
+    label: ds.product.get + flete
+    title: El api lee el producto
+    description: Con la cuenta del comerciante y para el país del mercado de la tienda. El flete más barato de una unidad es solo informativo.
+    term: supplier-connection
+  - from: api
+    to: admin
+    kind: reply
+    label: vista previa
+    title: El comerciante ve qué va a importar
+    description: Variantes, opciones, costo, flete, días de preparación y el margen por defecto (10 %). Avisa si ya está importado o si alguna opción no tiene un valor claro. No guarda nada.
+  - from: admin
+    to: api
+    kind: http
+    label: POST .../imports (margen)
+    title: El comerciante importa
+  - from: api
+    to: aliexpress
+    kind: http
+    label: ds.product.get
+    title: El api lo vuelve a leer
+    description: Nunca confía en los datos que manda el cliente. 409 si ya está importado.
+  - node: api
+    kind: command
+    label: una transacción
+    title: Crea el producto y sus variantes
+    description: Todas las variantes del proveedor; la primera es la principal. Activo, precio = costo más el margen, sin conversión de moneda, imágenes con la URL del proveedor, descripción en texto plano. El vendedor de AliExpress queda guardado aparte.
+    term: product
+  - from: api
+    to: store
+    kind: reply
+    label: a la venta
+    title: Ya se vende
+    description: El store nunca ve el costo, el margen ni los datos del proveedor.

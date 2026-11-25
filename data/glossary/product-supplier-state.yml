@@ -1,0 +1,7 @@
+name: supplier.state
+type: status
+domain: catalogo
+summary: 'Salud de un producto importado: OK, PRICE_CHANGED, SYNC_NEEDED, OUT_OF_STOCK o UNAVAILABLE. Solo la escribe el proveedor.'
+owner: api
+relations: [product]
+details: 'El admin filtra y resume el catálogo por este estado, más MISSING (productos sin proveedor) y los que se venden por debajo del costo.'

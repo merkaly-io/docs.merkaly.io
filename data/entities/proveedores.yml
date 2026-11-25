@@ -1,0 +1,58 @@
+entities:
+  - id: organization
+    label: Organización
+    caption: identidad
+    outside: true
+    col: 0
+    row: 0
+    term: organization
+    summary: La tienda. Guarda en Auth0 el id de vendedor de su cuenta de AliExpress.
+  - id: supplier
+    label: Proveedor
+    caption: integration.suppliers
+    col: 1
+    row: 0
+    summary: Una plataforma de la que la tienda compra. Uno por proveedor en cada tienda; hoy AliExpress.
+  - id: connection
+    label: Conexión
+    caption: cuenta propia, OAuth
+    col: 2
+    row: 0
+    term: supplier-connection
+    summary: La cuenta de AliExpress del comerciante. Sin ella, nada funciona.
+    fields:
+      - name: tokens
+        note: nunca salen en una respuesta
+      - name: expiresAt
+        note: se renueva sola antes de vencer
+      - name: sellerId
+        note: con él los avisos encuentran la tienda
+  - id: vendor
+    label: Vendedor
+    caption: contacto del proveedor
+    col: 1
+    row: 1
+    term: supplier-vendor
+    summary: La tienda dentro de AliExpress que vende un producto.
+  - id: product
+    label: Producto
+    caption: catálogo
+    outside: true
+    col: 0
+    row: 1
+    term: product
+    summary: Guarda el id del producto en el proveedor.
+  - id: purchase
+    label: Compra
+    caption: pedidos
+    outside: true
+    col: 2
+    row: 1
+    term: purchase
+    summary: El pedido de la tienda a AliExpress, hecho con la conexión.
+relations:
+  - { from: organization, to: supplier, label: compra en, many: true }
+  - { from: supplier, to: connection, label: se usa con }
+  - { from: supplier, to: vendor, label: tiene, many: true }
+  - { from: vendor, to: product, label: vende, many: true }
+  - { from: connection, to: purchase, label: pide, many: true }

@@ -1,6 +1,6 @@
 ---
 title: Proveedores
-description: 'La conexión de cada organización con su proveedor de productos.'
+description: 'La conexión de cada tienda con su proveedor de productos.'
 navigation:
   title: Resumen
   icon: i-lucide-layers
@@ -8,12 +8,50 @@ navigation:
 
 ## Qué es
 
-La conexión de cada organización con su proveedor de productos ([AliExpress](/glosario/aliexpress) hoy): importar productos, comprar y seguir los pedidos. El comprador nunca ve al proveedor.
+De dónde salen los productos y a quién se le compra cada venta.
 
-::note
-Este dominio se está pasando a esta documentación. Mientras tanto, el detalle sigue en los README del código enlazados abajo.
+- Hoy el único proveedor es [AliExpress](/glosario/aliexpress), con la **cuenta propia** de cada comerciante. No hay cuenta de Merkaly de respaldo.
+- El proveedor alimenta el [catálogo](/catalogo) (importar y sincronizar) y los [pedidos](/pedidos) (cotizar, comprar, seguir y cancelar).
+- Cada tienda vende en un solo [mercado](/glosario/market) (hoy Brasil). Las lecturas usan ese país; el costo real se recotiza con el destino del pedido.
+- El comprador nunca ve al proveedor. Los documentos internos sí lo nombran.
+
+## Qué hace Merkaly con AliExpress
+
+| Qué | Cómo |
+| --- | --- |
+| Importar un producto | Vista previa y luego importación, siempre releyendo al proveedor |
+| Sincronizar | A pedido del comerciante; no hay sondeo |
+| Cotizar | Costo, stock, flete por línea y tramos del impuesto de importación |
+| Comprar | Un pedido sin pagar con todas las líneas; el comerciante lo paga en su cuenta |
+| Seguir | Avisos de pedido (mensaje 53) más la relectura del pedido y del tracking |
+| Cancelar | AliExpress no lo permite por api: el pedido queda sin pagar y se cierra solo |
+| Importar un pedido externo | Venta IMPORT con su compra y sus envíos |
+
+## Lo que AliExpress no dice
+
+- **Choice**: no hay un campo que lo diga. Solo el flete lo insinúa (puede ser envío de plataforma) y trae el umbral de envío gratis en la moneda del mercado. Sin ese dato, la línea paga el flete de su tienda.
+- **Impuesto de importación**: ninguna llamada lo cotiza. Se usan tramos medidos en pedidos reales (Brasil: 20,6 % hasta US$ 50, 34 % arriba). Un envío desde el mismo país no paga.
+- **Ciudades**: solo acepta las de su propia lista. El checkout y la edición de la entrega la validan; si la lista no responde, aceptan la ciudad con un aviso.
+- **Plazo de pago**: cada pedido sin pagar tiene el suyo, de 2 horas a 20 días.
+- **Sandbox**: no hay. En desarrollo y pruebas los pedidos se arman pero nunca se crean.
+
+## Valores de las opciones
+
+Cada propiedad trae el alias del vendedor y el valor estándar. Se muestra el que dice más (letras, después otro contenido, después un número suelto).
+
+| Alias | Estándar | Se muestra |
+| --- | --- | --- |
+| 35-36 | 0 | 35-36 |
+| 2 | Azul | Azul |
+| 1 Pairs green | Ouro | 1 Pairs green |
+| 2 | 0 | 2 (0), con aviso |
+
+## Entidades
+
+Toca una entidad para ver sus campos clave y con qué se relaciona. Las punteadas son de otro dominio.
+
+::content-entity-map{domain="proveedores"}
 ::
-
 
 ## Ciclos de vida
 
@@ -25,11 +63,21 @@ Este dominio se está pasando a esta documentación. Mientras tanto, el detalle 
 ::content-flow-list{domain="proveedores"}
 ::
 
+::content-flow{flow="conectar-aliexpress"}
+::
+
+## Decisiones
+
+- [Solo la cuenta propia del comerciante](/proveedores/decisiones/solo-cuenta-propia)
+- [Un solo mercado por tienda](/proveedores/decisiones/mercado-unico)
+
 ## En el código
 
 | Dónde | Qué hay |
 | --- | --- |
-| [api.merkaly.io `src/domain/integration/supplier`](https://github.com/merkaly-io/api.merkaly.io/tree/master/src/domain/integration/supplier) | Conexión e importación del proveedor |
+| [api.merkaly.io `src/domain/integration/supplier`](https://github.com/merkaly-io/api.merkaly.io/tree/master/src/domain/integration/supplier) | Conexión, importación, sincronización, cotización y pedidos |
+| [api.merkaly.io `src/domain/integration/supplier/providers/aliexpress`](https://github.com/merkaly-io/api.merkaly.io/tree/master/src/domain/integration/supplier/providers/aliexpress) | Un archivo por rol: transporte, conexión, adaptadores y mappers |
+| [webhooks.merkaly.io `src`](https://github.com/merkaly-io/webhooks.merkaly.io/tree/master/src) | La puerta de los avisos de AliExpress |
 
 ## Glosario
 

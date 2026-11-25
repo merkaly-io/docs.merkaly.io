@@ -1,0 +1,5 @@
+name: onboarding
+type: concept
+domain: tienda
+summary: 'Los tres pasos que el admin propone a una tienda nueva: cuenta de pago, conexión con AliExpress y primer producto. Todos se pueden saltar.'
+relations: [payment-account, supplier-connection, product, store-readiness]

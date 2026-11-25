@@ -1,0 +1,8 @@
+name: configuración de la organización
+type: entity
+domain: tienda
+summary: 'La configuración de cada tienda, guardada en su propia base como documentos por clave (settings): perfil, marca, contacto, localización, cuenta de pago, secuencias.'
+owner: api
+relations: [store-profile, market, payment-account, sale-sequence]
+details: 'Cada clave tiene un contrato con su forma. La cuenta de pago también vive acá (clave payments), pero nunca se sirve por los endpoints de configuración porque tiene credenciales.'
+source: api.merkaly.io src/domain/settings

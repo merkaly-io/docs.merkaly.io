@@ -1,0 +1,6 @@
+name: readiness de la tienda
+type: concept
+domain: tienda
+summary: 'Si la tienda está lista: productos activos, si puede cobrar, y lista = productos > 0 y puede cobrar. El admin suma el estado de la conexión con el proveedor.'
+relations: [payment-account-readiness, supplier-connection, store-profile]
+details: 'Sale solo de datos guardados, sin llamar al proveedor, porque corre en cada armado de página del store. El admin la usa para sus avisos y para habilitar acciones.'

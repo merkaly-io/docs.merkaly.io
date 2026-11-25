@@ -1,0 +1,54 @@
+title: Cambiar el subdominio de la tienda
+domain: identidad
+summary: El nombre de la organización es el subdominio de la tienda. Al cambiarlo, el api renombra la organización, cambia sus dominios internos y el nombre viejo deja de responder.
+order: 4
+map: identity
+steps:
+  - from: person
+    to: admin
+    kind: http
+    label: nuevo subdominio
+    title: El dueño elige un nombre nuevo
+  - from: admin
+    to: api
+    kind: http
+    label: PATCH /admin/settings/organization/store
+    title: El admin pide el cambio
+  - node: api
+    kind: error
+    label: ¿está libre?
+    title: El api revisa el nombre
+    description: Formato y lista de reservados (400), y que ninguna otra tienda lo use (409). Si es el mismo nombre, termina acá.
+    term: store-domain
+  - from: api
+    to: auth0
+    kind: http
+    label: renombra la organización
+    title: Auth0 cambia el name
+    description: Si otra tienda lo tomó en el mismo momento, 409.
+    term: organization
+  - from: api
+    to: auth0
+    kind: http
+    label: + <nuevo>.merkaly.store
+    title: Agrega el dominio nuevo
+    term: discovery-domain
+  - from: api
+    to: auth0
+    kind: http
+    label: '- dominios internos viejos'
+    title: Quita los dominios viejos
+    description: Solo si el nuevo quedó puesto. Quita los *.merkaly.store de nombres anteriores; nunca los dominios propios. Así los nombres viejos quedan libres.
+    term: discovery-domain
+  - node: api
+    kind: event
+    label: nuevo 200, viejo 404
+    title: El api recarga sus tiendas
+    description: El nombre nuevo resuelve enseguida y el viejo responde 404. No hay redirección.
+    term: tenant-map
+  - from: api
+    to: admin
+    kind: reply
+    label: '200'
+    title: Listo
+    description: 'Lo que sigue con el nombre viejo: links ya compartidos se rompen, los compradores del host viejo pierden sesión y carrito, y el sitio de la cuenta de pago se actualiza en el próximo guardado.'

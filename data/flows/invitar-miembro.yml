@@ -1,0 +1,70 @@
+title: Invitar a un miembro
+domain: identidad
+summary: El dueño invita a alguien por email con un rol. Auth0 manda la invitación; al aceptarla la persona queda como miembro y el aviso vuelve al api para actualizar la caché del equipo.
+order: 3
+map: identity
+steps:
+  - from: person
+    to: admin
+    kind: http
+    label: email + rol
+    title: El dueño invita desde el admin
+    description: Configuración > Equipo. Los roles que se pueden dar son ORG_ADMIN y ORG_MANAGER.
+  - from: admin
+    to: api
+    kind: http
+    label: POST /admin/settings/team/invitations
+    title: El admin pide la invitación
+  - node: api
+    kind: error
+    label: ¿puede invitar?
+    title: El api revisa las reglas
+    description: Solo ORG_OWNER, ORG_ADMIN o MK_* invitan (si no, 403). 409 si el email ya es miembro activo o ya tiene una invitación pendiente.
+    term: invitation
+  - from: api
+    to: auth0
+    kind: http
+    label: crear invitación
+    title: Auth0 crea la invitación
+    description: Vale 7 días. El link lleva a la app que invitó, con la invitación y la organización.
+  - from: auth0
+    to: person
+    kind: http
+    label: email
+    title: Auth0 manda el email
+  - from: person
+    to: admin
+    kind: http
+    label: acepta
+    title: La persona acepta la invitación
+  - from: admin
+    to: auth0
+    kind: http
+    label: login con invitación
+    title: Login dentro de la tienda
+    description: Al aceptar, Auth0 la hace miembro con el rol de la invitación.
+    term: membership
+  - from: auth0
+    to: webhooks
+    kind: http
+    label: organization.member.added
+    title: Auth0 avisa por Event Streams
+    description: El mismo aviso llega si el cambio se hizo desde el panel de Auth0.
+  - from: webhooks
+    to: x-auth
+    kind: event
+    label: identity.organization.member.added
+    title: webhooks entrega en merkaly.auth
+    term: identity-organization-member
+  - from: x-auth
+    to: q-api-identity
+    kind: event
+    label: identity.organization.member.added
+    title: Enrutado a la cola del api
+  - from: q-api-identity
+    to: api
+    kind: event
+    label: '@HandleEvent'
+    title: El api actualiza la caché del equipo
+    description: Guarda al miembro con su rol actual de Auth0. El primer login también lo guarda, así que aplicarlo dos veces no hace daño.
+    term: team-member

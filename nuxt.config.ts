@@ -29,6 +29,7 @@ export default defineNuxtConfig({
     '/arquitectura/mensajeria': { redirect: { statusCode: 301, to: '/plataforma/mensajeria' } }, // old paths, before the domain layers
     '/arquitectura/reintentos': { redirect: { statusCode: 301, to: '/plataforma/reintentos' } },
     '/arquitectura/servicios': { redirect: { statusCode: 301, to: '/plataforma/servicios' } },
+    '/flujos/registro-auth0': { redirect: { statusCode: 301, to: '/flujos/auth0-avisa-cambio' } }, // signup moved to www /create
     '/decisiones/payments-sin-estado': { redirect: { statusCode: 301, to: '/pagos/decisiones/payments-sin-estado' } },
     '/decisiones/un-mensaje-por-proveedor': { redirect: { statusCode: 301, to: '/pagos/decisiones/un-mensaje-por-proveedor' } },
     '/decisiones/un-solo-estado-del-cobro': { redirect: { statusCode: 301, to: '/pagos/decisiones/un-solo-estado-del-cobro' } },

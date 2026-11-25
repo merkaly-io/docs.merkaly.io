@@ -1,0 +1,7 @@
+name: mandatory
+type: concept
+summary: 'Todo publish exige que alguna cola reciba el mensaje. Si nadie escucha ese tipo, el broker lo devuelve y el publish falla: nada se pierde en silencio.'
+relations:
+  - deliver
+  - webhooks
+source: '@merkaly/nest docs/events.md'

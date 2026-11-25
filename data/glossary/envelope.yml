@@ -1,0 +1,7 @@
+name: sobre (MerkalyEvent)
+type: concept
+summary: 'Forma común de todo mensaje: id (clave de idempotencia), type, version, producer, organization, fechas, data y raw solo para auditoría.'
+relations:
+  - deliver
+  - mandatory
+source: '@merkaly/nest docs/events.md'

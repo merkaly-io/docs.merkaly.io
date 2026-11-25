@@ -1,0 +1,41 @@
+title: Estado de la compra al proveedor
+domain: pedidos
+summary: 'La compra es el pedido de la tienda al proveedor para cumplir una venta. Una compra es un pedido a AliExpress, que vuelve como un pedido por ítem; la compra toma el estado del menos avanzado de los vivos.'
+term: purchase
+order: 2
+flags:
+  - id: live
+    label: viva
+    description: 'Toda compra no borrada y no CANCELLED. Solo las vivas cuentan para el costo, la ganancia, el estado y las alertas.'
+states:
+  - { id: TO_PLACE, col: 0, row: 1, initial: true, flags: [live], summary: 'Creada por la compra automática o manual; todavía no se pidió.' }
+  - { id: PLACED, col: 1, row: 0, flags: [live], summary: 'Creada en el proveedor; no se sabe si está pagada.' }
+  - { id: AWAITING_PAYMENT, col: 1, row: 1, flags: [live], summary: 'Creada sin pagar: el comerciante la paga en su cuenta del proveedor.' }
+  - { id: PAID, col: 2, row: 1, flags: [live], summary: 'Pagada en el proveedor, sin despachar.' }
+  - { id: SHIPPED, col: 3, row: 1, flags: [live], summary: 'El proveedor la entregó a la logística; desde acá cuentan los envíos.' }
+  - { id: FAILED, col: 1, row: 2, flags: [live], summary: 'El proveedor la rechazó; se puede volver a pedir.' }
+  - { id: CANCELLED, col: 2, row: 3, summary: 'Cancelada con la venta (sin pagar todavía) o por el proveedor (todos sus pedidos). Una sincronización nunca la revive.' }
+transitions:
+  - { from: TO_PLACE, to: AWAITING_PAYMENT, by: aliexpress, trigger: 'Se pide: PLACE_ORDER_SUCCESS' }
+  - { from: TO_PLACE, to: PLACED, by: aliexpress, trigger: 'Se pide y el estado de pago no se sabe' }
+  - { from: TO_PLACE, to: FAILED, by: aliexpress, trigger: 'El proveedor rechaza el pedido' }
+  - { from: FAILED, to: AWAITING_PAYMENT, by: aliexpress, trigger: 'Se vuelve a pedir' }
+  - { from: AWAITING_PAYMENT, to: PAID, by: aliexpress, trigger: 'El comerciante paga en su cuenta del proveedor' }
+  - { from: PLACED, to: PAID, by: aliexpress, trigger: 'La sincronización lo lee pagado' }
+  - { from: PAID, to: SHIPPED, by: aliexpress, trigger: 'Despacho parcial o completo' }
+  - { from: AWAITING_PAYMENT, to: CANCELLED, trigger: 'Se cancela la venta, o el proveedor cancela o cierra sin pagar' }
+  - { from: TO_PLACE, to: CANCELLED, trigger: 'Se cancela la venta' }
+  - { from: PAID, to: CANCELLED, by: aliexpress, trigger: 'El proveedor cancela todos sus pedidos' }
+mappings:
+  - title: Estado de AliExpress (ds.order.get) a estado de la compra
+    columns: [AliExpress, Merkaly]
+    rows:
+      - { from: PLACE_ORDER_SUCCESS, to: AWAITING_PAYMENT }
+      - { from: WAIT_SELLER_EXAMINE_MONEY, to: PAID }
+      - { from: RISK_CONTROL, to: PAID }
+      - { from: WAIT_SELLER_SEND_GOODS, to: PAID }
+      - { from: SELLER_PART_SEND_GOODS, to: SHIPPED }
+      - { from: WAIT_BUYER_ACCEPT_GOODS, to: SHIPPED }
+      - { from: FINISH + BUYER_ACCEPT_GOODS, to: SHIPPED, note: 'y sus envíos DELIVERED' }
+      - { from: FINISH sin despachar, to: CANCELLED }
+      - { from: IN_CANCEL, to: CANCELLED }

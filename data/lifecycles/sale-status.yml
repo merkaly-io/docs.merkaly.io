@@ -1,0 +1,48 @@
+title: Estado de la venta
+domain: pedidos
+summary: 'Nadie lo escribe a mano: se deriva del pago, las compras al proveedor y los envíos cada vez que algo de eso cambia. Es un resumen para el comerciante y el comprador; si está pagada lo dice el pago, nunca este estado.'
+term: sale
+order: 1
+flags:
+  - id: action
+    label: acción
+    description: 'TO_PAY y SUPPLIER_CANCELLED esperan algo del comerciante: pagar al proveedor, o cancelar y reembolsar o volver a pedir.'
+  - id: cancellable
+    label: cancelable
+    description: 'AWAITING_PAYMENT, TO_ORDER, TO_PAY, ORDERED y SUPPLIER_CANCELLED, mientras ninguna compra viva esté pagada en el proveedor.'
+states:
+  - { id: AWAITING_PAYMENT, col: 0, row: 1, initial: true, flags: [cancellable], term: sale-status-awaiting-payment, summary: 'El pago todavía no está pagado.' }
+  - { id: TO_ORDER, col: 1, row: 1, flags: [cancellable], term: sale-status-to-order, summary: 'Pagada; todavía no hay compra hecha en el proveedor.' }
+  - { id: TO_PAY, col: 2, row: 0, flags: [action, cancellable], term: sale-status-to-pay, summary: 'El pedido está creado en el proveedor pero sin pagar: el comerciante lo paga en su cuenta.' }
+  - { id: ORDERED, col: 2, row: 1, flags: [cancellable], term: sale-status-ordered, summary: 'Pedida y pagada en el proveedor, esperando el despacho.' }
+  - { id: SHIPPED, col: 3, row: 1, term: sale-status-shipped, summary: 'Todas las compras vivas despachadas y cada envío en tránsito o entregado.' }
+  - { id: DELIVERED, col: 4, row: 1, term: sale-status-delivered, summary: 'Todos los envíos entregados, por el tracking o por la confirmación del comprador.' }
+  - { id: SUPPLIER_CANCELLED, col: 2, row: 2, flags: [action, cancellable], term: sale-status-supplier-cancelled, summary: 'El proveedor canceló y la cancelación automática de la venta falló.' }
+  - { id: CANCELLED, col: 1, row: 3, term: sale-status-cancelled, summary: 'Cancelada por el comerciante, el comprador o el proveedor; o reembolsada o contracargada sin compra pagada en el proveedor.' }
+transitions:
+  - { from: AWAITING_PAYMENT, to: TO_ORDER, by: payments, trigger: 'Se confirma el pago online (o el de una venta importada)' }
+  - { from: AWAITING_PAYMENT, to: CANCELLED, trigger: 'El comerciante o el comprador cancela, o el pago se cancela' }
+  - { from: TO_ORDER, to: TO_PAY, by: aliexpress, trigger: 'El pedido se crea sin pagar en el proveedor' }
+  - { from: TO_ORDER, to: ORDERED, by: aliexpress, trigger: 'El pedido queda creado y pagado (o con el pago sin confirmar)' }
+  - { from: TO_PAY, to: ORDERED, by: aliexpress, trigger: 'El comerciante paga en su cuenta del proveedor' }
+  - { from: ORDERED, to: SHIPPED, by: aliexpress, trigger: 'Todas las compras vivas despachadas' }
+  - { from: SHIPPED, to: DELIVERED, trigger: 'Todos los envíos entregados (tracking o comprador)' }
+  - { from: ORDERED, to: SUPPLIER_CANCELLED, by: aliexpress, trigger: 'El proveedor cancela todo y la cancelación automática falla' }
+  - { from: SUPPLIER_CANCELLED, to: CANCELLED, trigger: 'El comerciante cancela y reembolsa' }
+  - { from: SUPPLIER_CANCELLED, to: TO_ORDER, trigger: 'El comerciante vuelve a comprar (compra nueva)' }
+  - { from: TO_ORDER, to: CANCELLED, trigger: 'Cancelan y se reembolsa todo, o hay reembolso o contracargo sin compra pagada' }
+  - { from: TO_PAY, to: CANCELLED, trigger: 'Cancelan: la compra sin pagar se cancela y el pago se reembolsa' }
+  - { from: ORDERED, to: CANCELLED, by: aliexpress, trigger: 'El proveedor cancela la única compra viva: se cancela y reembolsa' }
+  - { from: DELIVERED, to: CANCELLED, trigger: 'El comprador pide el reembolso dentro de los 7 días de la entrega' }
+mappings:
+  - title: Estado de la venta a etapa que ve el comprador
+    columns: [Venta, Comprador]
+    rows:
+      - { from: AWAITING_PAYMENT, to: AWAITING_PAYMENT }
+      - { from: TO_ORDER, to: RECEIVED, note: El comprador nunca ve al proveedor }
+      - { from: TO_PAY, to: RECEIVED }
+      - { from: SUPPLIER_CANCELLED, to: RECEIVED }
+      - { from: ORDERED, to: IN_PREPARATION }
+      - { from: SHIPPED, to: SHIPPED }
+      - { from: DELIVERED, to: DELIVERED }
+      - { from: CANCELLED, to: CANCELLED }

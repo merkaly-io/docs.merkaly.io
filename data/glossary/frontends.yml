@@ -1,0 +1,5 @@
+name: store / admin
+type: concept
+summary: Nuestros frontends. Siempre hablan con el api por HTTP; nunca con webhooks, payments ni el broker.
+relations:
+  - api

@@ -1,0 +1,7 @@
+name: Auth0
+type: provider
+summary: 'Identidad: usuarios, organizaciones y roles. Avisa altas y cambios por webhook.'
+relations:
+  - webhooks
+  - merkaly-auth
+  - identity-signup-requested

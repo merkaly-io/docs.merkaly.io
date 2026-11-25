@@ -14,7 +14,7 @@ const getKindColor = (kind: StepKind) => `var(--mk-kind-${kind})`;
       </span>
     </template>
 
-    <span v-text="'Rombo violeta: exchange · Verde: cola · Azul: servicio · Ámbar: puerta · Gris punteado: externo'" />
+    <span v-text="'Píldora rosa: persona · Celeste: app de Merkaly · Rombo violeta: exchange · Verde: cola · Azul: servicio · Ámbar: puerta · Gris punteado: externo'" />
   </div>
 </template>
 

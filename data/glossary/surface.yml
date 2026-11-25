@@ -1,0 +1,7 @@
+name: superficie (x-merkaly-client)
+type: concept
+domain: identidad
+summary: 'Cada app de Auth0 se llama <superficie>.merkaly.<tld> y solo puede llamar a sus rutas (/admin/*, /store/*...) y a /auth/*.'
+relations: [enforce-surface-access]
+details: 'Cada pedido lleva el client id de la app en x-merkaly-client. Si la app no corresponde a la ruta, o el token fue emitido para otra app, el api responde 428.'
+source: api.merkaly.io docs/conventions/clients.md

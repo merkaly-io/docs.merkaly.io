@@ -1,0 +1,96 @@
+entities:
+  - id: login
+    label: Identidad de login
+    caption: Auth0
+    col: 0
+    row: 0
+    term: account-linking
+    summary: 'Una forma de entrar: Google, Apple o email y contraseña. Un usuario puede tener varias, vinculadas.'
+  - id: user
+    label: Usuario
+    caption: Auth0
+    col: 1
+    row: 0
+    term: user
+    summary: Una persona. Puede ser dueña o miembro de varias tiendas, staff o comprador.
+    fields:
+      - name: app_metadata.merkaly.identity
+        note: nombre completo, CPF y fecha de nacimiento; solo lo escribe el api
+      - name: app_metadata.merkaly.onboarded
+        note: ya pasó por el registro
+      - name: user_metadata
+        note: teléfono, idioma y foto propia; los edita la persona
+  - id: membership
+    label: Membresía
+    caption: Auth0
+    col: 2
+    row: 0
+    term: membership
+    summary: El usuario dentro de una tienda. Es lo que deja entrar al admin de esa tienda.
+  - id: role
+    label: Rol
+    caption: Auth0, uno por usuario
+    col: 3
+    row: 0
+    term: role
+    summary: MK_SUPERADMIN, MK_ADMIN (staff), ORG_OWNER, ORG_ADMIN u ORG_MANAGER (tienda). Viaja en el token, sin permisos.
+  - id: invitation
+    label: Invitación
+    caption: Auth0, 7 días
+    col: 1
+    row: 1
+    term: invitation
+    summary: Email y rol. Al aceptarla, la persona queda como miembro.
+  - id: organization
+    label: Organización
+    caption: Auth0
+    col: 2
+    row: 1
+    term: organization
+    summary: La tienda en Auth0. Su name es el subdominio; tiene su propia base de datos en el api.
+    fields:
+      - name: name
+        note: subdominio de la tienda (<name>.merkaly.store)
+      - name: display_name
+        note: nombre que se muestra
+      - name: metadata
+        note: createdAt, ownerUserId, email, aliexpressSellerId
+  - id: domain
+    label: Dominio
+    caption: Auth0, descubrimiento
+    col: 3
+    row: 1
+    term: discovery-domain
+    summary: <slug>.merkaly.store y los dominios propios. Con ellos el api sabe qué tienda pide cada host.
+  - id: identity
+    label: Datos personales
+    caption: dentro del usuario
+    col: 0
+    row: 1
+    term: personal-identity
+    summary: CPF, nombre y fecha de nacimiento. Se bloquean al crear la cuenta de pago como persona física.
+  - id: cache
+    label: Miembro en caché
+    caption: Mongo, base de la tienda
+    col: 2
+    row: 2
+    term: team-member
+    summary: AccountUser, la copia de cada miembro con su rol. La lista del equipo lee de acá.
+  - id: payment-account
+    label: Cuenta de pago
+    caption: pagos
+    outside: true
+    col: 0
+    row: 2
+    summary: La subcuenta de la tienda en el proveedor de pagos. Usa y bloquea los datos personales del titular.
+relations:
+  - { from: user, to: login, label: entra con, many: true }
+  - { from: user, to: identity, label: tiene }
+  - { from: user, to: membership, label: tiene, many: true }
+  - { from: membership, to: role, label: lleva }
+  - { from: organization, to: membership, label: tiene, many: true }
+  - { from: organization, to: invitation, label: invita, many: true }
+  - { from: organization, to: domain, label: responde en, many: true }
+  - { from: organization, to: cache, label: copia en, many: true }
+  - { from: payment-account, to: identity, label: bloquea }
+  - { from: invitation, to: membership, label: al aceptar crea }

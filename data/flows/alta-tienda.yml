@@ -1,0 +1,72 @@
+title: Crear mi tienda (registro)
+domain: identidad
+summary: Una persona crea su cuenta y su tienda desde www /create. El api crea la organización en Auth0, la hace dueña y la manda al admin.
+order: 1
+map: identity
+steps:
+  - from: person
+    to: www
+    kind: http
+    label: Criar minha loja
+    title: La persona pide crear su tienda
+    description: Sin sesión, www abre la pantalla de registro de Auth0 y vuelve a /create. Con sesión, va directo a /create.
+  - from: www
+    to: auth0
+    kind: http
+    label: 'screen_hint: signup'
+    title: Auth0 registra a la persona
+    description: 'Registro con Google o Apple: www no tiene usuario y contraseña. Todavía no hay organización.'
+  - from: auth0
+    to: actions
+    kind: event
+    label: post-login
+    title: Corren las Actions de login
+    description: Ponen el rol en el token (todavía ninguno) y vinculan la cuenta si ya existe otra con el mismo email verificado.
+  - from: actions
+    to: www
+    kind: reply
+    label: /create con sesión
+    title: Vuelve a /create con sesión
+  - from: www
+    to: api
+    kind: http
+    label: GET /auth/me/identity
+    title: ¿Ya tiene datos personales?
+    description: 'Si responde 404, www pide CPF, nombre completo y fecha de nacimiento. Si ya existen, no los vuelve a pedir.'
+  - from: www
+    to: api
+    kind: http
+    label: POST /www/onboarding
+    title: Manda los datos de la tienda
+    description: Nombre de la tienda y, si faltan, los datos personales. Hace falta estar logueado.
+    term: www-onboarding
+  - node: api
+    kind: command
+    label: CPF único
+    title: El api guarda los datos personales
+    description: 'Si faltan, los guarda en app_metadata.merkaly.identity. Si otra cuenta ya tiene ese CPF, responde 409. Si ya existían, ganan los guardados.'
+    term: personal-identity
+  - from: api
+    to: auth0
+    kind: http
+    label: Management API
+    title: Crea la organización y su dominio
+    description: 'La organización (nombre = slug de la tienda), el dominio <slug>.merkaly.store verificado, la membresía y el rol ORG_OWNER. Cada paso hace solo lo que falta, así un reintento termina lo empezado.'
+    term: organization
+  - node: api
+    kind: event
+    label: la tienda resuelve ya
+    title: El api recarga sus tiendas
+    description: TenantService recarga esa organización, así su dominio responde enseguida. Después guarda al dueño en la caché del equipo.
+    term: tenant-map
+  - from: api
+    to: www
+    kind: reply
+    label: '{ organization }'
+    title: Responde el id de la organización
+  - from: www
+    to: admin
+    kind: http
+    label: /auth?organization=<id>
+    title: www abre el admin
+    description: El admin hace su propio login, ya dentro de la tienda nueva, y abre el onboarding.

@@ -1,0 +1,7 @@
+name: AccountUser
+type: entity
+domain: identidad
+summary: 'La caché del equipo: una copia de cada miembro en la base de la tienda, con su rol. La lista del equipo lee solo de acá.'
+relations: [membership, identity-organization-member]
+details: 'Se actualiza en cada login, en el registro, con la sincronización manual y con los avisos de Auth0 (member.added, .removed, .role.assigned, .role.removed). Nunca borra: quien deja de ser miembro queda disabled.'
+source: api.merkaly.io src/domain/account

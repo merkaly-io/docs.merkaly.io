@@ -1,0 +1,7 @@
+name: vinculación de cuentas
+type: concept
+domain: identidad
+summary: Unir dos identidades de login (por ejemplo Google y email) en un solo usuario, para que la misma persona no termine con dos cuentas.
+relations: [user, account-user-linked]
+details: 'Tres caminos. 1) La Action de login vincula sola si hay otro usuario con el mismo email verificado y el actual está vacío (sin tiendas ni datos); si los dos tienen datos, solo deja un log. 2) La persona vincula a mano desde su perfil (popup de login). 3) Al pedir una contraseña con una cuenta solo social. Si el vinculado tenía datos, el api los mueve al usuario que queda (account.user.linked).'
+source: auth.merkaly.io src/actions/link-accounts-by-email

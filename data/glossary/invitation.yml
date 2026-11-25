@@ -1,0 +1,7 @@
+name: invitación
+type: entity
+domain: identidad
+summary: Invitación de Auth0 a una tienda, con un email y un rol. Vale 7 días; al aceptarla la persona queda como miembro.
+relations: [membership, organization, team-member]
+details: 'Solo ORG_OWNER, ORG_ADMIN o MK_* invitan. 409 si el email ya es miembro activo o tiene otra pendiente.'
+source: api.merkaly.io src/domain/account/services/team.service.ts

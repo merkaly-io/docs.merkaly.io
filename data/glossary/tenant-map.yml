@@ -1,0 +1,7 @@
+name: mapa de tiendas
+type: concept
+domain: identidad
+summary: Mapa en memoria del api que traduce el host del pedido a la organización. La tienda nunca le pregunta a Auth0 por pedido.
+relations: [organization, discovery-domain, identity-organization]
+details: 'Gana un dominio de descubrimiento; si no, <name>.merkaly.store por nombre. Un host desconocido responde 404 sin llamar a Auth0. Se carga al arrancar, se recarga con cada evento de organización y completo cada hora.'
+source: api.merkaly.io src/infrastructure/services/tenant.service.ts

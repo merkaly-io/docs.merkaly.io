@@ -1,0 +1,7 @@
+name: organización
+type: entity
+domain: identidad
+summary: 'Una tienda en Auth0. Su name es el subdominio de la tienda; display_name es el nombre que se muestra.'
+relations: [membership, discovery-domain, store-domain, tenant-map, invitation]
+details: 'La crea el api (registro en www o staff), con las conexiones default, Google y Apple. metadata guarda createdAt, ownerUserId (para detectar huérfanas), el email de la empresa y el id de vendedor de AliExpress. Cada organización tiene su propia base de datos en el api.'
+source: api.merkaly.io src/domain/account/flows/store.provision.flow.ts

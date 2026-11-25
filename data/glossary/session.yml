@@ -1,0 +1,7 @@
+name: sesión
+type: concept
+domain: identidad
+summary: 'Access token de 2 horas que se renueva con un refresh token que rota. Se pierde tras 30 días sin uso o 90 días desde el login.'
+relations: [user]
+details: 'Las apps piden offline_access y guardan la sesión en el navegador. Cada refresh token sirve una vez; 30 segundos de gracia evitan que dos pestañas que renuevan a la vez cierren la sesión. Ver el ciclo de vida "Sesión en una app".'
+source: nuxt (paquete @merkaly/nuxt) README

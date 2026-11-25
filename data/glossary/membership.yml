@@ -1,0 +1,6 @@
+name: membresía
+type: entity
+domain: identidad
+summary: Un usuario dentro de una organización, con un solo rol. Ser miembro es lo que deja entrar al admin de esa tienda.
+relations: [user, organization, role, team-member]
+details: 'La da el api o una invitación aceptada, nunca solo el login (assign_membership_on_login apagado). Una persona puede ser miembro de varias tiendas y crear más de una.'

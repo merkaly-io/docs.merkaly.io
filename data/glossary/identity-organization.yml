@@ -1,0 +1,7 @@
+name: identity.organization.*
+type: event
+domain: identidad
+summary: 'created, updated y deleted de una organización, desde Auth0 Event Streams. El api recarga (o quita) esa organización en su mapa de tiendas.'
+relations: [merkaly-auth, merkaly-api-identity, tenant-map]
+details: 'Son avisos: el api lee los datos desde Auth0, no del mensaje.'
+source: webhooks.merkaly.io src/app.routes.ts

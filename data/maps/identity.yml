@@ -1,0 +1,102 @@
+title: Identidad y acceso
+width: 1140
+height: 640
+columns:
+  - label: persona
+    x: 85
+  - label: apps
+    x: 275
+  - label: auth0
+    x: 515
+  - label: mensajería
+    x: 745
+  - label: api
+    x: 1010
+nodes:
+  - id: person
+    label: Persona
+    caption: dueño, miembro o staff
+    kind: actor
+    x: 20
+    y: 270
+    w: 130
+    h: 56
+  - id: www
+    label: www
+    caption: sitio y registro
+    kind: app
+    term: www-onboarding
+    x: 200
+    y: 70
+    w: 150
+    h: 56
+  - id: admin
+    label: admin
+    caption: panel de la tienda
+    kind: app
+    x: 200
+    y: 270
+    w: 150
+    h: 56
+  - id: dashboard
+    label: dashboard
+    caption: solo staff
+    kind: app
+    x: 200
+    y: 470
+    w: 150
+    h: 56
+  - id: auth0
+    label: Auth0
+    caption: Universal Login y Management API
+    kind: provider
+    term: auth0
+    x: 420
+    y: 36
+    w: 190
+    h: 64
+  - id: actions
+    label: Actions post-login
+    caption: rol, acceso, vincular
+    kind: gate
+    term: enforce-surface-access
+    x: 455
+    y: 150
+    w: 160
+    h: 100
+  - id: webhooks
+    label: webhooks
+    caption: puerta de entrada
+    kind: gate
+    term: webhooks
+    x: 430
+    y: 450
+    w: 170
+    h: 90
+  - id: x-auth
+    label: merkaly.auth
+    caption: exchange
+    kind: exchange
+    term: merkaly-auth
+    x: 660
+    y: 460
+    w: 170
+    h: 64
+  - id: q-api-identity
+    label: merkaly.api-identity
+    caption: cola
+    kind: queue
+    term: merkaly-api-identity
+    x: 650
+    y: 570
+    w: 190
+    h: 44
+  - id: api
+    label: api
+    caption: guardias, tiendas y caché del equipo
+    kind: service
+    term: api
+    x: 910
+    y: 60
+    w: 200
+    h: 560

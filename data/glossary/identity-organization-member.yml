@@ -1,0 +1,6 @@
+name: identity.organization.member.*
+type: event
+domain: identidad
+summary: 'added, removed, role.assigned y role.removed de un miembro, desde Auth0 Event Streams. Mantienen la caché del equipo.'
+relations: [merkaly-auth, merkaly-api-identity, team-member]
+source: webhooks.merkaly.io src/app.routes.ts

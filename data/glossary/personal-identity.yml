@@ -1,0 +1,7 @@
+name: app_metadata.merkaly.identity
+type: concept
+domain: identidad
+summary: Datos personales de la persona (nombre completo, CPF y fecha de nacimiento), guardados en Auth0. Solo el api los escribe; nunca viajan en los tokens.
+relations: [user, www-onboarding]
+details: 'Un CPF no puede estar en dos cuentas (409). Se bloquean al crear la cuenta de pago de la tienda como persona física. Ver el ciclo de vida "Datos personales".'
+source: api.merkaly.io src/domain/account/services

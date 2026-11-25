@@ -1,0 +1,88 @@
+title: Login y acceso a cada app
+domain: identidad
+summary: Cómo entra una persona al admin y por qué el dashboard rechaza a quien no es staff. Auth0 decide en el login y el api vuelve a revisar en cada pedido.
+order: 2
+map: identity
+steps:
+  - from: person
+    to: admin
+    kind: http
+    label: admin.merkaly.io
+    title: La persona abre el admin
+  - from: admin
+    to: auth0
+    kind: http
+    label: 'organization: require'
+    title: El admin pide login dentro de una tienda
+    description: El admin siempre trabaja dentro de una organización.
+  - node: auth0
+    kind: http
+    label: elige la tienda
+    title: La persona elige su tienda
+    description: 'Después del login, Auth0 pregunta la organización. Ser miembro es el control: cualquier rol entra al admin.'
+    term: membership
+  - from: auth0
+    to: actions
+    kind: event
+    label: post-login
+    title: Corren las Actions, en orden
+  - node: actions
+    kind: event
+    label: 1. claim de rol
+    title: Pone el rol en el token
+    description: El claim https://merka.ly/authorization lleva el único rol de la persona, en el access token y en el id token.
+    term: authorization-claim
+  - node: actions
+    kind: error
+    label: '2. dashboard: solo MK_*'
+    title: Enforce surface access
+    description: Si la app es el dashboard y el rol no empieza con MK_, niega el acceso. En el admin no hace nada.
+    term: enforce-surface-access
+  - node: actions
+    kind: command
+    label: 3. vincular por email
+    title: Vincula cuentas duplicadas
+    description: Si existe otro usuario con el mismo email verificado y este está vacío, lo une al más viejo y sigue la sesión como ese.
+    term: account-linking
+  - from: actions
+    to: admin
+    kind: reply
+    label: token 2 h + refresh
+    title: El admin recibe la sesión
+    description: Access token de 2 horas y refresh token con rotación (30 días sin uso, 90 días como máximo).
+    term: session
+  - from: admin
+    to: api
+    kind: http
+    label: Bearer + x-merkaly-client
+    title: El admin llama al api
+    description: Cada pedido lleva el token y el client id de la app que llama.
+  - node: api
+    kind: error
+    label: app = superficie
+    title: El api revisa la app
+    description: '/admin/* solo acepta la app admin, y el token tiene que haber sido emitido para esa misma app. Si no, 428.'
+    term: surface
+  - node: api
+    kind: reply
+    label: org_id del token
+    title: AdminGuard fija la tienda
+    description: La organización sale del token. Sin organización, 412.
+  - from: person
+    to: dashboard
+    kind: http
+    label: dashboard.merkaly.io
+    title: ¿Y si entra al dashboard?
+    description: El dashboard no usa organizaciones; el staff trabaja sobre todas.
+  - from: dashboard
+    to: actions
+    kind: event
+    label: post-login
+    title: Las mismas Actions
+  - from: actions
+    to: dashboard
+    kind: error
+    label: access.deny
+    title: Sin MK_*, Auth0 niega el login
+    description: 'Y si alguien llega igual al api, DashboardGuard pide MK_ADMIN o MK_SUPERADMIN y solo deja leer.'
+    term: enforce-surface-access

@@ -1,0 +1,44 @@
+title: Auth0 avisa un cambio de organización
+domain: identidad
+summary: Auth0 avisa por Event Streams. webhooks entrega en el exchange del dominio identidad y el api relee la organización para mantener su mapa de tiendas.
+order: 5
+map: messaging
+steps:
+  - from: auth0
+    to: webhooks
+    kind: http
+    label: POST /auth0
+    title: Auth0 avisa
+    description: 'Event Streams con token Bearer. Tipos: organization.created, .updated, .deleted y organization.member.*.'
+  - from: webhooks
+    to: x-auth
+    kind: event
+    label: identity.organization.updated
+    title: Entrega en merkaly.auth
+    description: El dominio identidad tiene su exchange, aunque no hay un servicio "auth" corriendo. Los tipos que nadie traduce se responden 200 con un aviso en el log.
+    term: identity-organization
+  - from: x-auth
+    to: webhooks
+    kind: reply
+    label: confirm
+    title: Rabbit confirma
+    description: 'Hay una cola enlazada: el mensaje está a salvo.'
+  - from: webhooks
+    to: auth0
+    kind: http
+    label: '200'
+    title: webhooks responde
+  - from: x-auth
+    to: q-api-identity
+    kind: event
+    label: identity.organization.updated
+    title: Enrutado a la cola del api
+    description: 'merkaly.api-identity escucha merkaly.auth (from: "auth").'
+    term: identity-organization
+  - from: q-api-identity
+    to: api
+    kind: event
+    label: '@HandleEvent'
+    title: El api relee la organización
+    description: 'El evento es solo un aviso: el api lee la organización y sus dominios desde Auth0. created y updated recargan; deleted la quita del mapa.'
+    term: tenant-map

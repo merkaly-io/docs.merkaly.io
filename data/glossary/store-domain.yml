@@ -1,0 +1,7 @@
+name: subdominio de la tienda
+type: concept
+domain: identidad
+summary: '<name>.merkaly.store, donde name es el nombre de la organización. Cambiarlo cambia el host de la tienda, sin redirección.'
+relations: [organization, discovery-domain, tenant-map]
+details: 'Se valida el formato, una lista de reservados y que nadie más lo use. Al cambiarlo, el nombre viejo responde 404 y queda libre; los links compartidos se rompen y los compradores del host viejo pierden sesión y carrito.'
+source: api.merkaly.io src/domain/account/services/store.service.ts

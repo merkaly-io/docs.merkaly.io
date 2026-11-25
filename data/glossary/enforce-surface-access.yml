@@ -1,0 +1,7 @@
+name: Enforce surface access
+type: concept
+domain: identidad
+summary: 'Action de login de Auth0: niega el dashboard a quien no tiene un rol MK_*. En el admin no hace nada; ahí el control es la membresía.'
+relations: [role, authorization-claim, surface]
+details: 'El api repite el control: DashboardGuard pide MK_ADMIN o MK_SUPERADMIN y el dashboard solo lee.'
+source: auth.merkaly.io src/actions/enforce-surface-access

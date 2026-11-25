@@ -1,0 +1,7 @@
+name: usuario
+type: entity
+domain: identidad
+summary: Una persona con cuenta en Auth0. Puede ser dueña o miembro de varias tiendas, staff de Merkaly o comprador.
+relations: [membership, account-linking, personal-identity, auth0]
+details: 'Auth0 es la fuente de verdad. app_metadata.merkaly guarda lo que solo escribe el api (identity, onboarded); user_metadata guarda lo que la persona edita (teléfono, idioma, foto propia). La foto que se muestra es la propia si existe; si no, la del proveedor de login.'
+source: api.merkaly.io src/domain/account

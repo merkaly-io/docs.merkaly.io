@@ -5,6 +5,7 @@ const loadData = (event: H3Event) => Promise.all([
   queryCollection(event, 'flows').order('order', 'ASC').all(),
   queryCollection(event, 'lifecycles').order('order', 'ASC').all(),
   queryCollection(event, 'maps').all(),
+  queryCollection(event, 'entities').all(),
 ]);
 
 export default defineNitroPlugin((nitroApp) => {
@@ -19,12 +20,13 @@ export default defineNitroPlugin((nitroApp) => {
   });
 
   nitroApp.hooks.hook('llms:generate:full', async (event, _options, contents) => {
-    const [terms, flows, lifecycles, maps] = await loadData(event);
+    const [terms, flows, lifecycles, maps, entities] = await loadData(event);
 
     contents.push(
       ['# Glosario', ...terms.map(renderTermMarkdown)].join('\n\n'),
       ['# Flujos', ...flows.map(flow => renderFlowMarkdown(flow, maps.find(map => map.stem === flow.map)))].join('\n\n'),
       ['# Ciclos de vida', ...lifecycles.map(renderLifecycleMarkdown)].join('\n\n'),
+      ['# Entidades por dominio', ...entities.map(renderEntityMapMarkdown)].join('\n\n'),
     );
   });
 });

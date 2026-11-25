@@ -1,4 +1,5 @@
 title: 'El handler falla: reintentos'
+domain: plataforma
 summary: 'Un error transitorio no pierde el mensaje: espera 30 s en la cola .retry, vuelve hasta 5 veces y, si sigue fallando, queda 14 días en la .dlq.'
 order: 6
 steps:

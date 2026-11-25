@@ -22,7 +22,7 @@ useSeoMeta({
 
 <template>
   <UPage v-if="lifecycle">
-    <UPageHeader :title="lifecycle.title" :description="lifecycle.summary" headline="Ciclos de vida" />
+    <UPageHeader :title="lifecycle.title" :description="lifecycle.summary" :headline="`Ciclos de vida · ${DOMAIN_LABELS[lifecycle.domain]}`" />
 
     <UPageBody>
       <div v-if="entity" class="docs-lifecycle__entity">
@@ -82,6 +82,10 @@ useSeoMeta({
           </table>
         </section>
       </template>
+
+      <UButton :to="localePath(getDomainPath(lifecycle.domain))" :icon="DOMAIN_ICONS[lifecycle.domain]" color="neutral" variant="link">
+        <span v-text="`Ver el dominio ${DOMAIN_LABELS[lifecycle.domain]}`" />
+      </UButton>
 
       <UButton :to="localePath('/ciclos')" icon="i-lucide-arrow-left" color="neutral" variant="link">
         <span v-text="'Todos los ciclos de vida'" />

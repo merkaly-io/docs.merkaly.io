@@ -1,5 +1,6 @@
 name: .retry
 type: queue
+domain: plataforma
 summary: 'Cola auxiliar de cada cola de trabajo. Sin consumidores: el mensaje espera 30 s y vuelve a su cola. Hasta 5 intentos.'
 relations:
   - dead-letter-queue

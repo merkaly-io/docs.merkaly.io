@@ -1,5 +1,6 @@
 name: MANUAL
 type: status
+domain: pagos
 summary: 'Marcado como pagado a mano en el proveedor. No cuenta como pagado: nunca confirma la venta ni le compra al proveedor; espera revisión humana.'
 owner: api
 relations:

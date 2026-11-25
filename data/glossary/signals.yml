@@ -1,5 +1,6 @@
 name: signals
 type: service
+domain: plataforma
 summary: Envía notificaciones. Hoy solo email, con una cola por canal.
 relations:
   - merkaly-signals

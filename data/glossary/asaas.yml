@@ -1,5 +1,6 @@
 name: Asaas
 type: provider
+domain: pagos
 summary: Proveedor de pagos de hoy. Cobra el Pix en la cuenta de Merkaly con split al 100% a la wallet del vendedor y avisa por webhook.
 owner: payments
 relations:

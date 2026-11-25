@@ -1,5 +1,6 @@
 name: payment.charge.create
 type: invoke
+domain: pagos
 summary: El api le pide a payments crear un cobro Pix en la cuenta de Merkaly con split al vendedor. Responde el cobro en términos de Merkaly.
 owner: payments
 relations:

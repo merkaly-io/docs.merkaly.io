@@ -1,5 +1,6 @@
 name: referencia
 type: concept
+domain: pagos
 summary: 'Identificador que el api arma y lee: <orgId>:<saleId> para cobros y <orgId>:<withdrawalId> para retiros. payments solo la pasa al proveedor y de vuelta.'
 owner: api
 relations:

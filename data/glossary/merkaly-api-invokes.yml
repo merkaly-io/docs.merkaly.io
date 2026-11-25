@@ -1,5 +1,6 @@
 name: merkaly.api-invokes
 type: queue
+domain: plataforma
 summary: 'Cola de invokes del api: autorizar retiros y reembolsos.'
 owner: api
 relations:

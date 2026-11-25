@@ -1,4 +1,4 @@
-import type { NodeKind, StepKind, TermType } from '#shared/utils/docs';
+import type { Domain, NodeKind, StepKind, TermType } from '#shared/utils/docs';
 
 // Spanish UI copy in one place: the future i18n selector swaps this file for locale messages
 
@@ -38,6 +38,8 @@ export const STEP_KIND_LABELS: Record<StepKind, string> = {
 };
 
 export const NODE_KIND_LABELS: Record<NodeKind, string> = {
+  actor: 'persona',
+  app: 'app de Merkaly',
   exchange: 'exchange',
   gate: 'puerta',
   provider: 'externo',
@@ -50,3 +52,23 @@ export const FLOW_SPEEDS = [
   { label: 'normal', value: 1 },
   { label: 'rápida', value: 1.8 },
 ];
+
+export const DOMAIN_LABELS: Record<Domain, string> = {
+  catalogo: 'Catálogo',
+  identidad: 'Identidad',
+  pagos: 'Pagos',
+  pedidos: 'Pedidos',
+  plataforma: 'Plataforma',
+  proveedores: 'Proveedores',
+  tienda: 'Tienda',
+};
+
+export const DOMAIN_ICONS: Record<Domain, string> = {
+  catalogo: 'i-lucide-package',
+  identidad: 'i-lucide-fingerprint',
+  pagos: 'i-lucide-wallet',
+  pedidos: 'i-lucide-shopping-bag',
+  plataforma: 'i-lucide-boxes',
+  proveedores: 'i-lucide-truck',
+  tienda: 'i-lucide-store',
+};

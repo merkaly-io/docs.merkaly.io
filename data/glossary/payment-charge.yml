@@ -1,5 +1,6 @@
 name: cobro
 type: entity
+domain: pagos
 summary: Lo que el comprador paga por una venta. Lo crea payments en el proveedor; el api guarda su registro con un solo estado.
 owner: api
 relations:

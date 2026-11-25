@@ -1,5 +1,6 @@
 name: sobre (MerkalyEvent)
 type: concept
+domain: plataforma
 summary: 'Forma común de todo mensaje: id (clave de idempotencia), type, version, producer, organization, fechas, data y raw solo para auditoría.'
 relations:
   - deliver

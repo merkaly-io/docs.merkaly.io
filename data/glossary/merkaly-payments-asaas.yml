@@ -1,5 +1,6 @@
 name: merkaly.payments-asaas
 type: queue
+domain: pagos
 summary: Cola de payments con los avisos crudos de Asaas (payment.asaas.webhook.received).
 owner: payments
 relations:

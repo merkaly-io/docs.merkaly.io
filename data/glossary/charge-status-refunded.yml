@@ -1,5 +1,6 @@
 name: REFUNDED
 type: status
+domain: pagos
 summary: Reembolsado por completo.
 owner: api
 relations:

@@ -1,5 +1,6 @@
 name: operador
 type: concept
+domain: pagos
 summary: Una persona que actúa a mano en el panel del proveedor (marcar pagado, reembolsar). Lo que hace no pasa por las reglas del api.
 relations:
   - charge-status-manual

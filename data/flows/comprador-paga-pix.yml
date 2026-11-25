@@ -1,4 +1,5 @@
 title: El comprador paga (Pix)
+domain: pagos
 summary: El store pide cobrar. El api registra el intento y le pide el cobro a payments, que es el único que habla con Asaas.
 order: 5
 steps:

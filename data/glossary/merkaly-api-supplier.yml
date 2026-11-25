@@ -1,5 +1,6 @@
 name: merkaly.api-supplier
 type: queue
+domain: proveedores
 summary: Cola del api con los avisos del proveedor de productos (supplier.*).
 owner: api
 relations:

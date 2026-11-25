@@ -1,5 +1,6 @@
 name: api
 type: service
+domain: plataforma
 summary: Guarda todos los registros (pedidos, pagos, reembolsos, retiros, contracargos) y las reglas de negocio. Nunca ve el nombre, el estado ni las credenciales del proveedor.
 relations:
   - merkaly-api

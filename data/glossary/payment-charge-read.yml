@@ -1,5 +1,6 @@
 name: payment.charge.read
 type: invoke
+domain: pagos
 summary: 'Estado actual de un cobro. Es la fuente de verdad: el api siempre relee antes de decidir.'
 owner: payments
 relations:

@@ -1,4 +1,5 @@
 title: Registro en Auth0
+domain: identidad
 summary: Una persona crea su cuenta. Auth0 avisa a webhooks, que entrega en el exchange del dominio identidad, y el api crea la organización.
 order: 2
 steps:

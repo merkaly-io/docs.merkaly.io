@@ -1,5 +1,6 @@
 name: merkaly.api-identity
 type: queue
+domain: identidad
 summary: Cola del api con los eventos de identidad (identity.*) y account.user.linked.
 owner: api
 relations:

@@ -41,6 +41,16 @@ useSeoMeta({
           </dd>
         </div>
 
+        <div>
+          <dt v-text="'Dominio'" />
+
+          <dd>
+            <UButton :to="localePath(getDomainPath(term.domain))" :icon="DOMAIN_ICONS[term.domain]" color="neutral" variant="outline" size="xs">
+              <span v-text="DOMAIN_LABELS[term.domain]" />
+            </UButton>
+          </dd>
+        </div>
+
         <div v-if="term.owner">
           <dt v-text="'Dueño'" />
 

@@ -1,5 +1,6 @@
 name: operator policy
 type: concept
+domain: plataforma
 summary: 'Límites que el broker aplica sobre colas ya creadas: merkaly-work (máximo 10.000 mensajes, rechaza lo nuevo) y merkaly-dlq (14 días en la .dlq).'
 relations:
   - dead-letter-queue

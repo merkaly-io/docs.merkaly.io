@@ -1,5 +1,6 @@
 name: SETTLED
 type: status
+domain: pagos
 summary: Pagado y acreditado. Cuenta como pagado.
 owner: api
 relations:

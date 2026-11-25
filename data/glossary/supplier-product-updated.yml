@@ -1,5 +1,6 @@
 name: supplier.product.updated
 type: event
+domain: proveedores
 summary: Cambió un producto en el proveedor (por ejemplo, sin stock). Hoy solo se registra como pendiente.
 owner: api
 relations:

@@ -2,15 +2,20 @@
 import { computed, ref, refDebounced } from '#imports';
 import type { GlossaryCollectionItem } from '@nuxt/content';
 import type { PropType } from 'vue';
-import type { TermType } from '#shared/utils/docs';
+import type { Domain, TermType } from '#shared/utils/docs';
 
 const terms = defineModel({ required: true, type: Array as PropType<GlossaryCollectionItem[]> });
+
+const props = defineProps({
+  domains: { default: false, type: Boolean }, // show the domain filter
+});
 
 const { localePath } = useDocusI18n();
 
 const search = ref('');
 const searchDebounced = refDebounced(search, 150);
 const selectedType = ref<TermType | null>(null);
+const selectedDomain = ref<Domain | null>(null);
 
 const normalizeText = (text: string) => text.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(); // accents do not matter when searching
 
@@ -20,23 +25,47 @@ const matchingTerms = computed(() => {
   return terms.value.filter(term => !query || normalizeText(`${term.name} ${term.summary} ${term.stem}`).includes(query));
 });
 
+const domainFilters = computed(() => DOMAINS
+  .map(domain => ({ count: matchingTerms.value.filter(term => term.domain === domain).length, domain }))
+  .filter(filter => filter.count));
+
+const domainTerms = computed(() => matchingTerms.value.filter(term => !selectedDomain.value || term.domain === selectedDomain.value));
+
 const typeFilters = computed(() => TERM_TYPES
-  .map(type => ({ count: matchingTerms.value.filter(term => term.type === type).length, type }))
+  .map(type => ({ count: domainTerms.value.filter(term => term.type === type).length, type }))
   .filter(filter => filter.count));
 
 const groups = computed(() => TERM_TYPES
   .filter(type => !selectedType.value || selectedType.value === type)
-  .map(type => ({ terms: matchingTerms.value.filter(term => term.type === type), type }))
+  .map(type => ({ terms: domainTerms.value.filter(term => term.type === type), type }))
   .filter(group => group.terms.length));
 
 function toggleType(type: TermType) {
   selectedType.value = selectedType.value === type ? null : type;
+}
+
+function toggleDomain(domain: Domain) {
+  selectedDomain.value = selectedDomain.value === domain ? null : domain;
 }
 </script>
 
 <template>
   <div class="glossary-term-list">
     <UInput v-model="search" icon="i-lucide-search" placeholder="Busca un término: payment.confirmed, cola, webhooks..." size="lg" />
+
+    <div v-if="props.domains" class="glossary-term-list__filters">
+      <template v-for="filter in domainFilters" :key="filter.domain">
+        <UButton
+          :icon="DOMAIN_ICONS[filter.domain]"
+          :variant="selectedDomain === filter.domain ? 'solid' : 'outline'"
+          color="neutral"
+          size="xs"
+          @click="toggleDomain(filter.domain)"
+        >
+          <span v-text="`${DOMAIN_LABELS[filter.domain]} · ${filter.count}`" />
+        </UButton>
+      </template>
+    </div>
 
     <div class="glossary-term-list__filters">
       <template v-for="filter in typeFilters" :key="filter.type">
@@ -62,8 +91,8 @@ function toggleType(type: TermType) {
             <div class="glossary-term-list__item">
               <dt>
                 <NuxtLink :to="localePath(getTermPath(term.stem))">
-                <span v-text="term.name" />
-              </NuxtLink>
+                  <span v-text="term.name" />
+                </NuxtLink>
               </dt>
 
               <dd v-text="term.summary" />

@@ -1,0 +1,47 @@
+title: Preparar la tienda para vender
+domain: tienda
+summary: Después del registro, el admin guía tres pasos (cuenta de pago, conexión con AliExpress y primer producto). La tienda está lista cuando tiene productos activos y puede cobrar.
+order: 1
+map: store
+steps:
+  - from: merchant
+    to: admin
+    kind: http
+    label: /onboarding
+    title: El comerciante llega al onboarding
+    description: www lo manda acá después de crear la tienda. Cada paso se puede saltar.
+  - from: admin
+    to: api
+    kind: http
+    label: POST /admin/settings/payments
+    title: Paso 1, la cuenta de pago
+    description: Lo detalla el flujo "Abrir la cuenta de pago de la tienda".
+  - from: api
+    to: payments
+    kind: invoke
+    label: payment.account.create
+    title: payments crea la subcuenta
+  - from: admin
+    to: aliexpress
+    kind: http
+    label: OAuth
+    title: Paso 2, conectar AliExpress
+    description: Lo detalla el flujo "Conectar la cuenta de AliExpress". Vuelve a la misma página.
+  - from: admin
+    to: api
+    kind: http
+    label: importar producto
+    title: Paso 3, el primer producto
+    description: Lo detalla el flujo "Importar un producto".
+  - node: api
+    kind: event
+    label: readiness
+    title: El api calcula si está lista
+    description: 'Con datos guardados, sin llamar a nadie: productos activos, si puede cobrar, y lista = productos > 0 y puede cobrar.'
+    term: store-readiness
+  - from: api
+    to: admin
+    kind: reply
+    label: canSell, payments, supplier
+    title: El admin muestra lo que falta
+    description: Los avisos del menú y las acciones que necesitan cuenta (por ejemplo, pedir al proveedor) leen el mismo readiness.

@@ -1,0 +1,74 @@
+title: Tienda
+width: 960
+height: 560
+columns:
+  - label: personas
+    x: 85
+  - label: apps
+    x: 275
+  - label: api
+    x: 520
+  - label: afuera
+    x: 800
+nodes:
+  - id: buyer
+    label: Comprador
+    caption: abre la tienda
+    kind: actor
+    x: 20
+    y: 90
+    w: 130
+    h: 56
+  - id: store
+    label: store
+    caption: <nombre>.merkaly.store
+    kind: app
+    term: frontends
+    x: 200
+    y: 90
+    w: 150
+    h: 56
+  - id: merchant
+    label: Comerciante
+    caption: dueño de la tienda
+    kind: actor
+    x: 20
+    y: 400
+    w: 130
+    h: 56
+  - id: admin
+    label: admin
+    caption: onboarding y configuración
+    kind: app
+    term: frontends
+    x: 200
+    y: 400
+    w: 150
+    h: 56
+  - id: api
+    label: api
+    caption: configuración y mapa de tiendas
+    kind: service
+    term: api
+    x: 420
+    y: 40
+    w: 200
+    h: 490
+  - id: payments
+    label: payments
+    caption: cuenta de pago
+    kind: service
+    term: payments
+    x: 710
+    y: 250
+    w: 180
+    h: 70
+  - id: aliexpress
+    label: AliExpress
+    caption: cuenta del comerciante
+    kind: provider
+    term: aliexpress
+    x: 710
+    y: 400
+    w: 180
+    h: 64

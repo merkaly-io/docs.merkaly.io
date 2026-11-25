@@ -1,0 +1,79 @@
+entities:
+  - id: organization
+    label: Organización
+    caption: identidad
+    outside: true
+    col: 1
+    row: 0
+    term: organization
+    summary: La tienda en Auth0. Su nombre es el subdominio.
+  - id: domain
+    label: Dominio
+    caption: identidad
+    outside: true
+    col: 0
+    row: 0
+    term: store-domain
+    summary: <nombre>.merkaly.store y los dominios propios. El host dice qué tienda es.
+  - id: settings
+    label: Configuración
+    caption: settings, base de la tienda
+    col: 1
+    row: 1
+    term: organization-settings
+    summary: Documentos por clave, cada uno con su contrato.
+    fields:
+      - name: identity, branding, contact
+        note: el perfil público de la tienda
+      - name: localization
+        note: el mercado (país, moneda, idioma)
+      - name: sequence
+        note: numeración de ventas y compras
+      - name: payments
+        note: la cuenta de pago (nunca se sirve)
+  - id: profile
+    label: Perfil de la tienda
+    caption: público
+    col: 0
+    row: 2
+    term: store-profile
+    summary: Nombre, descripción, logo, favicon, imagen, color, email y redes.
+  - id: market
+    label: Mercado
+    caption: localization
+    col: 1
+    row: 2
+    term: market
+    summary: Un país, una moneda y un idioma por tienda (hoy Brasil).
+  - id: payment-account
+    label: Cuenta de pago
+    caption: pagos
+    outside: true
+    col: 2
+    row: 2
+    term: payment-account
+    summary: Si está lista, la tienda puede cobrar.
+  - id: page
+    label: Página de la tienda
+    caption: catálogo
+    outside: true
+    col: 2
+    row: 1
+    term: store-page
+    summary: La home que el comerciante edita.
+  - id: connection
+    label: Conexión con AliExpress
+    caption: proveedores
+    outside: true
+    col: 2
+    row: 0
+    term: supplier-connection
+    summary: La cuenta del comerciante en el proveedor.
+relations:
+  - { from: organization, to: domain, label: responde en, many: true }
+  - { from: organization, to: settings, label: se configura con }
+  - { from: settings, to: profile, label: publica }
+  - { from: settings, to: market, label: fija }
+  - { from: settings, to: payment-account, label: guarda }
+  - { from: organization, to: page, label: muestra, many: true }
+  - { from: organization, to: connection, label: compra con }

@@ -1,0 +1,42 @@
+title: Un comprador abre la tienda
+domain: tienda
+summary: El host dice qué tienda es. El api la encuentra en su mapa sin preguntarle a Auth0 y devuelve el perfil público y si el checkout está disponible.
+order: 2
+map: store
+steps:
+  - from: buyer
+    to: store
+    kind: http
+    label: <nombre>.merkaly.store
+    title: El comprador abre la tienda
+  - from: store
+    to: api
+    kind: http
+    label: GET /store/company (x-merkaly-host)
+    title: El store pide la tienda del host
+  - node: api
+    kind: command
+    label: host → organización
+    title: El api resuelve la tienda
+    description: 'Primero un dominio propio; si no, <nombre>.merkaly.store por nombre. Un host desconocido responde 404 sin llamar a Auth0. La tienda siempre sale del host, nunca del cliente.'
+    term: tenant-map
+  - node: api
+    kind: command
+    label: perfil público
+    title: Arma el perfil de la tienda
+    description: Nombre, descripción, logo, favicon, imagen para compartir, color, email y redes. Solo lo que está cargado.
+    term: store-profile
+  - from: api
+    to: store
+    kind: reply
+    label: checkout.available + readiness
+    title: El store sabe si puede vender
+    description: Sin cuenta de pago lista, el checkout no está disponible (sin decir por qué ni qué proveedor). Nunca llama al proveedor de pagos.
+    term: store-readiness
+  - from: store
+    to: api
+    kind: http
+    label: GET /store/content/pages/home
+    title: Arma la home
+    description: Los bloques que el comerciante guardó; lo que falta usa el contenido de fábrica.
+    term: store-page

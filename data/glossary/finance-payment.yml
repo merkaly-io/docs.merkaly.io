@@ -1,0 +1,8 @@
+name: pago
+type: entity
+domain: pagos
+summary: 'El registro del dinero de una venta (finance.payments). Guarda el cobro vigente, todos los intentos y el reparto con la tienda.'
+owner: api
+relations: [payment-charge, refund, chargeback, debt, sale]
+details: 'Su estado lo mueven solo los flujos de la venta y los avisos del cobro: no hay estado manual. Se confirma cuando un cobro APPROVED o SETTLED pagó exactamente el total más la tarifa; otro monto se registra pero no confirma (atención PAYMENT_AMOUNT_MISMATCH).'
+source: api.merkaly.io src/domain/finance/entities/payment.entity.ts

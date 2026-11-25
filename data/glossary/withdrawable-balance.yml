@@ -1,0 +1,7 @@
+name: saldo retirable
+type: concept
+domain: pagos
+summary: 'Lo que el comerciante puede retirar: lo liberado menos lo retirado, tope el saldo de la cuenta, menos las deudas abiertas.'
+relations: [withdrawal, debt, sale-status-delivered]
+details: 'Una venta libera su neto (pagado menos sus reembolsos) 7 días después de su entrega; antes no libera nada. Las ventas en disputa quedan retenidas. Las importadas y canceladas no liberan. Se calcula al leer, sin cron.'
+source: api.merkaly.io src/domain/finance/services/withdrawable.service.ts

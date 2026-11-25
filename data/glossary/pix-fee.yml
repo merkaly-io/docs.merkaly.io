@@ -1,0 +1,6 @@
+name: tarifa Pix
+type: concept
+domain: pagos
+summary: 'La paga el comprador, sobre el total del pedido. Merkaly no cobra comisión.'
+relations: [finance-payment, payment-charge]
+details: 'Se lee del proveedor al arrancar el api (con su descuento hasta una fecha). Un cambio de tarifa necesita reiniciar el api. Los retiros pueden tener su propia tarifa del proveedor.'

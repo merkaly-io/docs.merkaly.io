@@ -1,0 +1,7 @@
+name: deuda
+type: entity
+domain: pagos
+summary: 'Lo que la tienda le debe a Merkaly (finance.debts). Hoy: la parte de un reembolso que prestó Merkaly (REFUND_FEE). Se cobra en el próximo retiro.'
+owner: api
+relations: [refund, withdrawal, merkaly-main-account]
+source: api.merkaly.io src/domain/finance/entities/debt.entity.ts

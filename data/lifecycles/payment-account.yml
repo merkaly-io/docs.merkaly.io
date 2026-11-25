@@ -1,0 +1,19 @@
+title: Cuenta de pago de la tienda
+domain: pagos
+summary: 'Si la tienda puede cobrar. Sale de la aprobación del proveedor y de las credenciales guardadas; el admin, el store y el checkout leen lo mismo.'
+term: payment-account-readiness
+order: 7
+states:
+  - { id: NOT_CONNECTED, col: 0, row: 1, initial: true, summary: 'La organización no tiene cuenta de pago. El store no ofrece pagos.' }
+  - { id: PENDING_DOCUMENTS, col: 1, row: 0, summary: 'El proveedor pide documentos; el admin los muestra.' }
+  - { id: IN_REVIEW, col: 1, row: 2, summary: 'Esperando que el proveedor apruebe.' }
+  - { id: READY, col: 2, row: 1, summary: 'Aprobada y con credenciales: puede vender. Con la llave Pix de la subcuenta, el store ofrece Pix.' }
+  - { id: REJECTED, col: 3, row: 1, summary: 'El proveedor la rechazó, o la cuenta no tiene credenciales usables (accountError).' }
+transitions:
+  - { from: NOT_CONNECTED, to: PENDING_DOCUMENTS, by: api, trigger: 'Se crea la cuenta y faltan documentos' }
+  - { from: NOT_CONNECTED, to: IN_REVIEW, by: api, trigger: 'Se crea la cuenta' }
+  - { from: PENDING_DOCUMENTS, to: IN_REVIEW, trigger: 'El comerciante manda los documentos' }
+  - { from: IN_REVIEW, to: PENDING_DOCUMENTS, by: asaas, trigger: 'El proveedor pide o rechaza un documento' }
+  - { from: IN_REVIEW, to: READY, by: asaas, trigger: 'El proveedor aprueba la cuenta' }
+  - { from: IN_REVIEW, to: REJECTED, by: asaas, trigger: 'El proveedor rechaza la cuenta' }
+  - { from: NOT_CONNECTED, to: REJECTED, by: api, trigger: 'El proveedor la creó pero el api no pudo guardar las credenciales' }

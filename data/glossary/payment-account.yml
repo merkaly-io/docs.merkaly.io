@@ -1,0 +1,8 @@
+name: cuenta de pago
+type: entity
+domain: pagos
+summary: 'La subcuenta de la tienda en el proveedor de pagos. Una por organización, creada desde el admin; solo sirve para recibir.'
+owner: api
+relations: [payment-account-readiness, merkaly-main-account, split, withdrawal, personal-identity]
+details: 'Se guarda en la configuración de la tienda (settings.payments), nunca se sirve por los endpoints de configuración porque tiene las credenciales. Las credenciales llegan una sola vez, al crearla. El email de registro no cambia: si está mal, se cierra la cuenta y se crea de nuevo.'
+source: api.merkaly.io src/domain/integration/payment

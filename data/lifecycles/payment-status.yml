@@ -1,0 +1,30 @@
+title: Estado del pago
+domain: pagos
+summary: 'El pago (finance.payments) dice si el comprador pagó la venta. Lo mueven solo los flujos de la venta y los avisos del cobro; no hay forma de cambiarlo a mano.'
+term: finance-payment
+order: 1
+flags:
+  - id: held
+    label: retenido
+    description: 'DISPUTED: el pago entero queda fuera del saldo retirable hasta que termina el contracargo.'
+states:
+  - { id: PENDING, col: 0, row: 1, initial: true, summary: 'Sin pagar. Puede tener un cobro Pix vigente.' }
+  - { id: PAID, col: 1, row: 1, summary: 'Pagado: un cobro APPROVED o SETTLED por el total exacto (más la tarifa).' }
+  - { id: CANCELLED, col: 0, row: 2, summary: 'La venta se canceló antes de pagar. Se borraron los cobros que se podían pagar.' }
+  - { id: REFUND_PENDING, col: 2, row: 0, summary: 'Reembolso debido. Todavía no se pidió, o el proveedor lo rechazó; el admin lo puede reintentar.' }
+  - { id: REFUND_PROCESSING, col: 3, row: 0, summary: 'El proveedor aceptó el reembolso; el dinero todavía no volvió.' }
+  - { id: REFUNDED, col: 4, row: 1, summary: 'Reembolsado: en línea, desde el panel del proveedor o a mano (MANUAL).' }
+  - { id: DISPUTED, col: 2, row: 2, flags: [held], term: chargeback, summary: 'El comprador abrió un contracargo.' }
+  - { id: CHARGED_BACK, col: 3, row: 2, summary: 'Contracargo perdido.' }
+transitions:
+  - { from: PENDING, to: PAID, by: payments, trigger: 'El cobro se paga por el total exacto (nunca a mano)' }
+  - { from: PENDING, to: CANCELLED, trigger: 'Se cancela la venta sin pagar' }
+  - { from: PAID, to: REFUND_PENDING, trigger: 'Se cancela la venta pagada' }
+  - { from: REFUND_PENDING, to: REFUND_PROCESSING, by: payments, trigger: 'El proveedor acepta el reembolso' }
+  - { from: REFUND_PENDING, to: REFUNDED, by: payments, trigger: 'Reembolso inmediato, o manual' }
+  - { from: REFUND_PROCESSING, to: REFUNDED, by: payments, trigger: 'El reembolso termina (DONE) o el cobro queda REFUNDED' }
+  - { from: REFUND_PROCESSING, to: REFUND_PENDING, by: payments, trigger: 'El proveedor niega el reembolso' }
+  - { from: PAID, to: REFUNDED, by: operador, trigger: 'Reembolso hecho en el panel del proveedor' }
+  - { from: PAID, to: DISPUTED, by: payments, trigger: 'Se abre un contracargo' }
+  - { from: DISPUTED, to: PAID, by: payments, trigger: 'Contracargo ganado' }
+  - { from: DISPUTED, to: CHARGED_BACK, by: payments, trigger: 'Contracargo perdido (CHARGEBACK_LOST o REFUNDED)' }

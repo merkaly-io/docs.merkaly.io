@@ -1,0 +1,8 @@
+name: retiro
+type: entity
+domain: pagos
+summary: 'Una transferencia de la cuenta de la tienda (finance.withdrawals): el Pix a la llave del comerciante, o el cobro de deudas a Merkaly.'
+owner: api
+relations: [withdrawable-balance, debt, payment-withdrawal-authorize, payment-account]
+details: 'Siempre manual, desde el admin. Se registra antes de pedirlo, con quién lo pidió y la llave Pix enmascarada. Un resultado incierto nunca se reintenta (la transferencia podría existir). Un retiro hecho fuera de Merkaly también se registra.'
+source: api.merkaly.io src/domain/finance/entities/withdrawal.entity.ts

@@ -1,0 +1,18 @@
+title: Estado del reembolso
+domain: pagos
+summary: 'Cada reembolso (finance.refunds) es un registro que apunta al pago: de una cancelación, automático, del panel del proveedor o parcial. Ninguno pasa de lo que el comprador pagó.'
+term: refund
+order: 3
+states:
+  - { id: REQUESTED, col: 0, row: 1, initial: true, summary: 'Registrado antes de pedirlo, así el proveedor lo puede autorizar.' }
+  - { id: PROCESSING, col: 1, row: 0, summary: 'El proveedor lo aceptó; el dinero va en camino.' }
+  - { id: DONE, col: 2, row: 1, summary: 'El dinero volvió al comprador. Lo que prestó Merkaly queda como deuda de la tienda.' }
+  - { id: PENDING, col: 1, row: 2, summary: 'Debido: no se pudo pedir (proveedor caído, sin saldo suficiente) o fue rechazado. error dice por qué.' }
+  - { id: MANUAL, col: 3, row: 1, summary: 'Sin cobro en línea que reembolsar: el comerciante devuelve el dinero a mano.' }
+transitions:
+  - { from: REQUESTED, to: PROCESSING, by: payments, trigger: 'El proveedor acepta' }
+  - { from: REQUESTED, to: DONE, by: payments, trigger: 'Se hace en el momento' }
+  - { from: REQUESTED, to: PENDING, by: payments, trigger: 'Rechazado, proveedor caído o no alcanza el dinero' }
+  - { from: PROCESSING, to: DONE, by: payments, trigger: 'El proveedor confirma' }
+  - { from: PROCESSING, to: PENDING, by: payments, trigger: 'El proveedor lo niega' }
+  - { from: PENDING, to: REQUESTED, trigger: 'El admin reintenta, o la próxima sincronización lo vuelve a pedir' }

@@ -1,0 +1,6 @@
+name: ventana del Pix
+type: concept
+domain: pagos
+summary: 'Un Pix vale 30 minutos para Merkaly, aunque el QR del proveedor dure meses. Vencido, se borra y el comprador genera otro.'
+relations: [payment-charge, charge-status-expired]
+details: 'Antes de borrarlo se relee: un pago tardío igual cuenta.'

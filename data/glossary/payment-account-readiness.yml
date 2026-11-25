@@ -1,0 +1,7 @@
+name: readiness de pagos
+type: status
+domain: pagos
+summary: 'NOT_CONNECTED, PENDING_DOCUMENTS, IN_REVIEW, READY o REJECTED. Si es READY la tienda puede vender; si no, el checkout responde 503.'
+owner: api
+relations: [payment-account]
+details: 'La misma regla alimenta el admin, el store y el checkout. La aprobación se relee en cada lectura del estado y con cada aviso de la cuenta; el admin y un cobro nuevo confían en una aprobación APPROVED de menos de 10 minutos.'

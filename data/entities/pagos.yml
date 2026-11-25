@@ -11,6 +11,7 @@ entities:
     caption: settings.payments
     col: 1
     row: 0
+    term: payment-account
     summary: La subcuenta de la tienda en el proveedor de pagos. Una por organización; se crea desde el admin y solo sirve para recibir.
     fields:
       - name: holder
@@ -22,12 +23,14 @@ entities:
   - id: withdrawal
     label: Retiro
     caption: finance.withdrawals
+    term: withdrawal
     col: 2
     row: 0
     summary: El comerciante pasa su saldo a su llave Pix, a mano desde el admin. Antes se cobran las deudas abiertas.
   - id: debt
     label: Deuda
     caption: finance.debts
+    term: debt
     col: 3
     row: 0
     summary: Lo que la tienda le debe a Merkaly, por ejemplo la tarifa del proveedor de un reembolso. Se cobra en el próximo retiro.
@@ -43,7 +46,7 @@ entities:
     caption: finance.payments
     col: 1
     row: 1
-    term: payment-charge
+    term: finance-payment
     summary: El registro del dinero de una venta. Guarda el cobro vigente, todos los intentos anteriores y cómo se reparte con la tienda.
     fields:
       - name: gateway
@@ -55,6 +58,7 @@ entities:
   - id: refund
     label: Reembolso
     caption: finance.refunds
+    term: refund
     col: 2
     row: 1
     summary: Dinero que vuelve al comprador, parcial o total, cuando se cancela una venta pagada.
@@ -68,9 +72,17 @@ entities:
   - id: chargeback
     label: Contracargo
     caption: finance.chargebacks
+    term: chargeback
     col: 2
     row: 2
     summary: El comprador disputa el pago ante su banco o el proveedor.
+  - id: merkaly
+    label: Cuenta de Merkaly
+    caption: cuenta principal, CNPJ
+    col: 3
+    row: 1
+    term: merkaly-main-account
+    summary: Donde se crea cada cobro. Reparte el 100 % a la tienda y presta para los reembolsos.
 relations:
   - { from: organization, to: account, label: tiene }
   - { from: sale, to: payment, label: se paga con }
@@ -80,3 +92,6 @@ relations:
   - { from: payment, to: debt, label: genera, many: true }
   - { from: account, to: withdrawal, label: retira, many: true }
   - { from: withdrawal, to: debt, label: cobra, many: true }
+  - { from: charge, to: merkaly, label: se crea en }
+  - { from: merkaly, to: account, label: reparte 100 % a }
+  - { from: merkaly, to: debt, label: presta y cobra }

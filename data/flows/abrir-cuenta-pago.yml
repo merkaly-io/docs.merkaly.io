@@ -1,0 +1,80 @@
+title: Abrir la cuenta de pago de la tienda
+domain: pagos
+summary: El comerciante pide su cuenta de pago desde el admin. payments crea la subcuenta en el proveedor, el api guarda el acceso y la tienda puede vender cuando el proveedor la aprueba.
+order: 1
+map: money
+steps:
+  - from: merchant
+    to: admin
+    kind: http
+    label: persona física o empresa
+    title: El comerciante completa el formulario
+    description: Integraciones > Pagos. Contacto, ingreso mensual y dirección; empresa también razón social y CNPJ.
+  - from: admin
+    to: api
+    kind: http
+    label: POST /admin/settings/payments
+    title: El admin pide la cuenta
+    description: 409 si la organización ya tiene una.
+  - node: api
+    kind: command
+    label: titular y sitio
+    title: El api arma el titular
+    description: 'Persona física: nombre, CPF y fecha de nacimiento salen de sus datos personales (422 si faltan). El sitio es siempre https://<tienda>.merkaly.store.'
+    term: personal-identity
+  - from: api
+    to: payments
+    kind: invoke
+    label: payment.account.create
+    title: El api le pide la subcuenta a payments
+  - from: payments
+    to: asaas
+    kind: http
+    label: crear subcuenta
+    title: payments crea la subcuenta
+  - from: payments
+    to: api
+    kind: reply
+    label: credenciales (una sola vez)
+    title: Vuelven las credenciales
+    description: Solo llegan en esta respuesta. Si el api no las puede guardar, la cuenta no sirve; se cierra en el proveedor y se crea de nuevo.
+    term: payment-account
+  - from: api
+    to: auth0
+    kind: http
+    label: lockedAt
+    title: Bloquea los datos personales
+    description: Persona física. El proveedor ya recibió esos datos, así que ya no se cambian.
+  - from: api
+    to: payments
+    kind: invoke
+    label: payment.account.pix_key.ensure
+    title: Pide la llave Pix de la subcuenta
+    description: Sin su propia llave Pix, el proveedor rechaza el reparto del cobro.
+  - node: api
+    kind: event
+    label: PENDING_DOCUMENTS / IN_REVIEW
+    title: Espera la aprobación
+    description: El proveedor aprueba datos comerciales, documentos, datos bancarios y la cuenta en general. Si pide documentos, el admin los muestra.
+    term: payment-account-readiness
+  - from: asaas
+    to: webhooks
+    kind: http
+    label: cambio de la cuenta
+    title: El proveedor avisa
+  - from: webhooks
+    to: payments
+    kind: event
+    label: payment.asaas.webhook.received
+    title: payments lo traduce
+  - from: payments
+    to: api
+    kind: event
+    label: payment.account.*
+    title: El api relee la aprobación
+  - node: api
+    kind: reply
+    label: READY
+    title: La tienda puede vender
+    description: Aprobada, con credenciales y llave Pix. El store ofrece Pix; antes, el checkout responde 503.
+    term: payment-account-readiness

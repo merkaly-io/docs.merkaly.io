@@ -1,5 +1,6 @@
 name: payment.withdrawal.authorize
 type: invoke
+domain: pagos
 summary: payments le pregunta al api si un retiro es legítimo. El api responde APPROVED o REFUSED.
 owner: api
 relations:

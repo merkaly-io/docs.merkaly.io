@@ -1,5 +1,6 @@
 name: payment.charge.delete
 type: invoke
+domain: pagos
 summary: Borra un cobro que todavía se puede pagar (PENDING o EXPIRED). Queda CANCELLED.
 owner: payments
 relations:

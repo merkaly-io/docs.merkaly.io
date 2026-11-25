@@ -1,5 +1,6 @@
 name: payment.refunded
 type: event
+domain: pagos
 summary: El cobro se reembolsó, total o parcialmente.
 owner: payments
 relations:

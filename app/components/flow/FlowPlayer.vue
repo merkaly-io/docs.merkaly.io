@@ -242,7 +242,7 @@ onBeforeUnmount(pauseFlow);
               :points="`${node.x + 14},${node.y} ${node.x + node.w - 14},${node.y} ${node.x + node.w},${node.y + node.h / 2} ${node.x + node.w - 14},${node.y + node.h} ${node.x + 14},${node.y + node.h} ${node.x},${node.y + node.h / 2}`"
             />
 
-            <rect v-else :x="node.x" :y="node.y" :width="node.w" :height="node.h" :rx="node.kind === 'queue' ? 8 : 12" />
+            <rect v-else :x="node.x" :y="node.y" :width="node.w" :height="node.h" :rx="node.kind === 'actor' ? node.h / 2 : node.kind === 'queue' ? 8 : 12" />
 
             <text
               :x="node.x + node.w / 2"
@@ -370,6 +370,10 @@ onBeforeUnmount(pauseFlow);
 .flow-player__node--exchange polygon { fill: var(--mk-node-exchange-bg); stroke: var(--mk-node-exchange); }
 
 .flow-player__node--queue rect { fill: var(--mk-node-queue-bg); stroke: var(--mk-node-queue); }
+
+.flow-player__node--actor rect { fill: var(--mk-node-actor-bg); stroke: var(--mk-node-actor); stroke-width: 2; }
+
+.flow-player__node--app rect { fill: var(--mk-node-app-bg); stroke: var(--mk-node-app); stroke-width: 1.8; }
 
 .flow-player__node--service rect { fill: var(--mk-node-service-bg); stroke: var(--mk-node-service); stroke-width: 2; }
 

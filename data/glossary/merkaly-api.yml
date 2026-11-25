@@ -1,5 +1,6 @@
 name: merkaly.api
 type: exchange
+domain: plataforma
 summary: Exchange del api. Recibe los avisos de AliExpress, los eventos propios del api y los invokes que el api responde.
 owner: api
 relations:

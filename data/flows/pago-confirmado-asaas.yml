@@ -1,4 +1,5 @@
 title: Pago confirmado (Asaas)
+domain: pagos
 summary: Asaas avisa que un cobro se pagó. El aviso cruza webhooks, payments lo traduce y el api actualiza el pedido sin ver nunca la palabra Asaas.
 order: 1
 steps:

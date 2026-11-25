@@ -1,4 +1,5 @@
 title: Estado del cobro
+domain: pagos
 summary: Un solo estado por cobro, mutuamente excluyente, y el único campo con el que el api decide. payments lo traduce desde el proveedor; el api deriva de él si se puede borrar, si está pagado y si se reembolsa en línea.
 term: payment-charge
 order: 1

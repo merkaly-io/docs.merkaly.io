@@ -1,5 +1,6 @@
 name: AliExpress
 type: provider
+domain: proveedores
 summary: Proveedor de productos. Avisa cambios de pedido (mensaje 53) y de producto (mensaje 61). El comprador nunca ve su nombre.
 owner: api
 relations:

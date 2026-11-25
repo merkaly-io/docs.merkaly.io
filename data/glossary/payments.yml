@@ -1,5 +1,6 @@
 name: payments
 type: service
+domain: pagos
 summary: 'Único servicio que habla con el proveedor de pagos. Sin estado ni base de datos: traduce los avisos del proveedor y responde invokes en términos de Merkaly.'
 relations:
   - asaas

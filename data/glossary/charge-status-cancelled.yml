@@ -1,5 +1,6 @@
 name: CANCELLED
 type: status
+domain: pagos
 summary: Borrado antes de pagarse.
 owner: api
 relations:

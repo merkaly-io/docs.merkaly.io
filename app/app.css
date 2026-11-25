@@ -13,6 +13,10 @@
 }
 
 :root {
+  --mk-node-actor: #be185d;
+  --mk-node-actor-bg: #fdecf3;
+  --mk-node-app: #0369a1;
+  --mk-node-app-bg: #e6f4fb;
   --mk-node-provider: #6b7280;
   --mk-node-provider-bg: #f1f1ee;
   --mk-node-gate: #d97706;
@@ -34,6 +38,10 @@
 }
 
 .dark {
+  --mk-node-actor: #f58bbd;
+  --mk-node-actor-bg: #35182a;
+  --mk-node-app: #6cc4ef;
+  --mk-node-app-bg: #12293a;
   --mk-node-provider: #a3a8b8;
   --mk-node-provider-bg: #20222a;
   --mk-node-gate: #f0a73a;

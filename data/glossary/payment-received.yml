@@ -1,5 +1,6 @@
 name: payment.received
 type: event
+domain: pagos
 summary: El cobro fue pagado y acreditado. El api relee el cobro y sincroniza la venta.
 owner: payments
 relations:

@@ -1,10 +1,11 @@
-import type { FlowsCollectionItem, GlossaryCollectionItem, LifecyclesCollectionItem, MapsCollectionItem } from '@nuxt/content';
+import type { EntitiesCollectionItem, FlowsCollectionItem, GlossaryCollectionItem, LifecyclesCollectionItem, MapsCollectionItem } from '@nuxt/content';
 
 export const renderTermMarkdown = (term: GlossaryCollectionItem) => [
   `## ${term.name} (${term.type})`,
   '',
   term.summary,
   term.details ? `\n${term.details}` : '',
+  `\nDominio: ${term.domain}`,
   term.owner ? `\nDueño: ${term.owner}` : '',
   term.relations?.length ? `Relacionado con: ${term.relations.join(', ')}` : '',
   term.source ? `En el código: ${term.source}` : '',
@@ -18,11 +19,13 @@ export const renderFlowMarkdown = (flow: FlowsCollectionItem, map?: MapsCollecti
     return `${index + 1}. [${step.kind}] ${where}${step.label ? ` (${step.label})` : ''}: ${step.title}. ${step.description ?? ''}`.trim();
   });
 
-  return [`## Flujo: ${flow.title}`, '', flow.summary, '', ...steps].join('\n');
+  return [`## Flujo: ${flow.title}`, '', `Dominio: ${flow.domain}`, '', flow.summary, '', ...steps].join('\n');
 };
 
 export const renderLifecycleMarkdown = (lifecycle: LifecyclesCollectionItem) => [
   `## Ciclo de vida: ${lifecycle.title}`,
+  '',
+  `Dominio: ${lifecycle.domain}`,
   '',
   lifecycle.summary,
   '',
@@ -34,3 +37,19 @@ export const renderLifecycleMarkdown = (lifecycle: LifecyclesCollectionItem) => 
   ...(lifecycle.flags ?? []).map(flag => `\nGrupo "${flag.label}": ${flag.description}`),
   ...(lifecycle.mappings ?? []).flatMap(mapping => [`\n### ${mapping.title}`, ...mapping.rows.map(row => `- ${row.from} -> ${row.to}${row.note ? ` (${row.note})` : ''}`)]),
 ].join('\n');
+
+export const renderEntityMapMarkdown = (map: EntitiesCollectionItem) => {
+  const labels = Object.fromEntries(map.entities.map(entity => [entity.id, entity.label]));
+
+  return [
+    `## Entidades: ${map.stem}`,
+    '',
+    ...map.entities.map(entity => [
+      `- ${entity.label}${entity.caption ? ` (${entity.caption})` : ''}${entity.outside ? ' [de otro dominio]' : ''}: ${entity.summary}`,
+      ...(entity.fields ?? []).map(field => `  - ${field.name}${field.note ? `: ${field.note}` : ''}`),
+    ].join('\n')),
+    '',
+    '### Relaciones',
+    ...map.relations.map(relation => `- ${labels[relation.from] ?? relation.from} ${relation.label} ${labels[relation.to] ?? relation.to} (${relation.many ? 'uno a muchos' : 'uno a uno'})`),
+  ].join('\n');
+};

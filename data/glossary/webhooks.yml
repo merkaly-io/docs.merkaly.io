@@ -1,5 +1,6 @@
 name: webhooks
 type: service
+domain: plataforma
 summary: Puerta de entrada de los proveedores externos. Valida cada pedido, entrega el mensaje en el exchange del dueño y responde. No tiene exchange propio ni lógica de negocio.
 relations:
   - asaas

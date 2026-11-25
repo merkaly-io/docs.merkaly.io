@@ -1,5 +1,6 @@
 name: supplier.order.status_changed
 type: event
+domain: proveedores
 summary: Cambió el estado de un pedido al proveedor de productos. El api resuelve la organización por el vendedor y relee el pedido.
 owner: api
 relations:

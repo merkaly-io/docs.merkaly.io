@@ -1,5 +1,6 @@
 name: .dlq
 type: queue
+domain: plataforma
 summary: 'Cola auxiliar donde termina lo que no se pudo procesar: tras 5 reintentos, sin handler o malformado. Guarda cada mensaje 14 días.'
 relations:
   - retry-queue

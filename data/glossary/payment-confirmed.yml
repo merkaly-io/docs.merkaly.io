@@ -1,5 +1,6 @@
 name: payment.confirmed
 type: event
+domain: pagos
 summary: 'El cobro fue confirmado por el proveedor: pagado, todavía sin acreditar. El api relee el cobro y sincroniza la venta.'
 owner: payments
 relations:

@@ -28,7 +28,7 @@ useSeoMeta({
 
 <template>
   <UPage v-if="flow">
-    <UPageHeader :title="flow.title" :description="flow.summary" headline="Flujos" />
+    <UPageHeader :title="flow.title" :description="flow.summary" :headline="`Flujos · ${DOMAIN_LABELS[flow.domain]}`" />
 
     <UPageBody>
       <FlowPlayer :model-value="view" autoplay />
@@ -44,6 +44,10 @@ useSeoMeta({
           </template>
         </div>
       </section>
+
+      <UButton :to="localePath(getDomainPath(flow.domain))" :icon="DOMAIN_ICONS[flow.domain]" color="neutral" variant="link">
+        <span v-text="`Ver el dominio ${DOMAIN_LABELS[flow.domain]}`" />
+      </UButton>
 
       <UButton :to="localePath('/flujos')" icon="i-lucide-arrow-left" color="neutral" variant="link">
         <span v-text="'Todos los flujos'" />

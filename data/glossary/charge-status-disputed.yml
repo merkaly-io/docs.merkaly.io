@@ -1,5 +1,6 @@
 name: DISPUTED
 type: status
+domain: pagos
 summary: Contracargo abierto, o ganado y esperando que vuelva el dinero.
 owner: api
 relations:

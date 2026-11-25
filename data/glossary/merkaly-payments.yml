@@ -1,5 +1,6 @@
 name: merkaly.payments
 type: exchange
+domain: pagos
 summary: Exchange del dominio pagos. Recibe los avisos crudos de Asaas (vía webhooks) y los eventos payment.* que emite payments.
 owner: payments
 relations:

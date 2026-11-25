@@ -1,5 +1,6 @@
 name: CHARGEBACK_LOST
 type: status
+domain: pagos
 summary: 'El contracargo se perdió: el dinero volvió al titular de la tarjeta.'
 owner: api
 relations:

@@ -1,5 +1,6 @@
 name: identity.signup.requested
 type: event
+domain: identidad
 summary: Alguien se registró y pidió crear su tienda. El api crea la organización con el usuario como miembro.
 relations:
   - auth0

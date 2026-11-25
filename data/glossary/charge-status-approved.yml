@@ -1,5 +1,6 @@
 name: APPROVED
 type: status
+domain: pagos
 summary: Pagado, todavía sin acreditar (tarjeta). Cuenta como pagado.
 owner: api
 relations:

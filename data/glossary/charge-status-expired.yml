@@ -1,5 +1,6 @@
 name: EXPIRED
 type: status
+domain: pagos
 summary: El Pix venció sin pagarse. Todavía se puede pagar y se puede borrar.
 owner: api
 relations:

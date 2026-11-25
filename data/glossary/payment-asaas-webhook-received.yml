@@ -1,5 +1,6 @@
 name: payment.asaas.webhook.received
 type: event
+domain: pagos
 summary: Aviso crudo de Asaas que webhooks entrega a payments, sin datos personales del comprador. payments lo traduce a payment.*.
 owner: payments
 relations:

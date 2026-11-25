@@ -1,4 +1,5 @@
 title: Nadie escucha ese tipo
+domain: plataforma
 summary: Si ninguna cola está enlazada al tipo, el broker devuelve el mensaje, webhooks responde 5xx y el proveedor reintenta. Nada se pierde en silencio.
 order: 7
 steps:

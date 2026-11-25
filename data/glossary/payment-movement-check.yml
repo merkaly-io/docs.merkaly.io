@@ -1,5 +1,6 @@
 name: payment.movement.check
 type: invoke
+domain: pagos
 summary: webhooks le pregunta a payments si Asaas puede mover dinero (retiro o reembolso Pix). Cualquier falla es un rechazo, nunca un 5xx.
 owner: payments
 relations:

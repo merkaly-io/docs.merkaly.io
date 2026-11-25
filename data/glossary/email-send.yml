@@ -1,5 +1,6 @@
 name: email.send
 type: command
+domain: plataforma
 summary: Pide enviar un email. Lo consume signals; nadie lo publica todavía.
 owner: signals
 relations:

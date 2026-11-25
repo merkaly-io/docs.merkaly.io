@@ -1,5 +1,6 @@
 name: merkaly.signals
 type: exchange
+domain: plataforma
 summary: Exchange de signals. Recibe los comandos de notificación.
 owner: signals
 relations:

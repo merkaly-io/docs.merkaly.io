@@ -1,6 +1,6 @@
 import { fileURLToPath } from 'node:url';
 import { defineCollection, defineContentConfig, z } from '@nuxt/content';
-import { NODE_KINDS, STEP_KINDS, TERM_TYPES } from './shared/utils/docs';
+import { DOMAINS, NODE_KINDS, STEP_KINDS, TERM_TYPES } from './shared/utils/docs';
 
 // Docus keeps its own `docs` and `landing` collections (markdown in content/); these are the data ones
 // optional fields are read with a fallback: Content does not apply zod defaults to nested data
@@ -9,6 +9,7 @@ const getDataDir = (folder: string) => fileURLToPath(new URL(`./data/${folder}`,
 
 const glossarySchema = z.object({
   details: z.string().optional(), // longer explanation, plain text
+  domain: z.enum(DOMAINS), // layer it belongs to
   name: z.string(), // as written in code: payment.confirmed, merkaly.api-payments
   owner: z.string().optional(), // stem of the service term that owns it
   relations: z.array(z.string()).optional(), // stems of related terms
@@ -47,6 +48,7 @@ const flowStepSchema = z.object({
 }).refine(step => Boolean(step.node) || Boolean(step.from && step.to), 'a step needs node, or from and to');
 
 const flowSchema = z.object({
+  domain: z.enum(DOMAINS),
   map: z.string(), // stem of the map with the nodes
   order: z.number().optional(),
   steps: z.array(flowStepSchema),
@@ -55,6 +57,7 @@ const flowSchema = z.object({
 });
 
 const lifecycleSchema = z.object({
+  domain: z.enum(DOMAINS),
   flags: z.array(z.object({ description: z.string(), id: z.string(), label: z.string() })).optional(),
   mappings: z.array(z.object({
     columns: z.tuple([z.string(), z.string()]),
@@ -82,8 +85,29 @@ const lifecycleSchema = z.object({
   })),
 });
 
+const entityMapSchema = z.object({ // one per domain, the file stem is the domain
+  entities: z.array(z.object({
+    caption: z.string().optional(), // where it lives: Auth0, Mongo, the provider
+    col: z.number(), // grid position, 0 based
+    fields: z.array(z.object({ name: z.string(), note: z.string().optional() })).optional(), // the fields worth knowing
+    id: z.string(),
+    label: z.string(),
+    outside: z.boolean().optional(), // belongs to another domain, drawn faded
+    row: z.number(),
+    summary: z.string(),
+    term: z.string().optional(), // glossary stem
+  })),
+  relations: z.array(z.object({
+    from: z.string(),
+    label: z.string(), // verb read from -> to: tiene, pertenece a
+    many: z.boolean().optional(), // one from has many to
+    to: z.string(),
+  })),
+});
+
 export default defineContentConfig({
   collections: {
+    entities: defineCollection({ schema: entityMapSchema, source: { cwd: getDataDir('entities'), include: '*.yml' }, type: 'data' }),
     flows: defineCollection({ schema: flowSchema, source: { cwd: getDataDir('flows'), include: '*.yml' }, type: 'data' }),
     glossary: defineCollection({ schema: glossarySchema, source: { cwd: getDataDir('glossary'), include: '*.yml' }, type: 'data' }),
     lifecycles: defineCollection({ schema: lifecycleSchema, source: { cwd: getDataDir('lifecycles'), include: '*.yml' }, type: 'data' }),

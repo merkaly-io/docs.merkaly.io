@@ -1,5 +1,6 @@
 name: Auth0
 type: provider
+domain: identidad
 summary: 'Identidad: usuarios, organizaciones y roles. Avisa altas y cambios por webhook.'
 relations:
   - webhooks

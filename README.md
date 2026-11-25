@@ -22,14 +22,17 @@ native module to build.
 ## Layout
 
 ```
-content/                 # markdown pages (Docus "docs" collection): home, section indexes, architecture, decisions
+content/                 # markdown pages (Docus "docs" collection): home, one folder per domain, reference indexes
+  <n>.<domain>/index.md  # the entry page of a domain layer, its decisions in <domain>/decisiones/
 data/
+  entities/<domain>.yml  # entity map of a domain: entities on a grid and their relations
   glossary/<stem>.yml    # one file per term
   maps/<stem>.yml        # node layouts shared by flows (messaging.yml: providers, gate, exchanges, queues, services)
   flows/<stem>.yml       # one file per flow, steps over a map
   lifecycles/<stem>.yml  # one file per state machine
 content.config.ts        # zod schemas of the data collections
 app/
+  components/entity/     # EntityMap (interactive entity map with animated relations)
   components/flow/       # FlowPlayer (animated SVG player), FlowLegend
   components/state/      # StateMachine (interactive state machine)
   components/glossary/   # GlossaryTermList (search and filter), GlossaryTermBadge
@@ -44,6 +47,42 @@ The file name (stem) is the id and the URL: `data/glossary/payment-confirmed.yml
 and other files reference it as `payment-confirmed`. Nested fields are optional in the schemas (Content does not
 apply zod defaults to nested data), components read them with a fallback.
 
+## Domains
+
+Every term, flow and lifecycle has a `domain` (zod enum `DOMAINS` in `shared/utils/docs.ts`): `identidad`, `tienda`,
+`catalogo`, `pedidos`, `pagos`, `proveedores`, `plataforma`. Each domain is a layer with the same shape, an entry page
+in `content/<n>.<domain>/index.md`:
+
+1. Qué es: what it is, in one screen.
+2. Entidades: `::content-entity-map{domain="pagos"}` over `data/entities/<domain>.yml`.
+3. Ciclos de vida and Flujos: `::content-lifecycle-list{domain="pagos"}`, `::content-flow-list{domain="pagos"}`.
+4. Decisiones: links to `content/<n>.<domain>/<n>.decisiones/*.md` (also listed in `content/94.decisiones.md`).
+5. En el código: a table of repo paths linked on GitHub.
+6. Glosario: `::content-glossary{domain="pagos"}`.
+
+Labels and icons of the domains live in `app/utils/docs.labels.ts`. Moved pages keep a 301 in `routeRules`.
+
+## Add an entity map
+
+`data/entities/<domain>.yml`:
+
+```yaml
+entities:
+  - id: payment
+    label: Pago
+    caption: finance.payments    # where it lives, optional
+    col: 1                       # grid position, 0 based
+    row: 1
+    term: payment-charge         # optional glossary stem
+    summary: One or two lines.
+    fields:                      # optional, shown when the entity is selected
+      - { name: gateway, note: el cobro vigente }
+  - { id: sale, label: Venta, caption: pedidos, outside: true, col: 0, row: 1, summary: From another domain, drawn dashed. }
+relations:
+  - { from: sale, to: payment, label: se paga con }     # read from -> to
+  - { from: payment, to: refund, label: devuelve, many: true }  # one to many
+```
+
 ## Add a term
 
 `data/glossary/<stem>.yml`:
@@ -51,6 +90,7 @@ apply zod defaults to nested data), components read them with a fallback.
 ```yaml
 name: payment.confirmed          # as written in code
 type: event                      # entity, status, event, command, invoke, exchange, queue, service, provider, concept
+domain: pagos                    # one of DOMAINS
 summary: One or two lines.
 owner: payments                  # optional, stem of the owning service
 relations: [merkaly-api-payments] # optional, stems; the term page also shows the reverse links
@@ -66,6 +106,7 @@ source: repo path/to/file.ts     # optional
 
 ```yaml
 title: Pago confirmado (Asaas)
+domain: pagos
 summary: One or two lines.
 order: 1
 map: messaging
@@ -84,7 +125,7 @@ steps:
 ```
 
 A new node goes in the map (`data/maps/<stem>.yml`) with its position (`x`, `y`, `w`, `h` in a `width` x
-`height` viewBox), `kind` (provider, gate, exchange, queue, service) and its glossary `term`. Embed a flow in any
+`height` viewBox), `kind` (actor, app, provider, gate, exchange, queue, service) and its glossary `term`. Embed a flow in any
 markdown page with `::content-flow{flow="pago-confirmado-asaas"}` (`autoplay` optional).
 
 ## Add a state machine
@@ -93,6 +134,7 @@ markdown page with `::content-flow{flow="pago-confirmado-asaas"}` (`autoplay` op
 
 ```yaml
 title: Estado del cobro
+domain: pagos
 summary: One or two lines.
 term: payment-charge             # glossary stem of the entity
 flags:                           # optional groups of states, shown on the state and explained below

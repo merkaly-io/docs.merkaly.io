@@ -1,5 +1,6 @@
 name: payment.charge.refund
 type: invoke
+domain: pagos
 summary: Reembolso total o parcial de un cobro pagado; la parte del vendedor se descuenta de su split.
 owner: payments
 relations:

@@ -1,5 +1,6 @@
 name: PENDING
 type: status
+domain: pagos
 summary: Cobro sin pagar. Todavía se puede borrar.
 owner: api
 relations:

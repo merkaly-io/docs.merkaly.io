@@ -1,4 +1,5 @@
 title: Cambio de pedido (AliExpress)
+domain: proveedores
 summary: AliExpress avisa que cambió el estado de un pedido al proveedor. webhooks lo entrega al api, que es el dueño del dominio proveedor.
 order: 3
 steps:

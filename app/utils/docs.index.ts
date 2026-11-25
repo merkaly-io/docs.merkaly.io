@@ -1,6 +1,7 @@
-import type { FlowsCollectionItem, GlossaryCollectionItem, LifecyclesCollectionItem, MapsCollectionItem } from '@nuxt/content';
+import type { EntitiesCollectionItem, FlowsCollectionItem, GlossaryCollectionItem, LifecyclesCollectionItem, MapsCollectionItem } from '@nuxt/content';
 
 export interface DocsIndex {
+  entities: EntitiesCollectionItem[];
   flows: FlowsCollectionItem[];
   lifecycles: LifecyclesCollectionItem[];
   maps: MapsCollectionItem[];
@@ -8,14 +9,15 @@ export interface DocsIndex {
 }
 
 export const loadDocsIndex = async (): Promise<DocsIndex> => {
-  const [flows, lifecycles, maps, terms] = await Promise.all([
+  const [entities, flows, lifecycles, maps, terms] = await Promise.all([
+    queryCollection('entities').all(),
     queryCollection('flows').order('order', 'ASC').all(),
     queryCollection('lifecycles').order('order', 'ASC').all(),
     queryCollection('maps').all(),
     queryCollection('glossary').order('name', 'ASC').all(),
   ]);
 
-  return { flows, lifecycles, maps, terms };
+  return { entities, flows, lifecycles, maps, terms };
 };
 
 export const getFlowTermStems = (flow: FlowsCollectionItem, index: DocsIndex) => { // the messages and the nodes the flow touches

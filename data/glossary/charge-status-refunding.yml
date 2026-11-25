@@ -1,5 +1,6 @@
 name: REFUNDING
 type: status
+domain: pagos
 summary: El reembolso está en camino.
 owner: api
 relations:

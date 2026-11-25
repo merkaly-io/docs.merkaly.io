@@ -1,0 +1,69 @@
+title: Del carrito a la venta pagada
+domain: pedidos
+summary: El comprador cotiza, confirma el total y paga con Pix. La venta nace esperando el pago y pasa a "por pedir" cuando el pago se confirma.
+order: 1
+map: orders
+steps:
+  - from: buyer
+    to: store
+    kind: http
+    label: Finalizar compra
+    title: El comprador va al checkout
+  - from: store
+    to: api
+    kind: http
+    label: POST /store/checkout/quotes
+    title: El store pide la cotización
+  - from: api
+    to: aliexpress
+    kind: http
+    label: costo, flete, impuestos
+    title: El api recotiza con el proveedor
+    description: Relee el costo de cada línea, el flete de cada grupo de envío y los tramos del impuesto de importación.
+  - node: api
+    kind: command
+    label: precio al día
+    title: Actualiza el precio de la variante
+    description: Si el costo del proveedor cambió, recalcula el precio de venta con el margen de la variante.
+    term: quoted-total
+  - from: api
+    to: store
+    kind: reply
+    label: total = ítems + flete + impuestos
+    title: El comprador ve el total
+  - from: store
+    to: api
+    kind: http
+    label: crear venta (quotedTotal)
+    title: El comprador confirma
+    description: 'El pedido lleva el total que vio. Si la tienda no puede vender, 503 antes de escribir nada.'
+  - node: api
+    kind: error
+    label: '409 si cambió el total'
+    title: ¿Sigue siendo el mismo total?
+    description: Si el precio, el flete o el impuesto cambió, no crea nada y responde CHECKOUT_TOTAL_CHANGED. El store recotiza y el comprador confirma de nuevo.
+    term: quoted-total
+  - node: api
+    kind: event
+    label: AWAITING_PAYMENT
+    title: Nace la venta
+    description: Venta CHECKOUT esperando pago, con lo acordado (destinatario, dirección, flete e impuestos por línea). El pago queda PENDING.
+    term: sale-status-awaiting-payment
+  - from: api
+    to: payments
+    kind: invoke
+    label: payment.charge.create
+    title: El api pide el cobro Pix
+    description: Lo detalla el flujo "El comprador paga (Pix)" de Pagos.
+  - from: payments
+    to: api
+    kind: event
+    label: payment.confirmed
+    title: El pago se confirma
+    description: El api relee el cobro y confirma el pago. El store sigue el cobro en vivo, sin preguntar.
+  - node: api
+    kind: event
+    label: TO_ORDER
+    title: La venta queda por pedir
+    description: Y arranca sola la compra al proveedor, en segundo plano.
+    term: sale-status-to-order

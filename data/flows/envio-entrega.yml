@@ -1,0 +1,68 @@
+title: Envío y entrega
+domain: pedidos
+summary: El proveedor despacha, el api sigue cada paquete por su número de seguimiento y la entrega llega por el tracking o por la confirmación del comprador.
+order: 3
+map: orders
+steps:
+  - from: aliexpress
+    to: webhooks
+    kind: http
+    label: despachado
+    title: El proveedor despacha
+  - from: webhooks
+    to: api
+    kind: event
+    label: supplier.order.status_changed
+    title: El aviso llega al api
+    term: supplier-order-status-changed
+  - from: api
+    to: aliexpress
+    kind: http
+    label: pedido + tracking
+    title: El api relee pedido y seguimiento
+  - node: api
+    kind: command
+    label: un envío por tracking
+    title: Arma los envíos
+    description: Un envío por número de seguimiento, con los ítems de cada pedido que lleva. Suma solo los eventos nuevos; nunca borra los viejos.
+    term: shipment
+  - node: api
+    kind: event
+    label: SHIPPED
+    title: La venta queda enviada
+    description: Todas las compras vivas despachadas y cada envío en tránsito o entregado.
+    term: sale-status-shipped
+  - from: api
+    to: store
+    kind: reply
+    label: vista neutra
+    title: El comprador sigue su paquete
+    description: Estado, fechas, número de seguimiento y transportadoras reales. Nunca el proveedor ni sus códigos internos.
+  - from: buyer
+    to: store
+    kind: http
+    label: Confirmar recibido
+    title: El comprador confirma que recibió
+    description: Puede hacerlo en SHIPPED, o en DELIVERED dentro de los 7 días de la entrega si todavía no confirmó.
+  - from: store
+    to: api
+    kind: http
+    label: POST .../receipt
+    title: El store avisa la recepción
+  - node: api
+    kind: event
+    label: DELIVERED
+    title: La venta queda entregada
+    description: Cada envío abierto pasa a DELIVERED, recibido por el comprador. El tracking del proveedor también puede marcarla sola.
+    term: sale-status-delivered
+  - from: api
+    to: aliexpress
+    kind: http
+    label: avisar entrega
+    title: Le avisa al proveedor
+    description: AliExpress no tiene esa llamada; el pedido se cierra allá solo. Un fallo nunca deshace la confirmación.
+  - node: api
+    kind: reply
+    label: + 7 días
+    title: El dinero se libera
+    description: El dinero de la venta se puede retirar 7 días después de la entrega. Ese mismo plazo cierra la ventana para confirmar la recepción.

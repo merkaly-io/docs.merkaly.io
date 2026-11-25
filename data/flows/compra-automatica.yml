@@ -1,0 +1,72 @@
+title: Compra automática al proveedor
+domain: pedidos
+summary: Con el pago online confirmado, el api compra al proveedor solo. El pedido queda creado sin pagar; el comerciante lo paga en su cuenta del proveedor.
+order: 2
+map: orders
+steps:
+  - node: api
+    kind: event
+    label: pago confirmado
+    title: Arranca la compra automática
+    description: En segundo plano y como sistema, nunca a nombre del comprador. Nunca hace fallar el pago.
+    term: procurement
+  - node: api
+    kind: command
+    label: una compra por cuenta
+    title: Arma las compras
+    description: Agrupa los ítems por cuenta del proveedor (una compra por cuenta) y recotiza el costo real. La compra nace TO_PLACE.
+    term: purchase
+  - from: api
+    to: aliexpress
+    kind: http
+    label: ds.order.create
+    title: Pide al proveedor
+    description: Un solo pedido con todas las líneas, sin pagar. Si AliExpress limita, reintenta a los 1, 5 y 15 minutos.
+  - from: aliexpress
+    to: api
+    kind: reply
+    label: un pedido por ítem
+    title: AliExpress responde
+    description: Cada ítem vuelve como su propio pedido, con su estado y sus cargos.
+    term: supplier-order
+  - node: api
+    kind: event
+    label: TO_PAY
+    title: La venta queda por pagar al proveedor
+    description: La compra queda AWAITING_PAYMENT.
+    term: sale-status-to-pay
+  - from: merchant
+    to: aliexpress
+    kind: http
+    label: paga en su cuenta
+    title: El comerciante paga el pedido
+    description: Fuera de Merkaly, en su propia cuenta del proveedor.
+  - from: aliexpress
+    to: webhooks
+    kind: http
+    label: aviso de pedido
+    title: AliExpress avisa el cambio
+  - from: webhooks
+    to: api
+    kind: event
+    label: supplier.order.status_changed
+    title: El aviso llega al api
+    term: supplier-order-status-changed
+  - from: api
+    to: aliexpress
+    kind: http
+    label: ds.order.get
+    title: El api relee el pedido
+    description: El mismo camino que el botón Sincronizar del admin. Guarda los cargos reales, que reemplazan a la estimación.
+  - node: api
+    kind: event
+    label: ORDERED
+    title: La venta queda pedida
+    description: Pagada en el proveedor, esperando el despacho.
+    term: sale-status-ordered
+  - node: api
+    kind: error
+    label: AUTO_PROCUREMENT_FAILED
+    title: ¿Y si se frenó?
+    description: Si a los 30 minutos una venta pagada sigue sin compra, el admin lo marca para pedir a mano. La compra manual queda siempre como respaldo.
+    term: sale-attention

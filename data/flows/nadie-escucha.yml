@@ -1,0 +1,35 @@
+title: Nadie escucha ese tipo
+summary: Si ninguna cola está enlazada al tipo, el broker devuelve el mensaje, webhooks responde 5xx y el proveedor reintenta. Nada se pierde en silencio.
+order: 7
+steps:
+  - from: asaas
+    to: webhooks
+    kind: http
+    label: POST /asaas
+    title: Llega un aviso
+    description: Supongamos que payments todavía no enlazó su cola.
+  - from: webhooks
+    to: x-payments
+    kind: event
+    label: deliver (mandatory)
+    title: webhooks entrega
+    description: 'Publica con mandatory: exige que exista al menos una cola destino.'
+    term: payment-asaas-webhook-received
+  - node: x-payments
+    kind: error
+    label: sin cola enlazada
+    title: El exchange no tiene a quién darlo
+    description: Sin mandatory, Rabbit lo descartaría en silencio.
+  - from: x-payments
+    to: webhooks
+    kind: error
+    label: returned
+    title: Rabbit lo devuelve
+    description: El publish falla con UnroutableMessageException.
+  - from: webhooks
+    to: asaas
+    kind: error
+    label: HTTP 503
+    title: webhooks responde 5xx
+    description: Asaas guarda el aviso y reintenta más tarde. Nada se pierde.
+map: messaging

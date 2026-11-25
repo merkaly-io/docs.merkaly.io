@@ -1,0 +1,6 @@
+name: secuencia
+type: concept
+domain: tienda
+summary: 'La numeración de cada tienda por tipo y año, por ejemplo ventas SLS.2611.0147 y compras PUR.2611.0139.'
+relations: [organization-settings, sale, purchase]
+details: 'Todos los contadores viven en una sola clave de configuración (sequence), cada uno con su incremento atómico.'

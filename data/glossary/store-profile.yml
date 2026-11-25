@@ -1,0 +1,6 @@
+name: perfil de la tienda
+type: concept
+domain: tienda
+summary: 'Lo que el store muestra de la tienda: nombre, descripción, logo, favicon, imagen para compartir, color principal, email y redes sociales.'
+relations: [organization-settings, store-readiness]
+details: 'Público, por GET /store/company, solo con lo que está cargado. El registro escribe el nombre y el email. Las imágenes se suben aparte; el color va en formato #RRGGBB. Redes: instagram, facebook, tiktok, youtube, x, linkedin y whatsapp.'

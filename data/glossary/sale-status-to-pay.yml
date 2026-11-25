@@ -1,0 +1,7 @@
+name: TO_PAY
+type: status
+domain: pedidos
+summary: 'El pedido existe en el proveedor pero sin pagar. El comerciante lo paga en su cuenta del proveedor.'
+owner: api
+relations: [sale]
+source: api.merkaly.io src/domain/order/enums/sale.enum.ts

@@ -1,0 +1,46 @@
+title: El proveedor cancela
+domain: pedidos
+summary: AliExpress cancela uno o todos los pedidos de una compra. Si cancela algunos, se reembolsan esos ítems; si cancela la única compra viva, se cancela la venta y se reembolsa lo que queda.
+order: 5
+map: orders
+steps:
+  - from: aliexpress
+    to: webhooks
+    kind: http
+    label: pedido cancelado
+    title: AliExpress cancela
+    description: También lo descubre una sincronización, o un pedido cerrado sin pagar.
+  - from: webhooks
+    to: api
+    kind: event
+    label: supplier.order.status_changed
+    title: El aviso llega al api
+    term: supplier-order-status-changed
+  - from: api
+    to: aliexpress
+    kind: http
+    label: ds.order.get
+    title: El api relee el pedido
+  - node: api
+    kind: command
+    label: reembolso por ítem
+    title: Algunos pedidos cancelados
+    description: La compra sigue viva. Se reembolsan sus ítems (precio más su parte del flete y los impuestos), un reembolso por pedido cancelado. El pago sigue PAID.
+    term: supplier-order
+  - from: api
+    to: payments
+    kind: invoke
+    label: payment.charge.refund
+    title: Pide esos reembolsos
+  - node: api
+    kind: event
+    label: CANCELLED (SUPPLIER)
+    title: Todos los pedidos cancelados
+    description: La compra queda CANCELLED. Si era la única viva, la venta se cancela por el mismo camino que la del comerciante y reembolsa lo que queda (nunca más de lo pagado).
+    term: sale-status-cancelled
+  - node: api
+    kind: error
+    label: SUPPLIER_CANCELLED
+    title: ¿Y si la cancelación automática falla?
+    description: La venta queda SUPPLIER_CANCELLED y el admin lo marca. El comerciante cancela y reembolsa, o vuelve a pedir.
+    term: sale-status-supplier-cancelled

@@ -1,0 +1,6 @@
+name: compra automática
+type: concept
+domain: pedidos
+summary: 'Con el pago online confirmado, el api compra solo al proveedor, en segundo plano. El pedido queda sin pagar; nunca se fuerza.'
+relations: [purchase, sale-status-to-order, sale-attention]
+details: 'Corre como sistema, nunca a nombre del comprador, y nunca hace fallar el pago. Si AliExpress limita, reintenta a los 1, 5 y 15 minutos. Si se frena, a los 30 minutos el admin muestra AUTO_PROCUREMENT_FAILED y se compra a mano.'

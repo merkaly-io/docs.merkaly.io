@@ -1,0 +1,8 @@
+name: envío
+type: entity
+domain: pedidos
+summary: 'Un paquete real (logistics.shipments), uno por número de seguimiento, con los ítems que lleva y su historia de eventos.'
+owner: api
+relations: [sale, purchase]
+details: 'Un pedido puede ir en varios paquetes y varios pedidos pueden compartir uno. source dice de dónde sale (SUPPLIER o confirmado a mano) y receivedBy quién reportó la entrega (SUPPLIER, CARRIER, MERCHANT o BUYER). El comprador ve una versión neutra, sin el proveedor.'
+source: api.merkaly.io src/domain/logistics

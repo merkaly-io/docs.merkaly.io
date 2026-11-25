@@ -1,0 +1,55 @@
+title: Cancelar una venta
+domain: pedidos
+summary: El comerciante (o el comprador) cancela. Se cancelan las compras sin pagar al proveedor; el pago pendiente se cancela y el pagado se reembolsa.
+order: 4
+map: orders
+steps:
+  - from: merchant
+    to: admin
+    kind: http
+    label: Cancelar
+    title: El comerciante cancela
+    description: El comprador también puede, desde el store, con las mismas reglas y sin aprobación.
+  - from: admin
+    to: api
+    kind: http
+    label: cancelar venta
+    title: El admin pide la cancelación
+  - node: api
+    kind: error
+    label: 409 si ya pagó al proveedor
+    title: ¿Se puede cancelar?
+    description: Si alguna compra viva ya está pagada o despachada en el proveedor, responde 409.
+    term: live-purchase
+  - from: api
+    to: payments
+    kind: invoke
+    label: payment.charge.delete
+    title: Borra los cobros que se pueden pagar
+    description: Antes de la transacción, así un Pix ya no se puede pagar. 409 si justo se pagó.
+    term: payment-charge-delete
+  - node: api
+    kind: command
+    label: una transacción
+    title: Cancela todo junto
+    description: 'Venta cancelada (quién: MERCHANT, BUYER o SUPPLIER), compras sin pagar canceladas, pago pendiente cancelado o pago pagado en REFUND_PENDING.'
+    term: sale-status-cancelled
+  - from: api
+    to: payments
+    kind: invoke
+    label: payment.charge.refund
+    title: Pide el reembolso
+    description: Después del commit. Queda REFUND_PROCESSING hasta que el proveedor confirma.
+    term: payment-charge-refund
+  - from: payments
+    to: api
+    kind: event
+    label: payment.refunded
+    title: El reembolso se confirma
+    description: El pago pasa a REFUNDED.
+    term: payment-refunded
+  - node: api
+    kind: error
+    label: no lo pagues
+    title: ¿Y el pedido en AliExpress?
+    description: AliExpress no permite cancelar por api. El pedido queda sin pagar (se cierra solo) y la compra avisa que no se pague. Si igual se paga, el admin lo marca.

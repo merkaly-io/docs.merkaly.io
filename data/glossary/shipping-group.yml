@@ -1,0 +1,6 @@
+name: grupo de flete
+type: concept
+domain: pedidos
+summary: 'Un flete por grupo: las líneas Choice de AliExpress viajan juntas y el resto paga el flete de su tienda. Cada país de origen es su propio grupo.'
+relations: [quoted-total, import-tax]
+details: 'El grupo Choice sale gratis cuando su costo llega al umbral de envío gratis. El flete de cada grupo se reparte entre sus líneas, así un ítem cancelado reembolsa su parte.'

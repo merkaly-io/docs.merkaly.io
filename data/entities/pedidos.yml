@@ -1,0 +1,97 @@
+entities:
+  - id: buyer
+    label: Comprador
+    caption: identidad
+    outside: true
+    col: 0
+    row: 0
+    summary: Quien compra en la tienda. Ve sus pedidos por etapas y nunca ve al proveedor.
+  - id: sale
+    label: Venta
+    caption: order.sales
+    col: 1
+    row: 0
+    term: sale
+    summary: Lo que el comprador compró. Su estado se deriva; nadie lo escribe.
+    fields:
+      - name: status
+        note: derivado del pago, las compras y los envíos
+      - name: delivery
+        note: destinatario, dirección, flete e impuestos por línea, estimación de entrega
+      - name: source
+        note: CHECKOUT o IMPORT
+      - name: cancelledBy
+        note: MERCHANT, BUYER o SUPPLIER
+  - id: payment
+    label: Pago
+    caption: pagos
+    outside: true
+    col: 2
+    row: 0
+    term: payment-charge
+    summary: El dinero de la venta. Su estado sigue al de la venta, no al revés.
+  - id: refund
+    label: Reembolso
+    caption: pagos
+    outside: true
+    col: 3
+    row: 0
+    summary: Nunca más de lo que el comprador pagó. Puede ser de toda la venta o de los ítems de un pedido cancelado.
+  - id: item
+    label: Ítem
+    caption: dentro de la venta
+    col: 0
+    row: 1
+    summary: Una variante con su cantidad y su precio de venta.
+  - id: purchase
+    label: Compra
+    caption: order.purchases
+    col: 1
+    row: 1
+    term: purchase
+    summary: Lo que la tienda le compra al proveedor. Una por cuenta del proveedor.
+    fields:
+      - name: status
+        note: TO_PLACE, PLACED, AWAITING_PAYMENT, PAID, SHIPPED, FAILED o CANCELLED
+      - name: shippingCost / taxCost
+        note: estimados en el checkout, reales cuando el proveedor cobra
+      - name: supplierOrder.error
+        note: código estable del error del proveedor
+  - id: supplier-order
+    label: Pedido en el proveedor
+    caption: uno por ítem
+    col: 2
+    row: 1
+    term: supplier-order
+    summary: AliExpress responde un pedido por ítem. Cada uno tiene su estado y sus cargos.
+  - id: shipment
+    label: Envío
+    caption: logistics.shipments
+    col: 0
+    row: 2
+    term: shipment
+    summary: Un paquete real, uno por número de seguimiento.
+    fields:
+      - name: status
+        note: PENDING, IN_TRANSIT, DELIVERED o EXCEPTION
+      - name: receivedBy
+        note: SUPPLIER, CARRIER, MERCHANT o BUYER
+      - name: items
+        note: los ítems de la venta que lleva
+  - id: event
+    label: Evento
+    caption: dentro del envío
+    col: 1
+    row: 2
+    summary: POSTED, IN_TRANSIT, CUSTOMS, OUT_FOR_DELIVERY, DELIVERED o EXCEPTION, con fecha y lugar. Solo se suman, nunca se borran.
+relations:
+  - { from: buyer, to: sale, label: compra, many: true }
+  - { from: sale, to: item, label: tiene, many: true }
+  - { from: sale, to: payment, label: se paga con }
+  - { from: payment, to: refund, label: devuelve, many: true }
+  - { from: sale, to: purchase, label: se cumple con, many: true }
+  - { from: purchase, to: supplier-order, label: vuelve como, many: true }
+  - { from: supplier-order, to: refund, label: si se cancela, many: true }
+  - { from: sale, to: shipment, label: viaja en, many: true }
+  - { from: purchase, to: shipment, label: produce, many: true }
+  - { from: shipment, to: event, label: registra, many: true }

@@ -1,0 +1,7 @@
+name: TO_ORDER
+type: status
+domain: pedidos
+summary: 'Venta pagada sin compra hecha en el proveedor. Arranca la compra automática; si a los 30 minutos no hay compra, el admin la marca.'
+owner: api
+relations: [sale]
+source: api.merkaly.io src/domain/order/enums/sale.enum.ts

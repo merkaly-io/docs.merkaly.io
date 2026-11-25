@@ -1,0 +1,83 @@
+title: Pedidos
+width: 960
+height: 600
+columns:
+  - label: personas
+    x: 85
+  - label: apps
+    x: 275
+  - label: api
+    x: 520
+  - label: afuera
+    x: 800
+nodes:
+  - id: buyer
+    label: Comprador
+    caption: compra en la tienda
+    kind: actor
+    x: 20
+    y: 90
+    w: 130
+    h: 56
+  - id: store
+    label: store
+    caption: la tienda
+    kind: app
+    term: frontends
+    x: 200
+    y: 90
+    w: 150
+    h: 56
+  - id: merchant
+    label: Comerciante
+    caption: dueño de la tienda
+    kind: actor
+    x: 20
+    y: 430
+    w: 130
+    h: 56
+  - id: admin
+    label: admin
+    caption: panel de la tienda
+    kind: app
+    term: frontends
+    x: 200
+    y: 430
+    w: 150
+    h: 56
+  - id: api
+    label: api
+    caption: venta, compras y envíos
+    kind: service
+    term: api
+    x: 420
+    y: 40
+    w: 200
+    h: 530
+  - id: payments
+    label: payments
+    caption: cobros y reembolsos
+    kind: service
+    term: payments
+    x: 700
+    y: 50
+    w: 200
+    h: 110
+  - id: aliexpress
+    label: AliExpress
+    caption: proveedor de productos
+    kind: provider
+    term: aliexpress
+    x: 710
+    y: 260
+    w: 180
+    h: 64
+  - id: webhooks
+    label: webhooks
+    caption: avisos del proveedor
+    kind: gate
+    term: webhooks
+    x: 710
+    y: 420
+    w: 180
+    h: 100

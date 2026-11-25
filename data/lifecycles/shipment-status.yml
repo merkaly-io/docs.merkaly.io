@@ -1,0 +1,26 @@
+title: Estado del envío
+domain: pedidos
+summary: 'Un envío es un paquete real, uno por número de seguimiento. Su estado sigue al evento más nuevo del tracking.'
+term: shipment
+order: 3
+states:
+  - { id: PENDING, col: 0, row: 1, initial: true, summary: 'Hay número de seguimiento pero sin movimiento. Se ignora para la venta si otro envío ya se mueve.' }
+  - { id: IN_TRANSIT, col: 1, row: 1, summary: 'En camino: despachado, en tránsito, en aduana o en reparto.' }
+  - { id: DELIVERED, col: 2, row: 1, summary: 'Entregado. Lo reporta el proveedor, la transportadora, el comerciante o el comprador (receivedBy).' }
+  - { id: EXCEPTION, col: 1, row: 2, summary: 'Devuelto, perdido o retenido. Nunca mueve la venta solo: el admin lo marca y el comerciante decide (reembolsar o volver a enviar).' }
+transitions:
+  - { from: PENDING, to: IN_TRANSIT, trigger: 'Primer evento POSTED o IN_TRANSIT' }
+  - { from: IN_TRANSIT, to: DELIVERED, trigger: 'Evento DELIVERED, el proveedor dice recibido, o el comprador confirma' }
+  - { from: PENDING, to: DELIVERED, trigger: 'El comprador confirma la recepción' }
+  - { from: IN_TRANSIT, to: EXCEPTION, trigger: 'Evento EXCEPTION' }
+  - { from: EXCEPTION, to: IN_TRANSIT, trigger: 'Llega un evento más nuevo en tránsito' }
+mappings:
+  - title: Códigos de evento del seguimiento
+    columns: [Código, Significa]
+    rows:
+      - { from: POSTED, to: despachado }
+      - { from: IN_TRANSIT, to: en tránsito }
+      - { from: CUSTOMS, to: en aduana }
+      - { from: OUT_FOR_DELIVERY, to: en reparto }
+      - { from: DELIVERED, to: entregado }
+      - { from: EXCEPTION, to: problema }

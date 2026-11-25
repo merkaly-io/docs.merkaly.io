@@ -1,0 +1,7 @@
+name: DELIVERED
+type: status
+domain: pedidos
+summary: 'Todos los envíos entregados. Desde la entrega corren 7 días para el reembolso del comprador y para liberar el dinero.'
+owner: api
+relations: [sale]
+source: api.merkaly.io src/domain/order/enums/sale.enum.ts

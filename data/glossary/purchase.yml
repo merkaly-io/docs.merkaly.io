@@ -1,0 +1,8 @@
+name: compra
+type: entity
+domain: pedidos
+summary: 'Lo que la tienda le compra al proveedor para cumplir una venta (order.purchases). Una por cuenta del proveedor.'
+owner: api
+relations: [sale, supplier-order, live-purchase, shipment]
+details: 'Guarda el costo de cada línea, el flete (shippingCost) y el impuesto (taxCost), primero estimados y después los cargos reales. Si algo falla, supplierOrder.error lleva un código estable que los frontends traducen. Numeración PUR.<año><mes>.<n>.'
+source: api.merkaly.io src/domain/order

@@ -1,0 +1,5 @@
+name: compra viva
+type: concept
+domain: pedidos
+summary: Una compra no borrada y no CANCELLED. Solo las vivas cuentan para el costo, la ganancia, el estado de la venta y las alertas.
+relations: [purchase]

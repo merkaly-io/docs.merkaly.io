@@ -11,7 +11,7 @@ export default defineAppConfig({
     title: 'Merkaly Docs',
   },
   seo: {
-    description: 'Cómo funciona Merkaly: glosario, flujos, ciclos de vida, arquitectura y decisiones.',
+    description: 'Cómo funciona Merkaly: dominios, glosario, flujos, ciclos de vida y decisiones.',
     title: 'Merkaly Docs',
   },
   socials: {},

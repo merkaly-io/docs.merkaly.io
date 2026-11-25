@@ -13,8 +13,8 @@ links:
     to: /glosario
     icon: i-lucide-book-open
     size: xl
-  - label: Ver un flujo
-    to: /flujos
+  - label: Ver los dominios
+    to: /identidad
     icon: i-lucide-workflow
     size: xl
     color: neutral
@@ -24,15 +24,87 @@ links:
 
 ::u-page-section
 ---
-title: Cómo navegar
-description: Empieza por la sección que responde tu pregunta. Todo está enlazado entre sí, así que desde cualquier ficha llegas al resto.
+title: Por dominio
+description: Cada dominio es una capa con la misma forma. Qué es, sus entidades y cómo se relacionan, sus ciclos de vida, sus flujos animados, sus decisiones y dónde vive en el código.
+---
+
+  :::u-page-grid
+    ::::u-page-card
+    ---
+    title: Identidad
+    description: Usuarios, organizaciones, membresías, roles y sesión.
+    icon: i-lucide-fingerprint
+    to: /identidad
+    ---
+    ::::
+
+    ::::u-page-card
+    ---
+    title: Tienda
+    description: La organización como tienda: configuración, dominio y apps.
+    icon: i-lucide-store
+    to: /tienda
+    ---
+    ::::
+
+    ::::u-page-card
+    ---
+    title: Catálogo
+    description: Productos, variantes, categorías y marcas.
+    icon: i-lucide-package
+    to: /catalogo
+    ---
+    ::::
+
+    ::::u-page-card
+    ---
+    title: Pedidos
+    description: Ventas al comprador, compras al proveedor y envíos.
+    icon: i-lucide-shopping-bag
+    to: /pedidos
+    ---
+    ::::
+
+    ::::u-page-card
+    ---
+    title: Pagos
+    description: Cobros, reembolsos, retiros y la cuenta de pago de la tienda.
+    icon: i-lucide-wallet
+    to: /pagos
+    ---
+    ::::
+
+    ::::u-page-card
+    ---
+    title: Proveedores
+    description: La conexión con el proveedor de productos.
+    icon: i-lucide-truck
+    to: /proveedores
+    ---
+    ::::
+
+    ::::u-page-card
+    ---
+    title: Plataforma
+    description: Servicios, mensajería entre ellos y reintentos.
+    icon: i-lucide-boxes
+    to: /plataforma
+    ---
+    ::::
+  :::
+::
+
+::u-page-section
+---
+title: Referencia
+description: Todo junto, sin importar el dominio. Desde cualquier ficha llegas al resto.
 ---
 
   :::u-page-grid
     ::::u-page-card
     ---
     title: Glosario
-    description: ¿Qué es payment.confirmed? ¿De quién es merkaly.api-payments? Una ficha por término, con su tipo, su dueño, sus relaciones y dónde aparece.
+    description: ¿Qué es payment.confirmed? Una ficha por término, con su dominio, su dueño, sus relaciones y dónde aparece.
     icon: i-lucide-book-open
     to: /glosario
     ---
@@ -41,7 +113,7 @@ description: Empieza por la sección que responde tu pregunta. Todo está enlaza
     ::::u-page-card
     ---
     title: Flujos
-    description: ¿Qué pasa cuando Asaas confirma un pago? Cada flujo se reproduce paso a paso, con el mensaje viajando entre los servicios.
+    description: Cada flujo se reproduce paso a paso, con el mensaje viajando entre las piezas.
     icon: i-lucide-workflow
     to: /flujos
     ---
@@ -50,18 +122,9 @@ description: Empieza por la sección que responde tu pregunta. Todo está enlaza
     ::::u-page-card
     ---
     title: Ciclos de vida
-    description: ¿A qué estado puede pasar un cobro? Máquinas de estado interactivas, con quién dispara cada transición.
+    description: Máquinas de estado interactivas, con quién dispara cada transición.
     icon: i-lucide-git-fork
     to: /ciclos
-    ---
-    ::::
-
-    ::::u-page-card
-    ---
-    title: Arquitectura
-    description: Qué hace cada servicio, las reglas de la mensajería, los exchanges, las colas y los reintentos.
-    icon: i-lucide-boxes
-    to: /arquitectura/servicios
     ---
     ::::
 
@@ -70,14 +133,14 @@ description: Empieza por la sección que responde tu pregunta. Todo está enlaza
     title: Decisiones
     description: Registros cortos y fechados de por qué el sistema es como es.
     icon: i-lucide-scale
-    to: /decisiones/webhooks-puerta-sin-exchange
+    to: /decisiones
     ---
     ::::
 
     ::::u-page-card
     ---
     title: Para una IA
-    description: Todo el contenido en texto plano, listo para pasárselo a un asistente. Usa llms.txt para el índice y llms-full.txt para todo.
+    description: Todo el contenido en texto plano. Usa llms.txt para el índice y llms-full.txt para todo.
     icon: i-lucide-bot
     to: /llms-full.txt
     target: _blank

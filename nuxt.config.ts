@@ -26,6 +26,13 @@ export default defineNuxtConfig({
   mcp: { enabled: false }, // Docus MCP server: not needed, llms.txt covers AI access
 
   routeRules: {
+    '/arquitectura/mensajeria': { redirect: { statusCode: 301, to: '/plataforma/mensajeria' } }, // old paths, before the domain layers
+    '/arquitectura/reintentos': { redirect: { statusCode: 301, to: '/plataforma/reintentos' } },
+    '/arquitectura/servicios': { redirect: { statusCode: 301, to: '/plataforma/servicios' } },
+    '/decisiones/payments-sin-estado': { redirect: { statusCode: 301, to: '/pagos/decisiones/payments-sin-estado' } },
+    '/decisiones/un-mensaje-por-proveedor': { redirect: { statusCode: 301, to: '/pagos/decisiones/un-mensaje-por-proveedor' } },
+    '/decisiones/un-solo-estado-del-cobro': { redirect: { statusCode: 301, to: '/pagos/decisiones/un-solo-estado-del-cobro' } },
+    '/decisiones/webhooks-puerta-sin-exchange': { redirect: { statusCode: 301, to: '/plataforma/decisiones/webhooks-puerta-sin-exchange' } },
     '/**': {
       headers: {
         'referrer-policy': 'strict-origin-when-cross-origin',

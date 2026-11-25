@@ -1,0 +1,8 @@
+name: payment.refunded
+type: event
+summary: El cobro se reembolsó, total o parcialmente.
+owner: payments
+relations:
+  - merkaly-api-payments
+  - charge-status-refunded
+source: '@merkaly/nest docs/events.md'

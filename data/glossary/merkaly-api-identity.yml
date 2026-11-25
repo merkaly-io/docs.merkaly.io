@@ -6,4 +6,6 @@ owner: api
 relations:
   - merkaly-auth
   - identity-signup-requested
+  - identity-organization
+  - identity-organization-member
   - account-user-linked

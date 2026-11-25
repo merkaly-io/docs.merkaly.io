@@ -1,0 +1,6 @@
+name: dominio de descubrimiento
+type: concept
+domain: identidad
+summary: Dominio registrado en la organización de Auth0. Cada tienda tiene el interno <slug>.merkaly.store y puede tener dominios propios.
+relations: [organization, store-domain, tenant-map]
+details: 'Auth0 no avisa cuando cambian los dominios. El api los cambia él mismo (registro y cambio de subdominio) y recarga; un cambio hecho a mano en Auth0 se ve en la recarga de cada hora.'

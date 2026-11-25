@@ -1,9 +1,11 @@
 name: identity.signup.requested
 type: event
 domain: identidad
-summary: Alguien se registró y pidió crear su tienda. El api crea la organización con el usuario como miembro.
+summary: 'Legado, pendiente de borrar: lo publicaba la Action de registro, hoy desligada. El registro actual es www /create (POST /www/onboarding).'
+details: 'El api todavía lo escucha y crea la organización con el mismo paso que el registro actual, pero sin datos personales. Se borra junto con la Action, su Form y la rama de webhooks.'
 relations:
   - auth0
   - merkaly-auth
   - merkaly-api-identity
+  - www-onboarding
 source: '@merkaly/nest docs/events.md'

@@ -1,0 +1,7 @@
+name: rol
+type: concept
+domain: identidad
+summary: 'Un solo rol por usuario. MK_* es staff de Merkaly (dashboard, y admin si es miembro); ORG_* es de la tienda (solo admin).'
+relations: [authorization-claim, enforce-surface-access, membership]
+details: 'MK_SUPERADMIN: staff, acceso total. MK_ADMIN: staff, administra sin deshabilitar. ORG_OWNER: dueño de la tienda. ORG_ADMIN: administra la tienda sin deshabilitarla. ORG_MANAGER: administra sin deshabilitar nada. Los roles no llevan permisos: viajan en el claim https://merka.ly/authorization. Desde el admin solo se asignan ORG_ADMIN y ORG_MANAGER.'
+source: api.merkaly.io src/domain/account/enums/user.enum.ts

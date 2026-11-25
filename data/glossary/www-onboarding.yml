@@ -1,0 +1,7 @@
+name: POST /www/onboarding
+type: command
+domain: identidad
+summary: El registro de una tienda. www /create manda el nombre de la tienda (y los datos personales si faltan) y el api crea la organización y hace dueña a la persona.
+relations: [organization, personal-identity, membership]
+details: 'Necesita sesión (sin token, 401). Cada paso revisa Auth0 y hace solo lo que falta, así un reintento termina lo empezado. Una persona puede tener varias tiendas. Responde el id de la organización y www abre el admin.'
+source: api.merkaly.io src/application/www

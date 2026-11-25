@@ -1,8 +1,12 @@
 name: Auth0
 type: provider
 domain: identidad
-summary: 'Identidad: usuarios, organizaciones y roles. Avisa altas y cambios por webhook.'
+summary: 'Identidad: usuarios, organizaciones, membresías y roles. Hace el login, corre las Actions y avisa cambios por Event Streams.'
 relations:
   - webhooks
   - merkaly-auth
   - identity-signup-requested
+  - user
+  - organization
+  - enforce-surface-access
+source: auth.merkaly.io docs/tenant-setup.md

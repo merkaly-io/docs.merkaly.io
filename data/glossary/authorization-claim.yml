@@ -1,0 +1,6 @@
+name: https://merka.ly/authorization
+type: concept
+domain: identidad
+summary: Claim que la primera Action de login pone en el access token y en el id token, con el rol de la persona.
+relations: [role, enforce-surface-access]
+source: auth.merkaly.io src/actions/add-information-to-userinfo-context

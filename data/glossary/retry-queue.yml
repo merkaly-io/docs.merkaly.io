@@ -1,0 +1,8 @@
+name: .retry
+type: queue
+summary: 'Cola auxiliar de cada cola de trabajo. Sin consumidores: el mensaje espera 30 s y vuelve a su cola. Hasta 5 intentos.'
+relations:
+  - dead-letter-queue
+  - merkaly-api-payments
+details: 'El original solo se confirma cuando el broker confirmó la copia en .retry: no hay ventana de pérdida. El número de intento viaja en el header x-merkaly-retries.'
+source: '@merkaly/nest docs/events.md'

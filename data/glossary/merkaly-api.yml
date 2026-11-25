@@ -1,0 +1,9 @@
+name: merkaly.api
+type: exchange
+summary: Exchange del api. Recibe los avisos de AliExpress, los eventos propios del api y los invokes que el api responde.
+owner: api
+relations:
+  - merkaly-api-supplier
+  - merkaly-api-invokes
+  - merkaly-api-identity
+source: '@merkaly/nest docs/events.md'

@@ -1,0 +1,8 @@
+name: merkaly.signals
+type: exchange
+summary: Exchange de signals. Recibe los comandos de notificación.
+owner: signals
+relations:
+  - merkaly-signals-emails
+  - email-send
+source: '@merkaly/nest docs/events.md'

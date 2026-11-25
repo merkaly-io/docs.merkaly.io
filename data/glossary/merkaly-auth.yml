@@ -1,0 +1,7 @@
+name: merkaly.auth
+type: exchange
+summary: Exchange del dominio identidad. Recibe los avisos de Auth0, aunque no hay un servicio "auth" corriendo.
+relations:
+  - auth0
+  - merkaly-api-identity
+source: '@merkaly/nest docs/events.md'

@@ -1,0 +1,7 @@
+name: merkaly.signals-emails
+type: queue
+summary: Cola de signals con los comandos email.send.
+owner: signals
+relations:
+  - merkaly-signals
+  - email-send

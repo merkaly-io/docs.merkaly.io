@@ -1,0 +1,8 @@
+name: deliver
+type: concept
+summary: 'Cómo publica la puerta: entrega un hecho de afuera en el exchange del dueño (deliver({ service, type }, data)). Nunca usa emit, que crearía un exchange propio.'
+relations:
+  - webhooks
+  - mandatory
+  - envelope
+source: '@merkaly/nest docs/events.md'

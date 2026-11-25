@@ -1,0 +1,41 @@
+title: Cambio de pedido (AliExpress)
+summary: AliExpress avisa que cambió el estado de un pedido al proveedor. webhooks lo entrega al api, que es el dueño del dominio proveedor.
+order: 3
+steps:
+  - from: aliexpress
+    to: webhooks
+    kind: http
+    label: POST /aliexpress
+    title: AliExpress avisa
+    description: Cambió el estado de un pedido al proveedor (mensaje 53).
+  - from: webhooks
+    to: x-api
+    kind: event
+    label: supplier.order.status_changed
+    title: Entrega en merkaly.api
+    description: Por ahora el dueño del dominio proveedor es el api.
+    term: supplier-order-status-changed
+  - from: x-api
+    to: webhooks
+    kind: reply
+    label: confirm
+    title: Rabbit confirma
+  - from: webhooks
+    to: aliexpress
+    kind: http
+    label: '200'
+    title: webhooks responde
+  - from: x-api
+    to: q-api-supplier
+    kind: event
+    label: supplier.order.status_changed
+    title: Cola del api
+    description: 'merkaly.api-supplier escucha el exchange propio: sin from.'
+    term: supplier-order-status-changed
+  - from: q-api-supplier
+    to: api
+    kind: event
+    label: '@HandleEvent'
+    title: El api actualiza el envío
+    description: Resuelve la organización por el vendedor y relee el pedido. El comprador nunca ve el nombre del proveedor.
+map: messaging

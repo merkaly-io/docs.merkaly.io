@@ -1,0 +1,8 @@
+name: payment.refund.authorize
+type: invoke
+summary: payments le pregunta al api si un reembolso Pix es legítimo. El api responde APPROVED o REFUSED.
+owner: api
+relations:
+  - merkaly-api-invokes
+  - payment-movement-check
+source: payments.merkaly.io docs/contract.md

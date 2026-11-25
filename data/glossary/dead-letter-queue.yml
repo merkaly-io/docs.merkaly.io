@@ -1,0 +1,8 @@
+name: .dlq
+type: queue
+summary: 'Cola auxiliar donde termina lo que no se pudo procesar: tras 5 reintentos, sin handler o malformado. Guarda cada mensaje 14 días.'
+relations:
+  - retry-queue
+  - operator-policy
+details: Cada mensaje que entra deja una línea ERROR [DLQ] en el log del servicio. Para reprocesar, se corrige la causa y se mueven los mensajes a la cola original con la shovel.
+source: '@merkaly/nest docs/events.md'

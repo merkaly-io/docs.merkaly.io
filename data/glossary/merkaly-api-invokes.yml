@@ -1,0 +1,8 @@
+name: merkaly.api-invokes
+type: queue
+summary: 'Cola de invokes del api: autorizar retiros y reembolsos.'
+owner: api
+relations:
+  - merkaly-api
+  - payment-withdrawal-authorize
+  - payment-refund-authorize

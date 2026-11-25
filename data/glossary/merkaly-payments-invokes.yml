@@ -1,0 +1,8 @@
+name: merkaly.payments-invokes
+type: queue
+summary: 'Cola de invokes de payments: todas las preguntas que payments responde (payment.charge.create, payment.movement.check...).'
+owner: payments
+relations:
+  - merkaly-payments
+  - payment-charge-create
+  - payment-movement-check

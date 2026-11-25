@@ -1,0 +1,43 @@
+title: Registro en Auth0
+summary: Una persona crea su cuenta. Auth0 avisa a webhooks, que entrega en el exchange del dominio identidad, y el api crea la organización.
+order: 2
+steps:
+  - from: auth0
+    to: webhooks
+    kind: http
+    label: POST /auth0
+    title: Auth0 avisa
+    description: La Action de post-registro llama al webhook con el usuario nuevo.
+  - from: webhooks
+    to: x-auth
+    kind: event
+    label: identity.signup.requested
+    title: Entrega en merkaly.auth
+    description: El dominio identidad tiene su exchange, aunque no hay un servicio "auth" corriendo.
+    term: identity-signup-requested
+  - from: x-auth
+    to: webhooks
+    kind: reply
+    label: confirm
+    title: Rabbit confirma
+    description: 'Hay una cola enlazada: el mensaje está a salvo.'
+  - from: webhooks
+    to: auth0
+    kind: http
+    label: '200'
+    title: webhooks responde
+    description: Fin del trabajo de webhooks.
+  - from: x-auth
+    to: q-api-identity
+    kind: event
+    label: identity.signup.requested
+    title: Enrutado a la cola del api
+    description: 'merkaly.api-identity escucha merkaly.auth (from: "auth").'
+    term: identity-signup-requested
+  - from: q-api-identity
+    to: api
+    kind: event
+    label: '@HandleEvent'
+    title: El api crea la cuenta
+    description: Organización, miembro y rol. Si el handler falla, entra al circuito de reintentos.
+map: messaging

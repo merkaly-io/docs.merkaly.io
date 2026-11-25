@@ -1,0 +1,58 @@
+title: El comprador paga (Pix)
+summary: El store pide cobrar. El api registra el intento y le pide el cobro a payments, que es el único que habla con Asaas.
+order: 5
+steps:
+  - from: client
+    to: api
+    kind: http
+    label: POST checkout
+    title: El store pide cobrar
+    description: Los frontends siempre le hablan al api por HTTP. Nunca a webhooks ni a payments.
+  - node: api
+    kind: event
+    label: registra el intento
+    title: El api registra
+    description: 'Guarda el pago pendiente en la base de la organización: el estado es del api.'
+  - from: api
+    to: x-payments
+    kind: invoke
+    label: invoke payment.charge.create
+    title: El api invoca a payments
+    description: 'invoke({ service: "payments", type: "payment.charge.create" }, ..., { timeout: 40000 }).'
+    term: payment-charge-create
+  - from: x-payments
+    to: q-payments-invokes
+    kind: invoke
+    label: payment.charge.create
+    title: Cola de invokes de payments
+    term: payment-charge-create
+  - from: q-payments-invokes
+    to: payments
+    kind: invoke
+    label: '@HandleInvoke'
+    title: payments recibe el pedido
+    description: Sabe hablar con el proveedor activo; el api no.
+  - from: payments
+    to: asaas
+    kind: http
+    label: POST /payments
+    title: payments llama a Asaas
+    description: Crea el cobro Pix en la cuenta de Merkaly con el split al 100% a la wallet del vendedor.
+  - from: asaas
+    to: payments
+    kind: http
+    label: QR + id
+    title: Asaas responde
+  - from: payments
+    to: api
+    kind: reply
+    label: PaymentCharge
+    title: payments responde al api
+    description: Montos en centavos, un solo estado (PENDING) y sin nombres del proveedor.
+  - from: api
+    to: client
+    kind: http
+    label: QR Pix
+    title: El comprador ve el QR
+    description: Cuando pague, el aviso vuelve por el flujo "Pago confirmado".
+map: messaging

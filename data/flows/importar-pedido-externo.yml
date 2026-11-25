@@ -1,0 +1,39 @@
+title: Importar un pedido hecho fuera de Merkaly
+domain: proveedores
+summary: Un pedido que el comerciante hizo directo en AliExpress entra como venta IMPORT, con su compra y sus envíos, sin ganancia ni cliente.
+order: 2
+map: catalog
+steps:
+  - from: merchant
+    to: admin
+    kind: http
+    label: id del pedido
+    title: El comerciante pega el id
+  - from: admin
+    to: api
+    kind: http
+    label: GET .../imports/:externalOrderId
+    title: El admin pide la vista previa
+  - from: api
+    to: aliexpress
+    kind: http
+    label: trade.ds.order.get
+    title: El api lee el pedido
+    description: AliExpress no devuelve el destinatario, así que la venta importada no tiene cliente ni envío al comprador.
+  - from: api
+    to: admin
+    kind: reply
+    label: problemas
+    title: El comerciante ve si se puede importar
+    description: Ya importado, otra moneda, cancelado, producto que no existe o SKU desconocido.
+  - from: admin
+    to: api
+    kind: http
+    label: POST .../imports
+    title: El comerciante importa
+  - node: api
+    kind: command
+    label: IMPORT, pago PAID
+    title: Crea venta y compra
+    description: Venta y compra al mismo precio por unidad (ganancia 0), pago PAID sin método, compra con el estado de AliExpress y envíos con su seguimiento. El estado de la venta se deriva como siempre.
+    term: sale-source

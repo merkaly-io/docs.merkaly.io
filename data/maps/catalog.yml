@@ -1,0 +1,74 @@
+title: Catálogo y proveedor
+width: 960
+height: 560
+columns:
+  - label: personas
+    x: 85
+  - label: apps
+    x: 275
+  - label: api
+    x: 520
+  - label: proveedor
+    x: 800
+nodes:
+  - id: merchant
+    label: Comerciante
+    caption: dueño de la tienda
+    kind: actor
+    x: 20
+    y: 110
+    w: 130
+    h: 56
+  - id: admin
+    label: admin
+    caption: Catálogo e Integraciones
+    kind: app
+    term: frontends
+    x: 200
+    y: 110
+    w: 150
+    h: 56
+  - id: buyer
+    label: Comprador
+    caption: ve la tienda
+    kind: actor
+    x: 20
+    y: 400
+    w: 130
+    h: 56
+  - id: store
+    label: store
+    caption: la tienda
+    kind: app
+    term: frontends
+    x: 200
+    y: 400
+    w: 150
+    h: 56
+  - id: api
+    label: api
+    caption: catálogo e integración
+    kind: service
+    term: api
+    x: 420
+    y: 40
+    w: 200
+    h: 490
+  - id: aliexpress
+    label: AliExpress
+    caption: cuenta del comerciante
+    kind: provider
+    term: aliexpress
+    x: 710
+    y: 110
+    w: 180
+    h: 64
+  - id: auth0
+    label: Auth0
+    caption: metadata de la organización
+    kind: provider
+    term: auth0
+    x: 710
+    y: 330
+    w: 180
+    h: 56

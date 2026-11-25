@@ -1,0 +1,43 @@
+title: Sincronizar un producto con el proveedor
+domain: catalogo
+summary: El comerciante pide releer un producto importado. El api actualiza solo lo que es del proveedor, mantiene el margen y marca la salud del producto.
+order: 2
+map: catalog
+steps:
+  - from: merchant
+    to: admin
+    kind: http
+    label: Sincronizar
+    title: El comerciante sincroniza
+  - from: admin
+    to: api
+    kind: http
+    label: POST .../products/:id/syncs
+    title: El admin pide la sincronización
+  - from: api
+    to: aliexpress
+    kind: http
+    label: ds.product.get
+    title: El api relee el producto
+  - node: api
+    kind: command
+    label: solo lo del proveedor
+    title: Actualiza lo que es del proveedor
+    description: Costo (y el precio de venta con el mismo margen), opciones, origen, imagen, atributos y datos del proveedor. Nunca toca nombre, descripción, activo, categoría, marca, póster ni margen.
+    term: variant-price
+  - node: api
+    kind: event
+    label: faltan / nuevas
+    title: Informa variantes que cambiaron
+    description: Las que el proveedor ya no ofrece se informan, no se borran. Las nuevas se informan, no se crean.
+  - node: api
+    kind: event
+    label: supplier.state
+    title: Marca la salud del producto
+    description: 'La más urgente: OUT_OF_STOCK, SYNC_NEEDED, PRICE_CHANGED u OK. Si el proveedor dice que no existe: UNAVAILABLE.'
+    term: product-supplier-state
+  - from: api
+    to: admin
+    kind: reply
+    label: cambios
+    title: El comerciante ve qué cambió

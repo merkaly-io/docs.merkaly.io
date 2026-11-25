@@ -1,0 +1,11 @@
+name: payment.asaas.webhook.received
+type: event
+summary: Aviso crudo de Asaas que webhooks entrega a payments, sin datos personales del comprador. payments lo traduce a payment.*.
+owner: payments
+relations:
+  - asaas
+  - webhooks
+  - merkaly-payments-asaas
+  - payment-confirmed
+details: 'Un tipo y una cola por proveedor: un futuro Stripe sería payment.stripe.webhook.received en merkaly.payments-stripe.'
+source: webhooks.merkaly.io src/app.routes.ts

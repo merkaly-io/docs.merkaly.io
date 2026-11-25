@@ -1,0 +1,10 @@
+name: payments
+type: service
+summary: 'Único servicio que habla con el proveedor de pagos. Sin estado ni base de datos: traduce los avisos del proveedor y responde invokes en términos de Merkaly.'
+relations:
+  - asaas
+  - merkaly-payments
+  - api
+  - payment-charge
+details: Corre un gateway a la vez detrás de un puerto (Asaas hoy). El api le manda en cada invoke lo que necesita (credenciales de la subcuenta, ids del proveedor), así que payments no guarda nada.
+source: payments.merkaly.io docs/contract.md

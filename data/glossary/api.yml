@@ -1,0 +1,8 @@
+name: api
+type: service
+summary: Guarda todos los registros (pedidos, pagos, reembolsos, retiros, contracargos) y las reglas de negocio. Nunca ve el nombre, el estado ni las credenciales del proveedor.
+relations:
+  - merkaly-api
+  - payments
+  - frontends
+source: api.merkaly.io src/domain/integration/payment/README.md

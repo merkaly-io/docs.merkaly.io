@@ -1,0 +1,7 @@
+name: CHARGEBACK_LOST
+type: status
+summary: 'El contracargo se perdió: el dinero volvió al titular de la tarjeta.'
+owner: api
+relations:
+  - payment-charge
+source: api.merkaly.io src/domain/integration/payment/enums/charge.enum.ts

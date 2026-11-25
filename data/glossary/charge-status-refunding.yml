@@ -1,0 +1,8 @@
+name: REFUNDING
+type: status
+summary: El reembolso está en camino.
+owner: api
+relations:
+  - payment-charge
+  - payment-charge-refund
+source: api.merkaly.io src/domain/integration/payment/enums/charge.enum.ts

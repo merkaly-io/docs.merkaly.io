@@ -1,0 +1,9 @@
+name: payment.confirmed
+type: event
+summary: 'El cobro fue confirmado por el proveedor: pagado, todavía sin acreditar. El api relee el cobro y sincroniza la venta.'
+owner: payments
+relations:
+  - merkaly-api-payments
+  - charge-status-approved
+  - payment-received
+source: '@merkaly/nest docs/events.md'

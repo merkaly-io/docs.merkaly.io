@@ -1,0 +1,72 @@
+title: Pago confirmado (Asaas)
+summary: Asaas avisa que un cobro se pagó. El aviso cruza webhooks, payments lo traduce y el api actualiza el pedido sin ver nunca la palabra Asaas.
+order: 1
+steps:
+  - from: asaas
+    to: webhooks
+    kind: http
+    label: POST /asaas
+    title: Asaas avisa por HTTP
+    description: 'Asaas no puede hablar con Rabbit: llama a nuestro webhook con PAYMENT_CONFIRMED. webhooks valida el token.'
+  - node: webhooks
+    kind: event
+    label: quita datos personales
+    title: webhooks prepara el mensaje
+    description: 'Pasa el cuerpo por una lista blanca (sin datos del comprador) y no traduce nada: eso ya no es su trabajo.'
+  - from: webhooks
+    to: x-payments
+    kind: event
+    label: payment.asaas.webhook.received
+    title: Entrega en el exchange del dueño
+    description: 'deliver({ service: "payments", type: "payment.asaas.webhook.received" }). El dueño de pagos es payments.'
+    term: payment-asaas-webhook-received
+  - from: x-payments
+    to: webhooks
+    kind: reply
+    label: confirm
+    title: Rabbit confirma
+    description: El broker confirmó que el mensaje quedó en al menos una cola (mandatory). Recién ahí webhooks contesta.
+  - from: webhooks
+    to: asaas
+    kind: http
+    label: '200'
+    title: webhooks responde 200
+    description: Asaas ya no reintenta. Desde aquí webhooks se desentiende.
+  - from: x-payments
+    to: q-payments-asaas
+    kind: event
+    label: routing key
+    title: El exchange enruta
+    description: Solo merkaly.payments-asaas está suscrita a payment.asaas.webhook.received.
+  - from: q-payments-asaas
+    to: payments
+    kind: event
+    label: '@HandleEvent'
+    title: payments consume
+    description: El mapper de Asaas traduce el aviso crudo al vocabulario de Merkaly.
+  - node: payments
+    kind: event
+    label: traduce
+    title: Traducción
+    description: PAYMENT_CONFIRMED de Asaas pasa a ser payment.confirmed, con montos en centavos.
+  - from: payments
+    to: x-payments
+    kind: event
+    label: emit payment.confirmed
+    title: payments emite el hecho
+    description: 'emit() publica en su propio exchange. No sabe quién lo escucha: pub/sub.'
+    term: payment-confirmed
+  - from: x-payments
+    to: q-api-payments
+    kind: event
+    label: payment.confirmed
+    title: Rabbit copia a los suscritos
+    description: 'merkaly.api-payments está enlazada a merkaly.payments (from: "payments"). Si mañana signals también quiere enterarse, enlaza su cola y nadie más cambia.'
+    term: payment-confirmed
+  - from: q-api-payments
+    to: api
+    kind: event
+    label: '@HandleEvent'
+    title: El api actualiza sus registros
+    description: Relee el cobro con payment.charge.read, marca el pago como confirmado y el pedido avanza. El api nunca vio la palabra Asaas.
+map: messaging

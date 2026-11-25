@@ -1,0 +1,7 @@
+name: DISPUTED
+type: status
+summary: Contracargo abierto, o ganado y esperando que vuelva el dinero.
+owner: api
+relations:
+  - payment-charge
+source: api.merkaly.io src/domain/integration/payment/enums/charge.enum.ts

@@ -1,0 +1,21 @@
+title: Estado del retiro
+domain: pagos
+summary: 'Cada transferencia de la cuenta de la tienda (finance.withdrawals): el Pix del comerciante (WITHDRAWAL) o el cobro de deudas a Merkaly (DEBT). Una vez cerrada, nunca se reabre.'
+term: withdrawal
+order: 4
+flags:
+  - id: closed
+    label: cerrado
+    description: 'DONE, FAILED o CANCELLED: nunca vuelve a abrirse.'
+states:
+  - { id: REQUESTED, col: 0, row: 1, initial: true, summary: 'Registrado antes de pedirlo al proveedor, con la referencia <orgId>:<withdrawalId>.' }
+  - { id: PROCESSING, col: 1, row: 0, summary: 'El proveedor lo está procesando.' }
+  - { id: DONE, col: 2, row: 0, flags: [closed], summary: 'El dinero salió de la cuenta de la tienda.' }
+  - { id: FAILED, col: 2, row: 1, flags: [closed], summary: 'Falló, o pasaron 15 minutos sin id de transferencia (UNCONFIRMED). Si era DEBT, las deudas se reabren.' }
+  - { id: CANCELLED, col: 2, row: 2, flags: [closed], summary: 'Cancelado en el proveedor. Si era DEBT, las deudas se reabren.' }
+transitions:
+  - { from: REQUESTED, to: PROCESSING, by: payments, trigger: 'El proveedor acepta la transferencia' }
+  - { from: PROCESSING, to: DONE, by: payments, trigger: 'payment.transfer.* la lee terminada' }
+  - { from: PROCESSING, to: FAILED, by: payments, trigger: 'El proveedor la falla' }
+  - { from: REQUESTED, to: FAILED, trigger: '15 minutos sin id de transferencia' }
+  - { from: PROCESSING, to: CANCELLED, by: payments, trigger: 'Cancelada en el proveedor' }

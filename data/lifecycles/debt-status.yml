@@ -1,0 +1,11 @@
+title: Estado de la deuda
+domain: pagos
+summary: 'Lo que la tienda le debe a Merkaly (finance.debts), hoy la parte de un reembolso que prestó Merkaly. Se cobra sola en el próximo retiro, antes del Pix.'
+term: debt
+order: 5
+states:
+  - { id: OPEN, col: 0, row: 0, initial: true, summary: 'Abierta: el dinero sigue en la cuenta de la tienda y se resta del saldo retirable.' }
+  - { id: SETTLED, col: 1, row: 0, summary: 'Cobrada por un retiro DEBT: el dinero ya está en Merkaly.' }
+transitions:
+  - { from: OPEN, to: SETTLED, trigger: 'El próximo retiro la cobra antes del Pix' }
+  - { from: SETTLED, to: OPEN, by: payments, trigger: 'La transferencia DEBT falla, se cancela o no se confirma en 15 minutos' }

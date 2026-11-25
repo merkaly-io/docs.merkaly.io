@@ -1,0 +1,14 @@
+title: Estado del contracargo
+domain: pagos
+summary: 'Cada apertura de un contracargo es un registro (finance.chargebacks) con su motivo y la fecha límite para responder. Un contracargo nunca es un reembolso.'
+term: chargeback
+order: 6
+states:
+  - { id: OPEN, col: 0, row: 1, initial: true, summary: 'El comprador disputó el pago.' }
+  - { id: IN_DISPUTE, col: 1, row: 1, summary: 'En disputa, con las pruebas presentadas.' }
+  - { id: WON, col: 2, row: 0, summary: 'Ganado: el pago vuelve a PAID.' }
+  - { id: LOST, col: 2, row: 2, summary: 'Perdido: el pago queda CHARGED_BACK.' }
+transitions:
+  - { from: OPEN, to: IN_DISPUTE, by: payments, trigger: 'Pasa a disputa' }
+  - { from: IN_DISPUTE, to: WON, by: payments, trigger: 'Se resuelve a favor de la tienda' }
+  - { from: IN_DISPUTE, to: LOST, by: payments, trigger: 'Se resuelve a favor del comprador' }

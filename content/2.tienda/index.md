@@ -1,6 +1,6 @@
 ---
 title: Tienda
-description: 'La organización como tienda: su configuración, su dominio y sus apps.'
+description: 'La organización como tienda: su configuración, su perfil, su dominio y sus apps.'
 navigation:
   title: Resumen
   icon: i-lucide-layers
@@ -8,16 +8,40 @@ navigation:
 
 ## Qué es
 
-La organización vista como tienda: su configuración local (settings), su dominio y las apps con las que se opera.
+La [organización](/glosario/organization) vista como tienda.
 
-::note
-Este dominio se está pasando a esta documentación. Mientras tanto, el detalle sigue en los README del código enlazados abajo.
-::
+- Cada tienda tiene su propia base de datos y su [configuración](/glosario/organization-settings): perfil, marca, contacto, mercado y numeración.
+- Se ve en `<nombre>.merkaly.store` (o un dominio propio). El host dice qué tienda es; nunca el cliente.
+- Vende en un solo [mercado](/glosario/market) (hoy Brasil, BRL, pt).
+- Está lista para vender cuando tiene productos activos y su cuenta de pago puede cobrar ([readiness](/glosario/store-readiness)).
 
+## Las apps
 
-## Ciclos de vida
+| App | Para quién | Qué hace |
+| --- | --- | --- |
+| www.merkaly.io | cualquiera | Sitio de Merkaly y registro de tiendas (`/create`) |
+| admin.merkaly.io | miembros de la tienda | Catálogo, ventas, compras, finanzas, configuración, equipo e integraciones |
+| `<nombre>.merkaly.store` | compradores | La tienda: catálogo, carrito, checkout y pedidos |
+| dashboard.merkaly.io | staff de Merkaly | Vista de solo lectura sobre todas las tiendas (pagos, caja, clientes) |
 
-::content-lifecycle-list{domain="tienda"}
+Quién entra a cada una está en [Identidad](/identidad).
+
+## Lista para vender
+
+| Pieza | De dónde sale |
+| --- | --- |
+| productos | cantidad de productos activos |
+| pagos | la [cuenta de pago](/glosario/payment-account) puede cobrar |
+| lista | productos > 0 y pagos |
+| proveedor (solo admin) | la [conexión con AliExpress](/glosario/supplier-connection) está vigente |
+
+Todo sale de datos guardados, sin llamar a ningún proveedor. Sin pagos, el store muestra el checkout como no disponible, sin decir por qué.
+
+## Entidades
+
+Toca una entidad para ver sus campos clave y con qué se relaciona. Las punteadas son de otro dominio.
+
+::content-entity-map{domain="tienda"}
 ::
 
 ## Flujos
@@ -25,12 +49,24 @@ Este dominio se está pasando a esta documentación. Mientras tanto, el detalle 
 ::content-flow-list{domain="tienda"}
 ::
 
+::content-flow{flow="preparar-tienda"}
+::
+
+## Decisiones
+
+Las decisiones que tocan a la tienda viven en su dominio: [Cambiar el subdominio no redirige](/identidad/decisiones/subdominio-sin-redireccion) y [Un solo mercado por tienda](/proveedores/decisiones/mercado-unico).
+
 ## En el código
 
 | Dónde | Qué hay |
 | --- | --- |
-| [api.merkaly.io `src/domain/settings`](https://github.com/merkaly-io/api.merkaly.io/tree/master/src/domain/settings) | Configuración de cada organización |
-| [api.merkaly.io `docs/architecture`](https://github.com/merkaly-io/api.merkaly.io/tree/master/docs/architecture) | Tenants, dominios y apps |
+| [api.merkaly.io `src/domain/settings`](https://github.com/merkaly-io/api.merkaly.io/tree/master/src/domain/settings) | Configuración de cada tienda, perfil, marca y subdominio |
+| [api.merkaly.io `docs/architecture/tenants.md`](https://github.com/merkaly-io/api.merkaly.io/blob/master/docs/architecture/tenants.md) | Cómo el host se convierte en la tienda |
+| [api.merkaly.io `docs/architecture/applications.md`](https://github.com/merkaly-io/api.merkaly.io/blob/master/docs/architecture/applications.md) | Dónde vive cada ruta según quién la llama |
+| [admin.merkaly.io](https://github.com/merkaly-io/admin.merkaly.io) | El panel de la tienda |
+| [store.merkaly.io](https://github.com/merkaly-io/store.merkaly.io) | La tienda del comprador |
+| [dashboard.merkaly.io](https://github.com/merkaly-io/dashboard.merkaly.io) | El panel interno de Merkaly |
+| [www.merkaly.io](https://github.com/merkaly-io/www.merkaly.io) | El sitio y el registro |
 
 ## Glosario
 

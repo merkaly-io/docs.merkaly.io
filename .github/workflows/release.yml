@@ -1,0 +1,29 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - uses: merkaly-io/actions/deploy@master
+        with:
+          railway_project_id: c6b930b0-7c90-4e36-9aa3-131ea7f0d421
+          railway_environment_id: 633e5307-e002-442d-b99e-1dcbf071d75e
+          railway_service_id: ${{ vars.RAILWAY_SERVICE_ID }} # docs service, set as a repo variable once it exists in Railway
+          railway_token: ${{ secrets.RAILWAY_FRONTEND_TOKEN }}
+
+  release:
+    needs: deploy
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write # release deletes the tag ref caches
+      contents: write
+    steps:
+      - uses: merkaly-io/actions/release@master

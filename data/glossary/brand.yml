@@ -1,0 +1,6 @@
+name: marca
+type: entity
+domain: catalogo
+summary: Marca de un producto, con póster opcional.
+owner: api
+relations: [product]

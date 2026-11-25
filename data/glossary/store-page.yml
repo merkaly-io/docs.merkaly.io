@@ -1,0 +1,8 @@
+name: página de la tienda
+type: entity
+domain: catalogo
+summary: 'Contenido que el comerciante edita en el store (hoy solo la home). Bloques fijos en un orden fijo: cambia textos, imagen y link, u oculta un bloque.'
+owner: api
+relations: [category, brand]
+details: 'Sin borrador: guardar publica. Lo que no está guardado muestra el contenido de fábrica del store. En los bloques de productos (novedades, tendencias, ofertas) solo se edita el título; los productos son los últimos activos.'
+source: api.merkaly.io src/domain/content

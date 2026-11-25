@@ -1,0 +1,7 @@
+name: precio de la variante
+type: concept
+domain: catalogo
+summary: 'price.cost (costo en el proveedor), price.retail (precio de venta) y price.markup (margen en puntos básicos: 1000 = 10 %). Precio de venta = costo más el margen.'
+relations: [variant, quoted-total]
+details: 'Si el comerciante edita el precio de venta, se guarda el margen que implica. Cada vez que el proveedor trae otro costo (sincronización, cotización, checkout), el precio de venta se recalcula con el mismo margen. Todo en centavos y sin conversión de moneda. El store nunca ve el costo ni el margen.'
+source: api.merkaly.io src/domain/catalog/utils/variant.price.ts

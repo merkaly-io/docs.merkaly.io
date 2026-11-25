@@ -1,0 +1,7 @@
+name: vendedor
+type: entity
+domain: proveedores
+summary: 'La tienda dentro del proveedor (por ejemplo, una tienda de AliExpress) que vende un producto. Se guarda una vez por proveedor.'
+owner: api
+relations: [product, supplier-connection]
+details: 'La importación la busca o la crea. Un producto sin datos del vendedor se rechaza.'

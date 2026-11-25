@@ -1,0 +1,6 @@
+name: mercado
+type: concept
+domain: proveedores
+summary: 'Cada tienda vende en un solo mercado: país, moneda e idioma (hoy Brasil, BRL, pt).'
+relations: [supplier-connection]
+details: 'Las lecturas del proveedor usan el país del mercado como referencia; el costo y el flete reales se recotizan con el destino del pedido en el checkout o en la compra.'

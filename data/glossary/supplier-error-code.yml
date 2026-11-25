@@ -1,0 +1,6 @@
+name: SupplierErrorCodeEnum
+type: concept
+domain: proveedores
+summary: 'Códigos estables de los errores del proveedor, para que el admin muestre su propio texto. El error crudo solo va al log.'
+relations: [supplier-connection, purchase]
+details: 'SUPPLIER_ACCESS_DENIED (409, token rechazado), SUPPLIER_REQUEST_REJECTED (422), SUPPLIER_UNAVAILABLE (502), SUPPLIER_RECIPIENT_DOCUMENT_INVALID (422, CPF del destinatario rechazado), SUPPLIER_CONNECTION_REQUIRED y SUPPLIER_CONNECTION_EXPIRED (409).'

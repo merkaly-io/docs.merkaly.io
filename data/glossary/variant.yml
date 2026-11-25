@@ -1,0 +1,7 @@
+name: variante
+type: entity
+domain: catalogo
+summary: 'Una combinación de opciones de un producto (por ejemplo Color: Azul, Talle: M), con su precio, sus imágenes y lo que el proveedor necesita para comprarla.'
+owner: api
+relations: [product, variant-price, option-value]
+details: 'sourcing guarda el id de la variante en el proveedor y desde dónde se envía. No se borra la variante principal ni una que usó alguna venta.'

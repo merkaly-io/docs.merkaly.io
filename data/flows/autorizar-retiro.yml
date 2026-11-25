@@ -1,0 +1,68 @@
+title: Asaas pide autorizar un retiro
+summary: 'Antes de mover dinero, Asaas pregunta si el retiro es legítimo. Es un invoke de punta a punta: la puerta sí espera la respuesta.'
+order: 4
+steps:
+  - from: asaas
+    to: webhooks
+    kind: http
+    label: POST /asaas/withdrawals
+    title: Asaas pregunta antes de mover dinero
+    description: 'Para TRANSFER y PIX_REFUND Asaas espera una respuesta inmediata: ¿aprobado o rechazado?'
+  - from: webhooks
+    to: x-payments
+    kind: invoke
+    label: invoke payment.movement.check
+    title: webhooks invoca a payments
+    description: 'invoke({ service: "payments", type: "payment.movement.check" }, { payload }, { timeout: 3000 }). Aquí la puerta sí espera.'
+    term: payment-movement-check
+  - from: x-payments
+    to: q-payments-invokes
+    kind: invoke
+    label: payment.movement.check
+    title: Cola de invokes de payments
+    description: Una sola cola por servicio para todas las preguntas.
+    term: payment-movement-check
+  - from: q-payments-invokes
+    to: payments
+    kind: invoke
+    label: '@HandleInvoke'
+    title: payments lee el pedido de Asaas
+    description: Entiende si es retiro o reembolso Pix y arma los datos en términos de Merkaly.
+  - from: payments
+    to: x-api
+    kind: invoke
+    label: invoke payment.withdrawal.authorize
+    title: payments le pregunta al api
+    description: La decisión de negocio es del api (2 s de timeout como máximo).
+    term: payment-withdrawal-authorize
+  - from: x-api
+    to: q-api-invokes
+    kind: invoke
+    label: payment.withdrawal.authorize
+    title: Cola de invokes del api
+    term: payment-withdrawal-authorize
+  - from: q-api-invokes
+    to: api
+    kind: invoke
+    label: '@HandleInvoke'
+    title: El api decide
+    description: ¿Existe ese retiro, coincide el monto, es de esa tienda?
+  - from: api
+    to: payments
+    kind: reply
+    label: APPROVED
+    title: Respuesta directa
+    description: Vuelve por amq.rabbitmq.reply-to, sin pasar por exchanges.
+  - from: payments
+    to: webhooks
+    kind: reply
+    label: '{ approved, body }'
+    title: payments arma la respuesta de Asaas
+    description: Devuelve el cuerpo exacto que Asaas espera.
+  - from: webhooks
+    to: asaas
+    kind: http
+    label: 200 APPROVED
+    title: webhooks reenvía
+    description: Si algo tardó o falló en el camino, la respuesta es REFUSED con 200, nunca un 5xx.
+map: messaging

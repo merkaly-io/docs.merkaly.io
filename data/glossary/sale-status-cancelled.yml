@@ -1,0 +1,7 @@
+name: CANCELLED
+type: status
+domain: pedidos
+summary: 'Venta cancelada (por MERCHANT, BUYER o SUPPLIER), o reembolsada o contracargada sin compra pagada en el proveedor.'
+owner: api
+relations: [sale]
+source: api.merkaly.io src/domain/order/enums/sale.enum.ts

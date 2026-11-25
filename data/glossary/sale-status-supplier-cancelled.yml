@@ -1,0 +1,7 @@
+name: SUPPLIER_CANCELLED
+type: status
+domain: pedidos
+summary: 'El proveedor canceló y la cancelación automática de la venta falló. El comerciante cancela y reembolsa, o vuelve a pedir.'
+owner: api
+relations: [sale]
+source: api.merkaly.io src/domain/order/enums/sale.enum.ts

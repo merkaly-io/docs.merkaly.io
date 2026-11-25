@@ -1,0 +1,7 @@
+name: SHIPPED
+type: status
+domain: pedidos
+summary: 'Todas las compras vivas despachadas y cada envío en tránsito o entregado.'
+owner: api
+relations: [sale]
+source: api.merkaly.io src/domain/order/enums/sale.enum.ts

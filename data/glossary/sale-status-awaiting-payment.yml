@@ -1,0 +1,7 @@
+name: AWAITING_PAYMENT
+type: status
+domain: pedidos
+summary: 'Venta creada; el pago todavía no está pagado. Se puede cancelar.'
+owner: api
+relations: [sale]
+source: api.merkaly.io src/domain/order/enums/sale.enum.ts

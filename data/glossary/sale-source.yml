@@ -1,0 +1,6 @@
+name: origen de la venta
+type: concept
+domain: pedidos
+summary: 'CHECKOUT (el store), IMPORT (un pedido hecho fuera de Merkaly) o ADMIN (reservado: no hay ventas manuales).'
+relations: [sale]
+details: 'Las ventas importadas quedan fuera de las métricas de la tienda y de los flujos de pago.'

@@ -1,0 +1,7 @@
+name: atención
+type: concept
+domain: pedidos
+summary: 'La excepción más urgente de cada venta, calculada al leer. Algunas piden acción del comerciante; otras solo informan.'
+relations: [sale]
+details: 'Piden acción: PAYMENT_AMOUNT_MISMATCH, PAYMENT_DISPUTED, REFUND_PENDING, CHARGED_BACK_WITH_SUPPLIER_ORDER, REFUNDED_OUTSIDE_WITH_SUPPLIER_ORDER, SUPPLIER_PAID_AFTER_CANCEL, SUPPLIER_ORDER_FAILED, SUPPLIER_PAYMENT_PENDING, SHIPMENT_EXCEPTION, SUPPLIER_CANCELLED, AUTO_PROCUREMENT_FAILED y TO_ORDER. Solo informan: SHIPMENT_DELAYED (más de 7 días pedida sin despachar), PARTIAL_REFUND_OUTSIDE y PAID_AFTER_CANCEL_REFUNDED.'
+source: api.merkaly.io src/domain/order/enums/attention.enum.ts

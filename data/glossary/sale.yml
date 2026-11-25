@@ -1,0 +1,8 @@
+name: venta
+type: entity
+domain: pedidos
+summary: 'Lo que el comprador compró (order.sales). Guarda lo acordado en el checkout; su estado se deriva del pago, las compras y los envíos.'
+owner: api
+relations: [purchase, shipment, payment-charge, sale-source, sale-attention]
+details: 'delivery guarda destinatario, dirección, flete, impuestos de importación y la estimación de entrega, por línea. cancelledBy dice quién la canceló (MERCHANT, BUYER o SUPPLIER). El admin no crea ni edita ventas: solo nacen del checkout o de una importación. Numeración SLS.<año><mes>.<n>.'
+source: api.merkaly.io src/domain/order

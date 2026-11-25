@@ -1,0 +1,6 @@
+name: impuesto de importación
+type: concept
+domain: pedidos
+summary: 'Lo paga el comprador. El checkout lo estima por pedido con los tramos del proveedor (Brasil: 20,6 % hasta US$ 50, 34 % arriba) sobre el costo más el flete.'
+relations: [quoted-total, shipping-group]
+details: 'Ninguna llamada de AliExpress lo cotiza antes. Un grupo que sale del país de destino no es importación y no paga. Un ítem cancelado reembolsa su parte. El cargo real del proveedor reemplaza a la estimación.'

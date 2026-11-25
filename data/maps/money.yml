@@ -1,0 +1,94 @@
+title: Dinero
+width: 1140
+height: 600
+columns:
+  - label: personas
+    x: 85
+  - label: apps
+    x: 275
+  - label: api
+    x: 520
+  - label: payments
+    x: 790
+  - label: afuera
+    x: 1040
+nodes:
+  - id: buyer
+    label: Comprador
+    caption: paga con Pix
+    kind: actor
+    x: 20
+    y: 80
+    w: 130
+    h: 56
+  - id: store
+    label: store
+    caption: checkout
+    kind: app
+    term: frontends
+    x: 200
+    y: 80
+    w: 150
+    h: 56
+  - id: merchant
+    label: Comerciante
+    caption: dueño de la tienda
+    kind: actor
+    x: 20
+    y: 420
+    w: 130
+    h: 56
+  - id: admin
+    label: admin
+    caption: Pagos y Finanzas
+    kind: app
+    term: frontends
+    x: 200
+    y: 420
+    w: 150
+    h: 56
+  - id: api
+    label: api
+    caption: registros y reglas
+    kind: service
+    term: api
+    x: 420
+    y: 40
+    w: 200
+    h: 530
+  - id: payments
+    label: payments
+    caption: habla con el proveedor, sin estado
+    kind: service
+    term: payments
+    x: 700
+    y: 40
+    w: 180
+    h: 330
+  - id: asaas
+    label: Asaas
+    caption: proveedor de pagos
+    kind: provider
+    term: asaas
+    x: 960
+    y: 70
+    w: 160
+    h: 64
+  - id: auth0
+    label: Auth0
+    caption: datos personales
+    kind: provider
+    term: auth0
+    x: 960
+    y: 480
+    w: 160
+    h: 56
+  - id: webhooks
+    label: webhooks
+    caption: avisos y preguntas del proveedor
+    kind: gate
+    term: webhooks
+    x: 960
+    y: 230
+    w: 160
+    h: 110

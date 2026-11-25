@@ -1,0 +1,77 @@
+title: Retirar el saldo
+domain: pagos
+summary: El comerciante pasa su saldo a su llave Pix. Primero se cobran sus deudas con Merkaly; el proveedor pregunta antes de mover cada transferencia y el api solo aprueba lo que registró.
+order: 2
+map: money
+steps:
+  - from: merchant
+    to: admin
+    kind: http
+    label: Sacar agora
+    title: El comerciante pide el retiro
+    description: Siempre manual, nunca automático. Todo el saldo retirable o un monto.
+  - from: admin
+    to: api
+    kind: http
+    label: POST /admin/finance/withdrawals
+    title: El admin pide el retiro
+  - node: api
+    kind: command
+    label: saldo retirable
+    title: El api calcula cuánto se puede
+    description: 'Lo liberado (ventas entregadas hace más de 7 días) menos lo ya retirado, tope el saldo de la cuenta, menos las deudas abiertas. 422 si se pide más.'
+    term: withdrawable-balance
+  - node: api
+    kind: command
+    label: deudas primero
+    title: Registra y cobra las deudas
+    description: Con deudas abiertas, registra un retiro DEBT por su suma exacta y las marca cobradas, en una transacción.
+    term: debt
+  - from: api
+    to: payments
+    kind: invoke
+    label: payment.transfer.create (PLATFORM)
+    title: Transfiere las deudas a Merkaly
+    description: Débitos com a Merkaly. Si el proveedor la rechaza, las deudas se reabren y no hay Pix.
+  - node: api
+    kind: command
+    label: REQUESTED
+    title: Registra el retiro antes de pedirlo
+    description: 'Con referencia <orgId>:<withdrawalId>, quién lo pidió y la llave Pix enmascarada.'
+    term: withdrawal
+  - from: api
+    to: payments
+    kind: invoke
+    label: payment.transfer.create (PIX_KEY)
+    title: Pide el Pix a la llave del comerciante
+    description: Saque Merkaly. El proveedor puede cobrar una tarifa por retiro.
+  - from: payments
+    to: asaas
+    kind: http
+    label: transferencia
+    title: payments pide la transferencia
+  - from: asaas
+    to: webhooks
+    kind: http
+    label: ¿autorizas?
+    title: El proveedor pregunta antes de mover
+    description: Lo detalla el flujo "Asaas pide autorizar un retiro".
+  - from: payments
+    to: api
+    kind: invoke
+    label: payment.withdrawal.authorize
+    title: payments le pregunta al api
+    term: payment-withdrawal-authorize
+  - from: api
+    to: payments
+    kind: reply
+    label: APPROVED
+    title: El api aprueba solo lo suyo
+    description: Un retiro abierto con esa referencia, el mismo monto y dentro del saldo retirable. Cualquier otra cosa es REFUSED.
+  - from: payments
+    to: api
+    kind: event
+    label: payment.transfer.*
+    title: El retiro termina
+    description: El api relee la transferencia. DONE, FAILED o CANCELLED nunca vuelven a abrirse.
+    term: withdrawal

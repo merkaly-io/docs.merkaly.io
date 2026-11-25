@@ -1,0 +1,46 @@
+title: Contracargo
+domain: pagos
+summary: El comprador disputa un pago. El dinero queda retenido, el comerciante junta pruebas de entrega y el pago vuelve a pagado si gana o queda contracargado si pierde.
+order: 4
+map: money
+steps:
+  - from: asaas
+    to: webhooks
+    kind: http
+    label: contracargo
+    title: El proveedor avisa una disputa
+  - from: webhooks
+    to: payments
+    kind: event
+    label: payment.asaas.webhook.received
+    title: payments lo traduce
+  - from: payments
+    to: api
+    kind: event
+    label: payment.*
+    title: El api relee el cobro
+    description: El cobro queda DISPUTED.
+    term: charge-status-disputed
+  - node: api
+    kind: event
+    label: DISPUTED + OPEN
+    title: Pago en disputa, contracargo abierto
+    description: Un registro de contracargo por cada apertura, con motivo y fecha límite. El pago entero queda retenido del saldo retirable.
+    term: chargeback
+  - from: api
+    to: admin
+    kind: reply
+    label: PAYMENT_DISPUTED
+    title: El admin pide pruebas
+    description: Junta pruebas de entrega.
+    term: sale-attention
+  - node: api
+    kind: reply
+    label: WON → PAID
+    title: Si gana
+    description: El pago vuelve a PAID y el dinero se libera con la regla de siempre.
+  - node: api
+    kind: error
+    label: LOST → CHARGED_BACK
+    title: Si pierde
+    description: 'El pago queda CHARGED_BACK. Si ya se compró al proveedor, el admin lo marca: el pedido sigue.'

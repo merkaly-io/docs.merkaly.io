@@ -1,0 +1,67 @@
+title: Reembolsar un pago
+domain: pagos
+summary: Al cancelar una venta pagada, el comprador recibe todo lo que pagó. La tienda devuelve lo que puede y Merkaly presta el resto, que cobra en el próximo retiro.
+order: 3
+map: money
+steps:
+  - node: api
+    kind: event
+    label: REFUND_PENDING
+    title: La venta se cancela
+    description: En la misma transacción, el pago pagado pasa a REFUND_PENDING. El reembolso se pide después del commit.
+    term: finance-payment
+  - from: api
+    to: payments
+    kind: invoke
+    label: payment.charge.read
+    title: Relee el cobro
+    description: Solo se reembolsa en línea un cobro APPROVED o SETTLED.
+    term: payment-charge-read
+  - node: api
+    kind: command
+    label: tienda + préstamo
+    title: Decide de dónde sale el dinero
+    description: La cuenta de la tienda devuelve todo lo que puede; la cuenta de Merkaly presta el resto (la tarifa y lo que falte). Si entre las dos no alcanza, no pide nada (nunca un reembolso parcial) y queda PENDING.
+    term: refund
+  - node: api
+    kind: command
+    label: REQUESTED
+    title: Registra el reembolso antes de pedirlo
+    description: Nunca más de lo que el comprador pagó, tarifa incluida.
+    term: refund-cap
+  - from: api
+    to: payments
+    kind: invoke
+    label: payment.charge.refund
+    title: Pide el reembolso
+    term: payment-charge-refund
+  - from: payments
+    to: asaas
+    kind: http
+    label: reembolso Pix
+    title: payments lo pide al proveedor
+  - from: asaas
+    to: webhooks
+    kind: http
+    label: ¿autorizas?
+    title: El proveedor pregunta antes de mover
+  - from: payments
+    to: api
+    kind: invoke
+    label: payment.refund.authorize
+    title: payments le pregunta al api
+    description: Aprueba solo si Merkaly registró un reembolso de ese cobro por el mismo monto.
+    term: payment-refund-authorize
+  - from: payments
+    to: api
+    kind: event
+    label: payment.refunded
+    title: El reembolso termina
+    description: El pago pasa a REFUNDED.
+    term: payment-refunded
+  - node: api
+    kind: command
+    label: deuda REFUND_FEE
+    title: Registra lo que prestó Merkaly
+    description: Lo prestado queda como deuda abierta de la tienda, una por pago. Se cobra en su próximo retiro.
+    term: debt

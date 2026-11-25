@@ -1,0 +1,10 @@
+name: cobro
+type: entity
+summary: Lo que el comprador paga por una venta. Lo crea payments en el proveedor; el api guarda su registro con un solo estado.
+owner: api
+relations:
+  - payment-charge-create
+  - payment-charge-read
+  - charge-reference
+details: 'El estado del cobro decide todo: si se puede borrar, si está pagado y si se reembolsa en línea. Ver el ciclo de vida "Estado del cobro".'
+source: api.merkaly.io src/domain/integration/payment/enums/charge.enum.ts

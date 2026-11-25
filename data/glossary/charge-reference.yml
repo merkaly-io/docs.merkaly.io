@@ -1,0 +1,7 @@
+name: referencia
+type: concept
+summary: 'Identificador que el api arma y lee: <orgId>:<saleId> para cobros y <orgId>:<withdrawalId> para retiros. payments solo la pasa al proveedor y de vuelta.'
+owner: api
+relations:
+  - payment-charge
+source: payments.merkaly.io docs/contract.md

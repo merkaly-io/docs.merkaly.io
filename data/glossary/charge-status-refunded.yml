@@ -1,0 +1,8 @@
+name: REFUNDED
+type: status
+summary: Reembolsado por completo.
+owner: api
+relations:
+  - payment-charge
+  - payment-refunded
+source: api.merkaly.io src/domain/integration/payment/enums/charge.enum.ts

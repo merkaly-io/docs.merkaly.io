@@ -1,0 +1,11 @@
+name: webhooks
+type: service
+summary: Puerta de entrada de los proveedores externos. Valida cada pedido, entrega el mensaje en el exchange del dueño y responde. No tiene exchange propio ni lógica de negocio.
+relations:
+  - asaas
+  - auth0
+  - aliexpress
+  - deliver
+  - mandatory
+details: 'Recibe, verifica, entrega y responde: nada más. El mapa proveedor a dueño vive en un solo archivo, así que cambiar de dueño es cambiar una línea. Solo espera una respuesta cuando Asaas pide autorizar un movimiento (invoke payment.movement.check).'
+source: webhooks.merkaly.io src/app.routes.ts

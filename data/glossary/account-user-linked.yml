@@ -1,0 +1,7 @@
+name: account.user.linked
+type: event
+summary: Se vinculó una identidad existente a otra. El api reasigna las referencias del usuario en todas las organizaciones.
+owner: api
+relations:
+  - merkaly-api-identity
+source: '@merkaly/nest docs/events.md'

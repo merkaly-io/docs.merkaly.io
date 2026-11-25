@@ -1,0 +1,8 @@
+name: merkaly.api-supplier
+type: queue
+summary: Cola del api con los avisos del proveedor de productos (supplier.*).
+owner: api
+relations:
+  - merkaly-api
+  - supplier-order-status-changed
+  - supplier-product-updated

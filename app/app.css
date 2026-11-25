@@ -1,0 +1,55 @@
+@theme static {
+  --color-merkaly-50: #fdf3f5;
+  --color-merkaly-100: #fbe7eb;
+  --color-merkaly-200: #f6d0d9;
+  --color-merkaly-300: #eeaab9;
+  --color-merkaly-400: #e27a93;
+  --color-merkaly-500: #d24f70;
+  --color-merkaly-600: #ba2746; /* brand, same as admin and www */
+  --color-merkaly-700: #9d2440;
+  --color-merkaly-800: #84213b;
+  --color-merkaly-900: #712037;
+  --color-merkaly-950: #3f0c1a;
+}
+
+:root {
+  --mk-node-provider: #6b7280;
+  --mk-node-provider-bg: #f1f1ee;
+  --mk-node-gate: #d97706;
+  --mk-node-gate-bg: #fff7e6;
+  --mk-node-exchange: #7c3aed;
+  --mk-node-exchange-bg: #f2ecff;
+  --mk-node-queue: #0f766e;
+  --mk-node-queue-bg: #e4f5f1;
+  --mk-node-service: #1d4ed8;
+  --mk-node-service-bg: #e8efff;
+  --mk-kind-event: #d97706;
+  --mk-kind-invoke: #2563eb;
+  --mk-kind-reply: #059669;
+  --mk-kind-http: #475569;
+  --mk-kind-error: #dc2626;
+  --mk-kind-command: #db2777;
+  --mk-edge: #c9c8bf;
+  --mk-state-flag: #0f766e;
+}
+
+.dark {
+  --mk-node-provider: #a3a8b8;
+  --mk-node-provider-bg: #20222a;
+  --mk-node-gate: #f0a73a;
+  --mk-node-gate-bg: #2c2412;
+  --mk-node-exchange: #b79cff;
+  --mk-node-exchange-bg: #271f3d;
+  --mk-node-queue: #5fd3c4;
+  --mk-node-queue-bg: #142d2a;
+  --mk-node-service: #8db0ff;
+  --mk-node-service-bg: #18233f;
+  --mk-kind-event: #f5b04f;
+  --mk-kind-invoke: #7aa7ff;
+  --mk-kind-reply: #43d19c;
+  --mk-kind-http: #9aa6b8;
+  --mk-kind-error: #f87171;
+  --mk-kind-command: #f58bbd;
+  --mk-edge: #3a3c47;
+  --mk-state-flag: #5fd3c4;
+}

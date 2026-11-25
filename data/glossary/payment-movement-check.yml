@@ -1,0 +1,10 @@
+name: payment.movement.check
+type: invoke
+summary: webhooks le pregunta a payments si Asaas puede mover dinero (retiro o reembolso Pix). Cualquier falla es un rechazo, nunca un 5xx.
+owner: payments
+relations:
+  - asaas
+  - webhooks
+  - payment-withdrawal-authorize
+  - payment-refund-authorize
+source: payments.merkaly.io docs/contract.md

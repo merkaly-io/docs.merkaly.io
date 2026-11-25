@@ -1,0 +1,8 @@
+name: payment.withdrawal.authorize
+type: invoke
+summary: payments le pregunta al api si un retiro es legítimo. El api responde APPROVED o REFUSED.
+owner: api
+relations:
+  - merkaly-api-invokes
+  - payment-movement-check
+source: payments.merkaly.io docs/contract.md

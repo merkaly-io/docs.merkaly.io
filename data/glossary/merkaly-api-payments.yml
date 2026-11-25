@@ -1,0 +1,10 @@
+name: merkaly.api-payments
+type: queue
+summary: 'Cola del api con los eventos payment.* traducidos por payments. Ligada a merkaly.payments con from: "payments".'
+owner: api
+relations:
+  - merkaly-payments
+  - payment-confirmed
+  - payment-received
+  - retry-queue
+  - dead-letter-queue

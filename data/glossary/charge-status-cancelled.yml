@@ -1,0 +1,8 @@
+name: CANCELLED
+type: status
+summary: Borrado antes de pagarse.
+owner: api
+relations:
+  - payment-charge
+  - payment-charge-delete
+source: api.merkaly.io src/domain/integration/payment/enums/charge.enum.ts

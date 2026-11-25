@@ -1,0 +1,177 @@
+title: Mensajería entre servicios
+width: 1200
+height: 700
+columns:
+  - label: proveedores
+    x: 90
+  - label: puerta
+    x: 275
+  - label: exchanges
+    x: 485
+  - label: colas
+    x: 735
+  - label: servicios
+    x: 1060
+nodes:
+  - id: asaas
+    label: Asaas
+    caption: proveedor de pagos
+    kind: provider
+    term: asaas
+    x: 20
+    y: 70
+    w: 140
+    h: 56
+  - id: auth0
+    label: Auth0
+    caption: identidad
+    kind: provider
+    term: auth0
+    x: 20
+    y: 290
+    w: 140
+    h: 56
+  - id: aliexpress
+    label: AliExpress
+    caption: proveedor de productos
+    kind: provider
+    term: aliexpress
+    x: 20
+    y: 470
+    w: 140
+    h: 56
+  - id: client
+    label: store / admin
+    caption: nuestros frontends
+    kind: provider
+    term: frontends
+    x: 20
+    y: 610
+    w: 140
+    h: 56
+  - id: webhooks
+    label: webhooks
+    caption: puerta, sin exchange
+    kind: gate
+    term: webhooks
+    x: 205
+    y: 180
+    w: 140
+    h: 260
+  - id: x-payments
+    label: merkaly.payments
+    caption: exchange
+    kind: exchange
+    term: merkaly-payments
+    x: 400
+    y: 95
+    w: 170
+    h: 64
+  - id: x-auth
+    label: merkaly.auth
+    caption: exchange
+    kind: exchange
+    term: merkaly-auth
+    x: 400
+    y: 300
+    w: 170
+    h: 64
+  - id: x-api
+    label: merkaly.api
+    caption: exchange
+    kind: exchange
+    term: merkaly-api
+    x: 400
+    y: 470
+    w: 170
+    h: 64
+  - id: q-payments-asaas
+    label: merkaly.payments-asaas
+    caption: cola
+    kind: queue
+    term: merkaly-payments-asaas
+    x: 630
+    y: 30
+    w: 210
+    h: 44
+  - id: q-payments-invokes
+    label: merkaly.payments-invokes
+    caption: cola
+    kind: queue
+    term: merkaly-payments-invokes
+    x: 630
+    y: 96
+    w: 210
+    h: 44
+  - id: q-api-payments
+    label: merkaly.api-payments
+    caption: cola
+    kind: queue
+    term: merkaly-api-payments
+    x: 630
+    y: 186
+    w: 210
+    h: 44
+  - id: q-api-identity
+    label: merkaly.api-identity
+    caption: cola
+    kind: queue
+    term: merkaly-api-identity
+    x: 630
+    y: 310
+    w: 210
+    h: 44
+  - id: q-api-supplier
+    label: merkaly.api-supplier
+    caption: cola
+    kind: queue
+    term: merkaly-api-supplier
+    x: 630
+    y: 440
+    w: 210
+    h: 44
+  - id: q-api-invokes
+    label: merkaly.api-invokes
+    caption: cola
+    kind: queue
+    term: merkaly-api-invokes
+    x: 630
+    y: 506
+    w: 210
+    h: 44
+  - id: q-retry
+    label: merkaly.api-payments.retry
+    caption: espera 30 s
+    kind: queue
+    term: retry-queue
+    x: 630
+    y: 592
+    w: 210
+    h: 38
+  - id: q-dlq
+    label: merkaly.api-payments.dlq
+    caption: guarda 14 días
+    kind: queue
+    term: dead-letter-queue
+    x: 630
+    y: 644
+    w: 210
+    h: 38
+  - id: payments
+    label: payments
+    caption: habla con el proveedor, sin estado
+    kind: service
+    term: payments
+    x: 960
+    y: 40
+    w: 200
+    h: 130
+  - id: api
+    label: api
+    caption: registros y reglas de negocio
+    kind: service
+    term: api
+    x: 960
+    y: 260
+    w: 200
+    h: 300

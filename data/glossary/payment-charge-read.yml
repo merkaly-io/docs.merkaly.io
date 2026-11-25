@@ -1,0 +1,8 @@
+name: payment.charge.read
+type: invoke
+summary: 'Estado actual de un cobro. Es la fuente de verdad: el api siempre relee antes de decidir.'
+owner: payments
+relations:
+  - merkaly-payments-invokes
+  - payment-charge
+source: payments.merkaly.io docs/contract.md

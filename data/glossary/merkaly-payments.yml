@@ -1,0 +1,9 @@
+name: merkaly.payments
+type: exchange
+summary: Exchange del dominio pagos. Recibe los avisos crudos de Asaas (vía webhooks) y los eventos payment.* que emite payments.
+owner: payments
+relations:
+  - merkaly-payments-asaas
+  - merkaly-payments-invokes
+  - merkaly-api-payments
+source: '@merkaly/nest docs/events.md'

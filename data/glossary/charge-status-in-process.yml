@@ -1,0 +1,7 @@
+name: IN_PROCESS
+type: status
+summary: El proveedor todavía decide, o llegó un estado desconocido. Nunca cuenta como pagado.
+owner: api
+relations:
+  - payment-charge
+source: api.merkaly.io src/domain/integration/payment/enums/charge.enum.ts

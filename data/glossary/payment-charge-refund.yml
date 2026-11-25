@@ -1,0 +1,8 @@
+name: payment.charge.refund
+type: invoke
+summary: Reembolso total o parcial de un cobro pagado; la parte del vendedor se descuenta de su split.
+owner: payments
+relations:
+  - merkaly-payments-invokes
+  - charge-status-refunding
+source: payments.merkaly.io docs/contract.md

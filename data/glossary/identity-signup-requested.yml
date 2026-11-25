@@ -1,0 +1,8 @@
+name: identity.signup.requested
+type: event
+summary: Alguien se registró y pidió crear su tienda. El api crea la organización con el usuario como miembro.
+relations:
+  - auth0
+  - merkaly-auth
+  - merkaly-api-identity
+source: '@merkaly/nest docs/events.md'

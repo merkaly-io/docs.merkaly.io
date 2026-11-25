@@ -1,0 +1,8 @@
+name: payment.charge.delete
+type: invoke
+summary: Borra un cobro que todavía se puede pagar (PENDING o EXPIRED). Queda CANCELLED.
+owner: payments
+relations:
+  - merkaly-payments-invokes
+  - charge-status-cancelled
+source: payments.merkaly.io docs/contract.md

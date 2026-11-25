@@ -1,0 +1,7 @@
+name: email.send
+type: command
+summary: Pide enviar un email. Lo consume signals; nadie lo publica todavía.
+owner: signals
+relations:
+  - merkaly-signals-emails
+source: '@merkaly/nest docs/events.md'

@@ -1,0 +1,8 @@
+name: merkaly.api-identity
+type: queue
+summary: Cola del api con los eventos de identidad (identity.*) y account.user.linked.
+owner: api
+relations:
+  - merkaly-auth
+  - identity-signup-requested
+  - account-user-linked

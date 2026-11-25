@@ -1,0 +1,8 @@
+name: payment.received
+type: event
+summary: El cobro fue pagado y acreditado. El api relee el cobro y sincroniza la venta.
+owner: payments
+relations:
+  - merkaly-api-payments
+  - charge-status-settled
+source: '@merkaly/nest docs/events.md'

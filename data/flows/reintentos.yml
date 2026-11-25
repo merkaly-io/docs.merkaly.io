@@ -1,0 +1,51 @@
+title: 'El handler falla: reintentos'
+summary: 'Un error transitorio no pierde el mensaje: espera 30 s en la cola .retry, vuelve hasta 5 veces y, si sigue fallando, queda 14 días en la .dlq.'
+order: 6
+steps:
+  - from: q-api-payments
+    to: api
+    kind: event
+    label: payment.confirmed
+    title: Llega un evento
+    description: El api intenta procesarlo.
+    term: payment-confirmed
+  - node: api
+    kind: error
+    label: error (Mongo caído)
+    title: Falla transitoria
+    description: El handler lanza un error que podría resolverse solo.
+  - from: api
+    to: q-retry
+    kind: error
+    label: intento 1/5
+    title: Se copia a .retry
+    description: Primero el broker confirma la copia en .retry; recién entonces se descarta el original. Sin ventana de pérdida.
+  - node: q-retry
+    kind: event
+    label: espera 30 s
+    title: TTL de 30 s
+    description: 'La cola .retry no tiene consumidores: solo hace esperar.'
+  - from: q-retry
+    to: q-api-payments
+    kind: event
+    label: TTL vence
+    title: Vuelve a la cola
+    description: Dead letter de vuelta a merkaly.api-payments, con el header x-merkaly-retries.
+  - from: q-api-payments
+    to: api
+    kind: event
+    label: intentos 2 a 5
+    title: Se repite
+    description: Si en algún intento funciona, se confirma y listo.
+  - from: api
+    to: q-dlq
+    kind: error
+    label: 6.º fallo
+    title: A la .dlq
+    description: Tras 5 reintentos el mensaje se guarda en .dlq y el log marca ERROR [DLQ].
+  - node: q-dlq
+    kind: error
+    label: 14 días
+    title: Se puede revisar
+    description: 'La operator policy merkaly-dlq lo borra a los 14 días. Un rechazo de negocio (venta desconocida) no se reintenta: ack + log.'
+map: messaging

@@ -1,0 +1,192 @@
+title: Estado del cobro
+summary: Un solo estado por cobro, mutuamente excluyente, y el único campo con el que el api decide. payments lo traduce desde el proveedor; el api deriva de él si se puede borrar, si está pagado y si se reembolsa en línea.
+term: payment-charge
+order: 1
+flags:
+  - id: deletable
+    label: se puede borrar
+    description: 'PENDING o EXPIRED: el cobro todavía se puede pagar. El api lo borra antes de reemplazarlo.'
+  - id: paid
+    label: pagado
+    description: 'APPROVED o SETTLED: el dinero pasó por Merkaly. También son los únicos que se reembolsan en línea.'
+  - id: review
+    label: revisión humana
+    description: 'MANUAL: marcado como pagado a mano en el proveedor. Nunca confirma la venta ni le compra al proveedor de productos.'
+states:
+  - id: PENDING
+    term: charge-status-pending
+    col: 0
+    row: 1
+    summary: Sin pagar; todavía se puede borrar.
+    flags:
+      - deletable
+    initial: true
+  - id: IN_PROCESS
+    term: charge-status-in-process
+    col: 1
+    row: 0
+    summary: El proveedor todavía decide, o llegó un estado desconocido. Nunca cuenta como pagado.
+  - id: EXPIRED
+    term: charge-status-expired
+    col: 1
+    row: 2
+    summary: El Pix venció sin pagarse. Todavía se puede pagar hasta que el api lo borre.
+    flags:
+      - deletable
+  - id: MANUAL
+    term: charge-status-manual
+    col: 1
+    row: 3
+    summary: 'Marcado como pagado a mano en el proveedor. No cuenta como pagado: espera revisión humana y se reembolsa a mano.'
+    flags:
+      - review
+  - id: APPROVED
+    term: charge-status-approved
+    col: 2
+    row: 0
+    summary: Pagado, todavía sin acreditar (tarjeta).
+    flags:
+      - paid
+  - id: SETTLED
+    term: charge-status-settled
+    col: 2
+    row: 1
+    summary: Pagado y acreditado.
+    flags:
+      - paid
+  - id: CANCELLED
+    term: charge-status-cancelled
+    col: 2
+    row: 3
+    summary: Borrado antes de pagarse. No hay un campo deleted aparte.
+  - id: REFUNDING
+    term: charge-status-refunding
+    col: 3
+    row: 0
+    summary: El reembolso está en camino.
+  - id: DISPUTED
+    term: charge-status-disputed
+    col: 3
+    row: 2
+    summary: Contracargo abierto, o ganado y esperando que vuelva el dinero.
+  - id: REFUNDED
+    term: charge-status-refunded
+    col: 4
+    row: 0
+    summary: Reembolsado por completo.
+  - id: CHARGEBACK_LOST
+    term: charge-status-chargeback-lost
+    col: 4
+    row: 2
+    summary: 'El contracargo se perdió: el dinero volvió al titular de la tarjeta.'
+transitions:
+  - from: PENDING
+    to: IN_PROCESS
+    by: asaas
+    trigger: 'AUTHORIZED o AWAITING_RISK_ANALYSIS: el proveedor analiza el pago'
+  - from: PENDING
+    to: APPROVED
+    by: asaas
+    trigger: 'CONFIRMED: pago confirmado, sin acreditar'
+  - from: PENDING
+    to: SETTLED
+    by: asaas
+    trigger: 'RECEIVED: el Pix entra pagado y acreditado'
+  - from: PENDING
+    to: MANUAL
+    by: operador
+    trigger: 'RECEIVED_IN_CASH: alguien lo marcó pagado a mano en el proveedor'
+  - from: PENDING
+    to: EXPIRED
+    by: asaas
+    trigger: 'OVERDUE: venció la fecha del Pix'
+  - from: PENDING
+    to: CANCELLED
+    by: api
+    trigger: 'payment.charge.delete: el api lo borra para reemplazarlo'
+  - from: IN_PROCESS
+    to: APPROVED
+    by: asaas
+    trigger: 'CONFIRMED: el análisis terminó bien'
+  - from: EXPIRED
+    to: SETTLED
+    by: asaas
+    trigger: 'RECEIVED: un Pix vencido igual se pagó'
+  - from: EXPIRED
+    to: CANCELLED
+    by: api
+    trigger: 'payment.charge.delete: el api lo borra antes de reemplazarlo'
+  - from: APPROVED
+    to: SETTLED
+    by: asaas
+    trigger: 'RECEIVED: el dinero se acreditó'
+  - from: APPROVED
+    to: REFUNDING
+    by: api
+    trigger: 'payment.charge.refund: reembolso en línea'
+  - from: SETTLED
+    to: REFUNDING
+    by: api
+    trigger: 'payment.charge.refund: reembolso en línea'
+  - from: SETTLED
+    to: REFUNDED
+    by: asaas
+    trigger: 'REFUNDED: reembolso inmediato'
+  - from: REFUNDING
+    to: REFUNDED
+    by: asaas
+    trigger: 'REFUNDED: el reembolso terminó'
+  - from: APPROVED
+    to: DISPUTED
+    by: asaas
+    trigger: 'CHARGEBACK_REQUESTED: el titular abrió un contracargo'
+  - from: SETTLED
+    to: DISPUTED
+    by: asaas
+    trigger: 'CHARGEBACK_REQUESTED: el titular abrió un contracargo'
+  - from: DISPUTED
+    to: CHARGEBACK_LOST
+    by: asaas
+    trigger: 'Contracargo DISPUTE_LOST o DONE: se perdió'
+  - from: DISPUTED
+    to: SETTLED
+    by: asaas
+    trigger: 'Contracargo REVERSED: ganado, el dinero vuelve (sin aviso: el api lo ve al releer el cobro)'
+  - from: MANUAL
+    to: REFUNDED
+    by: operador
+    trigger: Reembolso a mano tras la revisión
+mappings:
+  - title: Estado de Asaas a estado del cobro
+    columns:
+      - Asaas
+      - Merkaly
+    rows:
+      - from: PENDING
+        to: PENDING
+      - from: AUTHORIZED, AWAITING_RISK_ANALYSIS
+        to: IN_PROCESS
+      - from: cualquier estado desconocido
+        to: IN_PROCESS
+        note: nunca cuenta como pagado
+      - from: CONFIRMED
+        to: APPROVED
+        note: pagado, sin acreditar
+      - from: RECEIVED
+        to: SETTLED
+      - from: RECEIVED_IN_CASH
+        to: MANUAL
+        note: revisión humana
+      - from: REFUND_REQUESTED, REFUND_IN_PROGRESS
+        to: REFUNDING
+      - from: REFUNDED
+        to: REFUNDED
+      - from: CHARGEBACK_REQUESTED, CHARGEBACK_DISPUTE, AWAITING_CHARGEBACK_REVERSAL
+        to: DISPUTED
+      - from: contracargo DISPUTE_LOST o DONE
+        to: CHARGEBACK_LOST
+      - from: OVERDUE
+        to: EXPIRED
+      - from: borrado
+        to: CANCELLED
+        note: no hay campo deleted

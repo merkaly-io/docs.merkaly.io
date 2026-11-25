@@ -1,0 +1,79 @@
+entities:
+  - id: category
+    label: Categoría
+    caption: árbol, ícono y póster
+    col: 0
+    row: 1
+    term: category
+    summary: Agrupa productos. Buscar una categoría trae también sus subcategorías.
+  - id: product
+    label: Producto
+    caption: catalog.products
+    col: 1
+    row: 0
+    term: product
+    summary: Lo que la tienda vende. Solo nace de una importación.
+    fields:
+      - name: active
+        note: si el store lo ofrece
+      - name: variant
+        note: la variante principal
+      - name: supplier
+        note: id en el proveedor, días de preparación, rating, vendidos y salud (state)
+  - id: brand
+    label: Marca
+    caption: póster opcional
+    col: 2
+    row: 0
+    term: brand
+    summary: Marca del producto.
+  - id: vendor
+    label: Vendedor
+    caption: proveedores
+    outside: true
+    col: 3
+    row: 0
+    term: supplier-vendor
+    summary: La tienda dentro de AliExpress que vende el producto.
+  - id: variant
+    label: Variante
+    caption: una combinación de opciones
+    col: 1
+    row: 1
+    term: variant
+    summary: Precio, imágenes, opciones y lo que el proveedor necesita para comprarla.
+    fields:
+      - name: price
+        note: cost, retail y markup (en puntos básicos)
+      - name: options
+        note: un valor por dimensión, por ejemplo Color Azul
+      - name: sourcing
+        note: id de la variante en el proveedor y desde dónde se envía
+  - id: asset
+    label: Imagen o video
+    caption: asset
+    col: 1
+    row: 2
+    summary: Por ahora guarda la URL del proveedor, sin descargarla.
+  - id: item
+    label: Ítem de venta
+    caption: pedidos
+    outside: true
+    col: 2
+    row: 1
+    summary: La venta guarda una foto del precio de la variante; cambios del catálogo no la tocan.
+  - id: page
+    label: Página de la tienda
+    caption: content.pages
+    col: 0
+    row: 2
+    term: store-page
+    summary: La home del store, con bloques fijos que el comerciante edita.
+relations:
+  - { from: category, to: product, label: agrupa, many: true }
+  - { from: brand, to: product, label: marca, many: true }
+  - { from: vendor, to: product, label: vende, many: true }
+  - { from: product, to: variant, label: tiene, many: true }
+  - { from: variant, to: asset, label: muestra, many: true }
+  - { from: variant, to: item, label: se vende en, many: true }
+  - { from: page, to: category, label: destaca, many: true }

@@ -7,5 +7,7 @@ relations:
   - payment-charge-create
   - payment-charge-read
   - charge-reference
+  - finance-payment
+  - pix-window
 details: 'El estado del cobro decide todo: si se puede borrar, si está pagado y si se reembolsa en línea. Ver el ciclo de vida "Estado del cobro".'
 source: api.merkaly.io src/domain/integration/payment/enums/charge.enum.ts

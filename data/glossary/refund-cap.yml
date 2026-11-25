@@ -1,0 +1,6 @@
+name: tope de reembolso
+type: concept
+domain: pagos
+summary: Los reembolsos de un pago nunca suman más de lo que el comprador pagó, tarifa incluida.
+relations: [refund]
+details: 'Dos reembolsos a la vez se ordenan; el que pasaría el tope no escribe nada y responde 409. Al cancelar la venta, se reembolsa lo que queda y reemplaza a los reembolsos de ítems que el proveedor nunca tomó.'

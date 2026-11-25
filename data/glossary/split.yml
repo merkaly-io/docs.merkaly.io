@@ -1,0 +1,6 @@
+name: split
+type: concept
+domain: pagos
+summary: 'El reparto del cobro: el 100 % del neto va a la cuenta de la tienda. Merkaly no se queda con nada.'
+relations: [merkaly-main-account, payment-account, finance-payment]
+details: 'Si el reparto falla, el pago se confirma igual (el comprador pagó), queda marcado en split.error y el dinero se transfiere a mano. El reporte de pagos del dashboard los cuenta.'

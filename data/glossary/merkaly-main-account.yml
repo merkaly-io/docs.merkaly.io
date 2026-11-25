@@ -1,0 +1,6 @@
+name: cuenta de Merkaly
+type: concept
+domain: pagos
+summary: 'La cuenta principal (CNPJ) de Merkaly en el proveedor. Cada cobro se crea acá y se reparte al 100 % a la tienda; también presta para los reembolsos.'
+relations: [split, payment-account, debt]
+details: 'Merkaly es el receptor formal: el QR Pix muestra la cuenta de Merkaly. Si la cuenta de la tienda no puede recibir, el proveedor cancela el reparto y el dinero queda en Merkaly para transferirlo a mano. El tratamiento fiscal está por confirmar con el contador.'

@@ -1,0 +1,8 @@
+name: reembolso
+type: entity
+domain: pagos
+summary: 'Dinero que vuelve al comprador (finance.refunds): de toda la venta al cancelarla, o de los ítems que el proveedor canceló.'
+owner: api
+relations: [finance-payment, refund-cap, debt, payment-charge-refund]
+details: 'origin dice de dónde vino (cancelación, compra cancelada por el proveedor, panel, automático). La tienda devuelve lo que puede y Merkaly presta el resto; si entre las dos no alcanza, no se pide nada y queda PENDING. Un reembolso de ítems devuelve producto, flete e impuestos, nunca la tarifa.'
+source: api.merkaly.io src/domain/finance/entities/refund.entity.ts

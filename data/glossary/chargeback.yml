@@ -1,0 +1,8 @@
+name: contracargo
+type: entity
+domain: pagos
+summary: 'El comprador disputa un pago (finance.chargebacks). Un registro por apertura, con motivo y fecha límite. Nunca es un reembolso.'
+owner: api
+relations: [finance-payment, charge-status-disputed]
+details: 'Mientras dura, el pago entero queda fuera del saldo retirable. Los contracargos golpean primero la cuenta de Merkaly; el proveedor revierte el reparto de la tienda mientras tenga el dinero (qué pasa si no lo tiene está por confirmar).'
+source: api.merkaly.io src/domain/finance/entities/chargeback.entity.ts

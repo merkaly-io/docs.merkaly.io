@@ -1,0 +1,32 @@
+{
+  "name": "@merkaly/docs",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev --host --no-qr",
+    "generate": "nuxt generate",
+    "lint": "eslint . && nuxt typecheck",
+    "postinstall": "nuxt prepare",
+    "preview": "nuxt preview",
+    "start": "node .output/server/index.mjs"
+  },
+  "packageManager": "pnpm@10.28.2",
+  "engines": {
+    "node": ">=24"
+  },
+  "version": "0.0.0",
+  "dependencies": {
+    "@vueuse/core": "^15.1.0",
+    "@vueuse/nuxt": "^15.1.0",
+    "docus": "^5.15.1",
+    "mermaid": "^12.3.0",
+    "nuxt": "^4.7.0"
+  },
+  "devDependencies": {
+    "@nuxt/eslint": "^1.17.0",
+    "eslint": "^10.15.0",
+    "typescript": "^6.0.3",
+    "vue-tsc": "^3.3.14"
+  }
+}

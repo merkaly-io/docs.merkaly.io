@@ -1,0 +1,22 @@
+title: Datos personales
+domain: identidad
+summary: Nombre completo, CPF y fecha de nacimiento de la persona. Se piden una vez, se pueden corregir hasta que se usan para la cuenta de pago, y ahí quedan bloqueados.
+term: personal-identity
+order: 3
+states:
+  - id: SIN_DATOS
+    col: 0
+    row: 0
+    initial: true
+    summary: Todavía no los cargó. www /create los pide antes de crear la tienda.
+  - id: EDITABLE
+    col: 1
+    row: 0
+    summary: Guardados en Auth0. La persona los puede reemplazar; el CPF se muestra completo.
+  - id: BLOQUEADA
+    col: 2
+    row: 0
+    summary: 'Tienen lockedAt. Ya no se cambian (409) y el CPF se muestra enmascarado: ***.***.***-12.'
+transitions:
+  - { from: SIN_DATOS, to: EDITABLE, by: api, trigger: 'Registro en www (POST /www/onboarding) o PUT /auth/me/identity. 409 si otra cuenta ya tiene el CPF' }
+  - { from: EDITABLE, to: BLOQUEADA, by: api, trigger: 'Se crea la cuenta de pago de la tienda como persona física' }

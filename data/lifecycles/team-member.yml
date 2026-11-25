@@ -1,0 +1,42 @@
+title: Miembro del equipo
+domain: identidad
+summary: De la invitación a la baja. Auth0 es la fuente de verdad de miembros y roles; el api guarda una copia por tienda (la caché del equipo) que nunca borra a nadie.
+term: team-member
+order: 2
+flags:
+  - id: auth0
+    label: solo en Auth0
+    description: La invitación existe en Auth0; todavía no hay miembro en la caché.
+states:
+  - id: INVITADO
+    col: 0
+    row: 1
+    initial: true
+    flags: [auth0]
+    term: invitation
+    summary: Invitación pendiente con un rol (ORG_ADMIN u ORG_MANAGER). Vale 7 días.
+  - id: CANCELADA
+    col: 1
+    row: 0
+    flags: [auth0]
+    summary: Un dueño o admin la canceló antes de que la acepten.
+  - id: VENCIDA
+    col: 1
+    row: 2
+    flags: [auth0]
+    summary: Pasaron 7 días. Ya no aparece en la lista de pendientes.
+  - id: MIEMBRO
+    col: 2
+    row: 1
+    term: membership
+    summary: Miembro de la tienda con un solo rol. Los que tienen ORG_OWNER o MK_* no se editan ni se quitan desde el admin, y nadie se edita a sí mismo.
+  - id: disabled
+    col: 3
+    row: 1
+    summary: 'Ya no es miembro. La cuenta de Auth0 sigue; la caché lo marca disabled y nunca lo borra.'
+transitions:
+  - { from: INVITADO, to: MIEMBRO, by: auth0, trigger: 'Acepta: Auth0 la hace miembro con el rol de la invitación' }
+  - { from: INVITADO, to: CANCELADA, by: api, trigger: 'DELETE /admin/settings/team/invitations/:id' }
+  - { from: INVITADO, to: VENCIDA, trigger: 'Pasan 7 días' }
+  - { from: MIEMBRO, to: disabled, by: api, trigger: 'La quitan desde el admin o desde Auth0 (member.removed), o la sincronización ya no la encuentra' }
+  - { from: disabled, to: INVITADO, by: api, trigger: 'La vuelven a invitar' }

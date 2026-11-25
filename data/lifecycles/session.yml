@@ -1,0 +1,31 @@
+title: Sesión en una app
+domain: identidad
+summary: 'Cómo vive la sesión en admin, dashboard, www y store: un access token de 2 horas que se renueva solo con un refresh token que rota. Cuando ya no se puede renovar, la app pide volver a entrar sin perder la página.'
+term: session
+order: 1
+states:
+  - id: ANONIMA
+    col: 0
+    row: 1
+    initial: true
+    summary: Sin token. store y www se pueden usar así; admin y dashboard mandan al login.
+  - id: ACTIVA
+    col: 1
+    row: 1
+    summary: Access token vigente (2 horas). Cada llamada al api lo lleva.
+  - id: VENCIDA
+    col: 2
+    row: 0
+    summary: El access token venció pero el refresh token sigue vivo. Se renueva solo antes de la próxima llamada.
+  - id: EXPIRADA
+    col: 2
+    row: 2
+    summary: Ya no se puede renovar. La app muestra un aviso que no se cierra, con un solo botón para volver a entrar.
+transitions:
+  - { from: ANONIMA, to: ACTIVA, by: auth0, trigger: 'Login: Auth0 entrega access token y refresh token' }
+  - { from: ACTIVA, to: VENCIDA, trigger: 'Pasan 2 horas' }
+  - { from: VENCIDA, to: ACTIVA, by: auth0, trigger: 'El refresh token se cambia por uno nuevo (rotación: cada uno sirve una vez, con 30 s de gracia)' }
+  - { from: VENCIDA, to: EXPIRADA, by: auth0, trigger: '30 días sin uso, 90 días desde el login, o el refresh token fue revocado' }
+  - { from: ACTIVA, to: EXPIRADA, trigger: 'El api responde 401, se renueva una vez y vuelve a responder 401' }
+  - { from: EXPIRADA, to: ACTIVA, by: auth0, trigger: 'Volver a entrar: el login regresa a la misma página' }
+  - { from: ACTIVA, to: ANONIMA, trigger: Logout }

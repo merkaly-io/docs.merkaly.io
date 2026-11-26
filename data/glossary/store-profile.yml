@@ -3,4 +3,4 @@ type: concept
 domain: tienda
 summary: 'Lo que el store muestra de la tienda: nombre, descripción, logo, favicon, imagen para compartir, color principal, email y redes sociales.'
 relations: [organization-settings, store-readiness]
-details: 'Público, por GET /store/company, solo con lo que está cargado. El registro escribe el nombre y el email. Las imágenes se suben aparte; el color va en formato #RRGGBB. Redes: instagram, facebook, tiktok, youtube, x, linkedin y whatsapp.'
+details: 'Público, por GET /store/company, solo con lo que está cargado. El nombre, el logo y el color son copia de la organización en Auth0, que manda (ver la decisión Auth0 manda en la identidad de la tienda). El registro escribe el nombre y el email. Las imágenes se suben aparte; el color va en formato #RRGGBB. Redes: instagram, facebook, tiktok, youtube, x, linkedin y whatsapp.'

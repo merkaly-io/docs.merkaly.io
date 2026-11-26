@@ -53,6 +53,7 @@ El registro, de punta a punta:
 - [El registro vive en www, no en una Action](/identidad/decisiones/registro-en-www)
 - [Un solo rol por usuario](/identidad/decisiones/un-rol-por-usuario)
 - [Cambiar el subdominio no redirige](/identidad/decisiones/subdominio-sin-redireccion)
+- [Auth0 manda en la identidad de la tienda](/identidad/decisiones/auth0-fuente-de-verdad)
 
 ## En el código
 

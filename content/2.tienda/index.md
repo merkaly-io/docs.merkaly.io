@@ -54,7 +54,7 @@ Toca una entidad para ver sus campos clave y con qué se relaciona. Las punteada
 
 ## Decisiones
 
-Las decisiones que tocan a la tienda viven en su dominio: [Cambiar el subdominio no redirige](/identidad/decisiones/subdominio-sin-redireccion) y [Un solo mercado por tienda](/proveedores/decisiones/mercado-unico).
+Las decisiones que tocan a la tienda viven en su dominio: [Cambiar el subdominio no redirige](/identidad/decisiones/subdominio-sin-redireccion), [Auth0 manda en la identidad de la tienda](/identidad/decisiones/auth0-fuente-de-verdad) y [Un solo mercado por tienda](/proveedores/decisiones/mercado-unico).
 
 ## En el código
 

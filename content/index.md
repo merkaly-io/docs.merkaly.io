@@ -19,6 +19,12 @@ links:
     size: xl
     color: neutral
     variant: subtle
+  - label: Cómo leer esta documentación
+    to: /como-leer
+    icon: i-lucide-compass
+    size: xl
+    color: neutral
+    variant: ghost
 ---
 ::
 
@@ -41,7 +47,7 @@ description: Cada dominio es una capa con la misma forma. Qué es, sus entidades
     ::::u-page-card
     ---
     title: Tienda
-    description: La organización como tienda: configuración, dominio y apps.
+    description: "La organización como tienda: configuración, dominio y apps."
     icon: i-lucide-store
     to: /tienda
     ---
@@ -98,6 +104,7 @@ description: Cada dominio es una capa con la misma forma. Qué es, sus entidades
 ---
 title: Referencia
 description: Todo junto, sin importar el dominio. Desde cualquier ficha llegas al resto.
+class: mk-accent
 ---
 
   :::u-page-grid

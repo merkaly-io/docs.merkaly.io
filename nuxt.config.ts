@@ -20,6 +20,10 @@ export default defineNuxtConfig({
 
   devtools: { enabled: false },
 
+  fonts: {
+    families: [{ global: true, name: 'Manrope', provider: 'google', weights: [600, 700, 800] }], // headings (brand sheet), self-hosted at build
+  },
+
   llms: {
     description: 'Documentación de Merkaly: glosario, flujos, ciclos de vida, arquitectura y decisiones.',
     full: {

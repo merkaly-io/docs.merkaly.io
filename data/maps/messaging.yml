@@ -121,6 +121,15 @@ nodes:
     y: 310
     w: 210
     h: 44
+  - id: q-api-procurement
+    label: merkaly.api-procurement
+    caption: cola
+    kind: queue
+    term: merkaly-api-procurement
+    x: 630
+    y: 375
+    w: 210
+    h: 44
   - id: q-api-supplier
     label: merkaly.api-supplier
     caption: cola

@@ -1,0 +1,10 @@
+name: order.sale.paid
+type: event
+domain: pedidos
+summary: El api confirmó el pago online de una venta. Lo publica en su exchange para que la cola haga la compra automática.
+owner: api
+relations:
+  - merkaly-api-procurement
+  - procurement
+details: 'Se publica justo después de guardar el pago, sin outbox: si falla o el api se cae en ese instante, la venta muestra AUTO_PROCUREMENT_FAILED a los 30 minutos. Las ventas importadas nunca lo publican.'
+source: api.merkaly.io src/domain/order/types/sale.events.ts

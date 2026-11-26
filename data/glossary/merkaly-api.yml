@@ -7,4 +7,5 @@ relations:
   - merkaly-api-supplier
   - merkaly-api-invokes
   - merkaly-api-identity
+  - merkaly-api-procurement
 source: '@merkaly/nest docs/events.md'

@@ -6,9 +6,15 @@ map: orders
 steps:
   - node: api
     kind: event
-    label: pago confirmado
-    title: Arranca la compra automática
-    description: En segundo plano y como sistema, nunca a nombre del comprador. Nunca hace fallar el pago.
+    label: order.sale.paid
+    title: El pago confirmado avisa a la cola
+    description: Con el pago guardado, el api publica order.sale.paid en su exchange. Solo el pago online lo publica, nunca una venta importada. Si la publicación falla, queda en el log y nunca hace fallar el pago.
+    term: order-sale-paid
+  - node: api
+    kind: command
+    label: merkaly.api-procurement
+    title: La cola arranca la compra automática
+    description: Un intento por mensaje, como sistema, nunca a nombre del comprador. Si la venta ya tiene compras (repetido o comprado a mano), no hace nada.
     term: procurement
   - node: api
     kind: command
@@ -21,7 +27,13 @@ steps:
     kind: http
     label: ds.order.create
     title: Pide al proveedor
-    description: Un solo pedido con todas las líneas, sin pagar. Si AliExpress limita, reintenta a los 1, 5 y 15 minutos.
+    description: Un solo pedido con todas las líneas, sin pagar. Si falla, el error queda en la compra (SUPPLIER_ORDER_FAILED) y se reintenta a mano.
+  - node: api
+    kind: error
+    label: .retry → .dlq
+    title: ¿Y si AliExpress limita?
+    description: Un límite de AliExpress o una falla pasajera (proveedor caído, red) vuelve a la cola cada 30 segundos, hasta 5 veces. Después el mensaje termina en la .dlq. Un rechazo definitivo (sin cuenta conectada, cotización que no cierra) no se reintenta.
+    term: retry-queue
   - from: aliexpress
     to: api
     kind: reply
@@ -68,5 +80,5 @@ steps:
     kind: error
     label: AUTO_PROCUREMENT_FAILED
     title: ¿Y si se frenó?
-    description: Si a los 30 minutos una venta pagada sigue sin compra, el admin lo marca para pedir a mano. La compra manual queda siempre como respaldo.
+    description: Si a los 30 minutos una venta pagada sigue sin compra (rechazo definitivo, mensaje en la .dlq o publicación perdida), el admin lo marca para pedir a mano. La compra manual queda siempre como respaldo.
     term: sale-attention

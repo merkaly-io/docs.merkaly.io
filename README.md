@@ -37,9 +37,12 @@ app/
   components/state/      # StateMachine (interactive state machine)
   components/glossary/   # GlossaryTermList (search and filter), GlossaryTermBadge
   components/content/    # MDC components usable from markdown, plus the ProsePre override for mermaid
+  components/app|docs/   # Docus overrides: header links (AppHeaderCTA), grouped sidebar (DocsAsideLeftBody, AppHeaderBody)
+  composables/useSidebarGroups.ts  # sidebar groups (Empezar, Dominios, Referencia) from `group` in the navigation
   pages/glosario|flujos|ciclos/[stem].vue  # one generated page per data file
   utils/                 # labels (all UI copy), paths, flow and state geometry, backlinks
-  app.css                # theme tokens: brand palette and --mk-* diagram colors (light and dark)
+  app.config.ts          # logo, header links and sidebar groups (`merkaly` key)
+  app.css                # theme tokens: brand palette, Manrope headings and --mk-* diagram colors (light and dark)
 server/plugins/llms.ts   # adds the data collections to /llms.txt and /llms-full.txt
 ```
 

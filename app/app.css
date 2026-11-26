@@ -1,18 +1,22 @@
 @theme static {
-  --color-merkaly-50: #fdf3f5;
+  --font-heading: 'Manrope', ui-sans-serif, system-ui, sans-serif; /* brand sheet: Manrope for titles, the body keeps the Docus font */
+
+  --color-merkaly-50: #f9eef0; /* soft rose, accent backgrounds */
   --color-merkaly-100: #fbe7eb;
   --color-merkaly-200: #f6d0d9;
   --color-merkaly-300: #eeaab9;
   --color-merkaly-400: #e27a93;
   --color-merkaly-500: #d24f70;
   --color-merkaly-600: #ba2746; /* brand, same as admin and www */
-  --color-merkaly-700: #9d2440;
+  --color-merkaly-700: #9e213b; /* deep crimson */
   --color-merkaly-800: #84213b;
   --color-merkaly-900: #712037;
   --color-merkaly-950: #3f0c1a;
 }
 
 :root {
+  --ui-primary: var(--ui-color-primary-600); /* Nuxt UI uses 500 in light mode; the brand is 600 */
+  --mk-accent-bg: var(--color-merkaly-50);
   --mk-node-actor: #be185d;
   --mk-node-actor-bg: #fdecf3;
   --mk-node-app: #0369a1;
@@ -38,6 +42,8 @@
 }
 
 .dark {
+  --ui-primary: var(--ui-color-primary-400);
+  --mk-accent-bg: color-mix(in oklab, var(--color-merkaly-600) 14%, var(--ui-bg));
   --mk-node-actor: #f58bbd;
   --mk-node-actor-bg: #35182a;
   --mk-node-app: #6cc4ef;
@@ -60,4 +66,21 @@
   --mk-kind-command: #f58bbd;
   --mk-edge: #3a3c47;
   --mk-state-flag: #5fd3c4;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-heading);
+}
+
+h1 { /* display titles: Manrope 800, tight */
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+h2, h3 {
+  letter-spacing: -0.015em;
+}
+
+.mk-accent { /* soft rose band, e.g. the landing reference section */
+  background-color: var(--mk-accent-bg);
 }

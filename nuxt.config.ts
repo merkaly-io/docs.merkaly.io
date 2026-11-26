@@ -4,6 +4,12 @@ import { defineNuxtConfig } from 'nuxt/config';
 export default defineNuxtConfig({
   extends: ['docus'], // Nuxt Content + Nuxt UI docs layer: navigation, search, llms.txt
 
+  app: {
+    head: {
+      link: [{ href: 'https://cdn.merkaly.io/brand/favicon/apple-touch-icon.png', rel: 'apple-touch-icon' }], // favicon itself comes from app.config header.logo
+    },
+  },
+
   modules: ['@nuxt/eslint', '@vueuse/nuxt'],
 
   compatibilityDate: 'latest',

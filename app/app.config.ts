@@ -5,8 +5,9 @@ export default defineAppConfig({
   header: {
     logo: {
       alt: 'Merkaly',
-      dark: '/favicon.svg',
-      light: '/favicon.svg',
+      dark: 'https://cdn.merkaly.io/brand/isotipo/chip.svg',
+      favicon: 'https://cdn.merkaly.io/brand/favicon/favicon.ico', // Docus falls back to /favicon.ico without it
+      light: 'https://cdn.merkaly.io/brand/isotipo/chip.svg',
     },
     title: 'Merkaly Docs',
   },

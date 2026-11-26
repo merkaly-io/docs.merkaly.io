@@ -19,6 +19,11 @@ export default defineAppConfig({
       { icon: 'i-lucide-git-fork', label: 'Ciclos de vida', to: '/ciclos' },
       { icon: 'i-lucide-scale', label: 'Decisiones', to: '/decisiones' },
     ],
+    sidebarGroups: [ // pages join a group with `group` in their navigation; paths stay as they are
+      { id: 'empezar', links: [{ icon: 'i-lucide-house', path: '/', title: 'Inicio' }], title: 'Empezar' },
+      { id: 'dominios', title: 'Dominios' },
+      { id: 'referencia', title: 'Referencia' },
+    ],
   },
   seo: {
     description: 'Cómo funciona Merkaly: dominios, glosario, flujos, ciclos de vida y decisiones.',

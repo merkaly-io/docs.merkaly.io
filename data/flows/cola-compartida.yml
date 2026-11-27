@@ -1,0 +1,43 @@
+title: 'Una cola, dos api'
+domain: plataforma
+summary: 'Limitación actual: un api local conectado al mismo broker consume de las mismas colas que producción. Los mensajes se reparten entre los dos y producción se pierde los que tomó el local.'
+order: 9
+steps:
+  - from: x-payments
+    to: q-api-payments
+    kind: event
+    label: payment.received
+    title: Llega un evento a la cola del api
+    description: 'Hay una sola cola merkaly.api-payments por broker, no una por entorno.'
+    term: merkaly-api-payments
+  - from: q-api-payments
+    to: api
+    kind: event
+    label: mensaje 1
+    title: Producción toma uno
+    description: 'Con dos consumidores en la misma cola, RabbitMQ reparte los mensajes por turnos.'
+  - from: q-api-payments
+    to: api-local
+    kind: error
+    label: mensaje 2
+    title: El api local toma el siguiente
+    description: 'Un api corriendo en una máquina de desarrollo con el mismo RABBITMQ_URL consume ese mensaje. Producción nunca lo ve.'
+  - node: api-local
+    kind: error
+    label: otro código, mismo Mongo
+    title: Lo procesa otra versión
+    description: 'Lo procesa con la rama que tenga checkouteada, contra la misma base de producción. Si falla, su .retry y su .dlq son también las de producción.'
+  - from: x-api
+    to: q-api-procurement
+    kind: event
+    label: order.sale.paid
+    title: Lo mismo con cualquier cola
+    description: 'Pasa en todas: payments, supplier, identity, procurement y las de invokes.'
+    term: merkaly-api-procurement
+  - from: q-api-procurement
+    to: api-local
+    kind: error
+    label: compra automática
+    title: Una compra puede salir desde una laptop
+    description: 'Hoy se evita no levantando el api local contra el broker de producción. Resolverlo (colas por entorno u otra forma de consumo) está pendiente.'
+map: messaging

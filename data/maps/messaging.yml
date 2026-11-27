@@ -184,3 +184,12 @@ nodes:
     y: 260
     w: 200
     h: 300
+  - id: api-local
+    label: api local
+    caption: misma cola, otra máquina
+    kind: service
+    term: api
+    x: 960
+    y: 600
+    w: 200
+    h: 70

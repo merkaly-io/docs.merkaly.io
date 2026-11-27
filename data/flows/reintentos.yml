@@ -1,6 +1,6 @@
 title: 'El handler falla: reintentos'
 domain: plataforma
-summary: 'Un error transitorio no pierde el mensaje: espera 30 s en la cola .retry, vuelve hasta 5 veces y, si sigue fallando, queda 14 días en la .dlq.'
+summary: 'Un error pasajero no pierde el mensaje: espera 30 s en la cola .retry, vuelve hasta 5 veces y, si sigue fallando, queda 14 días en la .dlq. Un rechazo definitivo se confirma y queda en el log.'
 order: 6
 steps:
   - from: q-api-payments
@@ -8,45 +8,52 @@ steps:
     kind: event
     label: payment.confirmed
     title: Llega un evento
-    description: El api intenta procesarlo.
+    description: El api intenta procesarlo dentro de EventsConsumer.handle.
     term: payment-confirmed
   - node: api
     kind: error
     label: error (Mongo caído)
-    title: Falla transitoria
-    description: El handler lanza un error que podría resolverse solo.
+    title: Falla pasajera
+    description: 'El handler lanza un error que podría resolverse solo: base de datos, red, proveedor caído o un 5xx.'
   - from: api
     to: q-retry
     kind: error
     label: intento 1/5
     title: Se copia a .retry
-    description: Primero el broker confirma la copia en .retry; recién entonces se descarta el original. Sin ventana de pérdida.
+    description: Primero el broker confirma la copia en .retry; recién entonces se confirma (ack) el original. Si la copia no se confirma, el original vuelve a la cola. Sin ventana de pérdida.
+    term: retry-queue
   - node: q-retry
     kind: event
     label: espera 30 s
     title: TTL de 30 s
-    description: 'La cola .retry no tiene consumidores: solo hace esperar.'
+    description: 'La cola .retry no tiene consumidores: su x-message-ttl hace esperar el mensaje.'
   - from: q-retry
     to: q-api-payments
     kind: event
     label: TTL vence
     title: Vuelve a la cola
-    description: Dead letter de vuelta a merkaly.api-payments, con el header x-merkaly-retries.
+    description: Al vencer, el broker lo devuelve a merkaly.api-payments (dead letter por el exchange por defecto) con el header x-merkaly-retries.
   - from: q-api-payments
     to: api
     kind: event
     label: intentos 2 a 5
     title: Se repite
-    description: Si en algún intento funciona, se confirma y listo.
+    description: Si en algún intento funciona, se confirma y listo. Por eso todo handler tiene que poder correr dos veces sin efecto doble.
   - from: api
     to: q-dlq
     kind: error
     label: 6.º fallo
     title: A la .dlq
-    description: Tras 5 reintentos el mensaje se guarda en .dlq y el log marca ERROR [DLQ].
+    description: Tras 5 reintentos el mensaje se rechaza sin volver a la cola, el broker lo deja en .dlq y el log marca ERROR [DLQ].
+    term: dead-letter-queue
   - node: q-dlq
     kind: error
     label: 14 días
     title: Se puede revisar
-    description: 'La operator policy merkaly-dlq lo borra a los 14 días. Un rechazo de negocio (venta desconocida) no se reintenta: ack + log.'
+    description: 'La operator policy merkaly-dlq lo borra a los 14 días. Para reprocesar, se corrige la causa y se mueven los mensajes a la cola original.'
+  - node: api
+    kind: event
+    label: ack + log
+    title: El otro camino, un rechazo definitivo
+    description: 'Un 4xx (venta desconocida, monto distinto, cobro ajeno) no cambia reintentando: el handler lo convierte en EventRejectedException, el mensaje se confirma y queda un aviso en el log. Ni .retry ni .dlq.'
 map: messaging

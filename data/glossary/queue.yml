@@ -1,0 +1,11 @@
+name: cola (queue)
+type: concept
+domain: plataforma
+summary: 'Donde los mensajes esperan a su consumidor. Cada servicio tiene una cola por trabajo, merkaly.<servicio>-<trabajo>, más una de invokes, merkaly.<servicio>-invokes.'
+relations:
+  - exchange
+  - routing-key
+  - retry-queue
+  - dead-letter-queue
+details: 'La cola es del que consume y se liga a una o más claves exactas, en su propio exchange o en el de otro servicio (from). Cada cola de trabajo tiene su .retry y su .dlq; las de invokes no. Un mensaje de la cola lo toma un solo consumidor: si hay dos procesos conectados, se lo reparten.'
+source: '@merkaly/nest src/rabbit/rabbit.server.ts'

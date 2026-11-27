@@ -1,0 +1,10 @@
+name: emit
+type: concept
+domain: plataforma
+summary: 'Cómo un servicio publica un hecho propio: en su propio exchange, sin saber quién lo escucha (payments emite payment.received, el api emite order.sale.paid).'
+relations:
+  - deliver
+  - command
+  - invoke
+  - exchange
+source: '@merkaly/nest src/rabbit/events.publisher.ts'

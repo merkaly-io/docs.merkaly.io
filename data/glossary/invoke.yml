@@ -1,0 +1,11 @@
+name: invoke
+type: concept
+domain: plataforma
+summary: 'Una pregunta con respuesta (RPC) por RabbitMQ. Quien pregunta publica en la cola -invokes del otro servicio y espera la respuesta por amq.rabbitmq.reply-to, con un tiempo límite.'
+relations:
+  - merkaly-payments-invokes
+  - merkaly-api-invokes
+  - payment-movement-check
+  - payment-charge-create
+details: 'Espera 5 s por defecto; cada llamada puede pasar su propio timeout (25 s o 40 s del api a payments, 3 s de webhooks a payments). No tiene .retry ni .dlq: si no hay respuesta a tiempo, falla y quien preguntó decide qué hacer. La cola descarta lo que nadie atendió en 30 s y el consumidor descarta lo que ya venció.'
+source: '@merkaly/nest src/rabbit/events.publisher.ts'

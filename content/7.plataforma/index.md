@@ -23,7 +23,7 @@ Cómo se hablan los servicios de Merkaly. Cada servicio hace una sola cosa y los
   :::u-page-card
   ---
   title: Mensajería
-  description: Exchanges, colas, clases de mensaje y reglas.
+  description: Cómo viajan hoy los mensajes. Exchanges, colas, routing keys, emit, command e invoke, con recorridos animados.
   icon: i-lucide-send
   to: /plataforma/mensajeria
   ---

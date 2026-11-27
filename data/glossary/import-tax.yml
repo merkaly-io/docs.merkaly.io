@@ -1,6 +1,6 @@
 name: impuesto de importación
 type: concept
 domain: pedidos
-summary: 'Lo paga el comprador. El checkout lo estima por pedido con los tramos del proveedor (Brasil: 20,6 % hasta US$ 50, 34 % arriba) sobre el costo más el flete.'
-relations: [quoted-total, shipping-group]
-details: 'Ninguna llamada de AliExpress lo cotiza antes. Un grupo que sale del país de destino no es importación y no paga. Un ítem cancelado reembolsa su parte. El cargo real del proveedor reemplaza a la estimación.'
+summary: 'Lo paga el comprador. Se calcula por cada pedido que AliExpress va a crear (uno por tienda) con las reglas de la Receita: nada hasta US$ 50, arriba 60 % menos US$ 30, y encima el ICMS del estado del comprador.'
+relations: [quoted-total, supplier-order, shipping-group]
+details: 'Ninguna llamada de AliExpress lo cotiza antes, así que cada proveedor trae sus reglas por país (aliexpress.taxes.ts en el api). La base es el costo del proveedor más el flete de ese pedido, no el precio de venta. El ICMS va "por dentro": (base + II) × alícuota / (1 − alícuota), con la alícuota de la UF según la tabla de Comsefaz (17 % a 20 %; si no se sabe la UF, 20 %). Un pedido que sale del país de destino no es importación y no paga. Se calcula sin el subsidio Choice: si AliExpress lo aplica, la diferencia queda para Merkaly. Un ítem cancelado reembolsa su parte y el cargo real del proveedor reemplaza a la estimación.'

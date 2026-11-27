@@ -19,7 +19,7 @@ steps:
     kind: http
     label: costo, flete, impuestos
     title: El api recotiza con el proveedor
-    description: Relee el costo de cada línea, el flete de cada grupo de envío y los tramos del impuesto de importación.
+    description: Relee el costo y el flete de cada línea. Después reparte un flete por grupo de envío y calcula el impuesto de importación de cada pedido de AliExpress (uno por tienda).
   - node: api
     kind: command
     label: precio al día

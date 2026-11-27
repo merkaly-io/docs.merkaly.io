@@ -21,7 +21,7 @@ De dónde salen los productos y a quién se le compra cada venta.
 | --- | --- |
 | Importar un producto | Vista previa y luego importación, siempre releyendo al proveedor |
 | Sincronizar | A pedido del comerciante; no hay sondeo |
-| Cotizar | Costo, stock, flete por línea y tramos del impuesto de importación |
+| Cotizar | Costo, stock y flete por línea; el impuesto de importación sale de las reglas del proveedor |
 | Comprar | Un pedido sin pagar con todas las líneas; el comerciante lo paga en su cuenta |
 | Seguir | Avisos de pedido (mensaje 53) más la relectura del pedido y del tracking |
 | Cancelar | AliExpress no lo permite por api: el pedido queda sin pagar y se cierra solo |
@@ -30,7 +30,7 @@ De dónde salen los productos y a quién se le compra cada venta.
 ## Lo que AliExpress no dice
 
 - **Choice**: no hay un campo que lo diga. Solo el flete lo insinúa (puede ser envío de plataforma) y trae el umbral de envío gratis en la moneda del mercado. Un umbral de 0 (como en AliExpress Selection Standard) se cotiza como envío gratis: en los pedidos reales AliExpress descuenta todo el flete. Sin ese dato, la línea paga el flete de su tienda. El flete cobrado se mide en cada pedido (flete base y descuento) y se avisa si un envío cotizado gratis termina cobrado.
-- **Impuesto de importación**: ninguna llamada lo cotiza. Se usan tramos medidos en pedidos reales (Brasil: 20,6 % hasta US$ 50, 34 % arriba). Un envío desde el mismo país no paga.
+- **Impuesto de importación**: ninguna llamada lo cotiza. Cada proveedor trae sus reglas por país: AliExpress cobra por pedido (uno por tienda) con las reglas de la Receita y el ICMS del estado del comprador. Un envío desde el mismo país no paga. Ver [la decisión](/proveedores/decisiones/impuestos-de-importacion) y [el flujo](/flujos/calcular-impuestos).
 - **Ciudades**: solo acepta las de su propia lista. El checkout y la edición de la entrega la validan; si la lista no responde, aceptan la ciudad con un aviso.
 - **Plazo de pago**: cada pedido sin pagar tiene el suyo, de 2 horas a 20 días.
 - **Sandbox**: no hay. En desarrollo y pruebas los pedidos se arman pero nunca se crean.

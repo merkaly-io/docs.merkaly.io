@@ -1,7 +1,7 @@
 name: pedido en el proveedor
 type: entity
 domain: pedidos
-summary: 'Cada pedido que AliExpress devuelve por una compra: uno por ítem, con su estado, sus ítems y sus cargos reales.'
+summary: 'Cada pedido que AliExpress devuelve por una compra: uno por tienda, con su estado, sus ítems y sus cargos reales. Cada uno paga su propio impuesto de importación.'
 owner: api
 relations: [purchase, supplier-order-status-changed]
 details: 'Viven en supplierOrder.orders[] de la compra. Si se cancelan algunos, se reembolsan sus ítems (precio más su parte de flete e impuestos), un reembolso por pedido. Si se cancelan todos, la compra queda CANCELLED.'

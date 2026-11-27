@@ -22,6 +22,7 @@ export default defineAppConfig({
     sidebarGroups: [ // pages join a group with `group` in their navigation; paths stay as they are
       { id: 'empezar', links: [{ icon: 'i-lucide-house', path: '/', title: 'Inicio' }], title: 'Empezar' },
       { id: 'dominios', title: 'Dominios' },
+      { id: 'tecnico', title: 'Técnico' },
       { id: 'referencia', title: 'Referencia' },
     ],
   },

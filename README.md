@@ -24,6 +24,7 @@ native module to build.
 ```
 content/                 # markdown pages (Docus "docs" collection): home, one folder per domain, reference indexes
   <n>.<domain>/index.md  # the entry page of a domain layer, its decisions in <domain>/decisiones/
+  8.tecnico/<repo>/       # technical docs of each repo (architecture, conventions, setup, runbooks, contracts), English
 data/
   entities/<domain>.yml  # entity map of a domain: entities on a grid and their relations
   glossary/<stem>.yml    # one file per term

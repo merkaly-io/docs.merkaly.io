@@ -53,7 +53,7 @@ steps:
     kind: command
     label: email.send
     title: El comprador recibe "Pedido criado"
-    description: 'Con la venta ya guardada, el api le pide a signals el email de pedido creado (número y botón "Ver pedido", donde paga el Pix). Sale una vez por venta; si signals no responde, la venta sigue igual.'
+    description: 'Con la venta ya guardada, el api le pide a signals el email de pedido creado (número y botón "Ver pedido", donde paga el Pix). Lleva la marca de la tienda para que el comprador sepa de dónde viene: nombre (también en el asunto), dirección, color principal y logo (solo PNG o JPG). Sale una vez por venta; si signals no responde, la venta sigue igual.'
     term: email-send
   - from: api
     to: payments

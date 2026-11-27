@@ -1,0 +1,10 @@
+name: routing key
+type: concept
+domain: plataforma
+summary: 'La etiqueta con la que viaja un mensaje. En Merkaly es siempre el nombre del mensaje (payment.received, order.sale.paid): el exchange la usa para saber a qué colas copiarlo.'
+relations:
+  - exchange
+  - queue
+  - envelope
+details: 'Las colas se ligan a claves exactas, sin comodines (* o #). Un mensaje cuya clave no tiene handler en la cola va a la .dlq.'
+source: '@merkaly/nest src/rabbit/rabbit.names.ts'

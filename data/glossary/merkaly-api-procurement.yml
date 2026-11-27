@@ -1,7 +1,7 @@
 name: merkaly.api-procurement
 type: queue
 domain: pedidos
-summary: Cola del api que hace la compra automática al proveedor tras un pago online, en dos pasos: arma las compras (order.sale.paid) y pide cada una al proveedor (order.purchase.place).
+summary: 'Cola del api que hace la compra automática al proveedor tras un pago online, en dos pasos: arma las compras (order.sale.paid) y pide cada una al proveedor (order.purchase.place).'
 owner: api
 relations:
   - merkaly-api

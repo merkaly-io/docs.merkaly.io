@@ -1,0 +1,67 @@
+title: 'Un invoke sin respuesta'
+domain: plataforma
+summary: 'Asaas pregunta si puede mover dinero y espera la respuesta. Cada salto tiene su tiempo: webhooks espera 3 s, payments le da al api lo que queda de 2,5 s (2 s como máximo). Si nadie contesta a tiempo, la respuesta es REFUSED.'
+order: 8
+steps:
+  - from: asaas
+    to: webhooks
+    kind: http
+    label: POST /asaas/withdrawals
+    title: Asaas pregunta antes de mover dinero
+    description: 'Para un retiro (TRANSFER) o un reembolso Pix, Asaas espera una respuesta inmediata.'
+  - from: webhooks
+    to: x-payments
+    kind: invoke
+    label: invoke payment.movement.check (3 s)
+    title: webhooks invoca y espera 3 s
+    description: 'Un invoke es una pregunta con respuesta. El mensaje lleva expiresAt y expiration de 3 s: pasado ese tiempo no vale nada.'
+    term: payment-movement-check
+  - from: x-payments
+    to: q-payments-invokes
+    kind: invoke
+    label: payment.movement.check
+    title: Cola de invokes de payments
+    description: 'Las colas -invokes no tienen .retry ni .dlq y descartan lo que nadie atendió en 30 s.'
+    term: merkaly-payments-invokes
+  - from: q-payments-invokes
+    to: payments
+    kind: invoke
+    label: '@HandleInvoke'
+    title: payments lee el pedido
+    description: 'Si el mensaje ya venció (quien preguntó se rindió), payments lo descarta sin procesar.'
+  - from: payments
+    to: x-api
+    kind: invoke
+    label: invoke payment.withdrawal.authorize (≤ 2 s)
+    title: payments le pregunta al api
+    description: 'Le da al api lo que queda del presupuesto de 2,5 s, nunca más de 2 s, para que webhooks llegue a contestar dentro de sus 3 s.'
+    term: payment-withdrawal-authorize
+  - from: x-api
+    to: q-api-invokes
+    kind: invoke
+    label: payment.withdrawal.authorize
+    title: Cola de invokes del api
+    term: merkaly-api-invokes
+  - node: api
+    kind: error
+    label: tarda o no está
+    title: El api no contesta a tiempo
+    description: 'Puede estar caído, reiniciando o lento. Un invoke perdido nunca se reintenta solo.'
+  - node: payments
+    kind: error
+    label: timeout
+    title: Se vence la espera de payments
+    description: 'El publisher rechaza con GatewayTimeout. payments arma un rechazo en el formato de Asaas.'
+  - from: payments
+    to: webhooks
+    kind: reply
+    label: REFUSED
+    title: payments responde igual
+    description: 'Vuelve por amq.rabbitmq.reply-to, directo a quien preguntó.'
+  - from: webhooks
+    to: asaas
+    kind: http
+    label: 200 REFUSED
+    title: Asaas no mueve el dinero
+    description: 'Ante cualquier falla o demora la respuesta es REFUSED con 200, nunca un 5xx: ante la duda, no se mueve dinero.'
+map: messaging

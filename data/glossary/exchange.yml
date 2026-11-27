@@ -1,0 +1,12 @@
+name: exchange
+type: concept
+domain: plataforma
+summary: 'El buzón de un servicio en RabbitMQ. Cada servicio tiene uno, merkaly.<servicio>, de tipo topic. No guarda mensajes: los copia a las colas ligadas a su routing key.'
+relations:
+  - queue
+  - routing-key
+  - merkaly-api
+  - merkaly-payments
+  - merkaly-auth
+details: 'Hoy existen merkaly.api, merkaly.payments, merkaly.auth (avisos de Auth0, sin servicio propio) y merkaly.signals. webhooks no tiene exchange: entrega en el del dueño. Si ninguna cola está ligada a la routing key, el publish falla (mandatory).'
+source: '@merkaly/nest src/rabbit/rabbit.names.ts'

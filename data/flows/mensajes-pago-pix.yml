@@ -1,0 +1,102 @@
+title: 'Mensajes de un pago Pix'
+domain: plataforma
+summary: 'El comprador paga el Pix y el aviso cruza cuatro servicios: Asaas avisa a webhooks, payments traduce, el api confirma el pago y publica order.sale.paid para la compra automática.'
+order: 1
+steps:
+  - from: asaas
+    to: webhooks
+    kind: http
+    label: POST /asaas PAYMENT_RECEIVED
+    title: Asaas avisa que el Pix entró
+    description: 'Un Pix se acredita al instante, por eso Asaas manda PAYMENT_RECEIVED. Asaas no habla con Rabbit: llama a webhooks por HTTP y webhooks valida el token.'
+  - from: webhooks
+    to: x-payments
+    kind: event
+    label: deliver payment.asaas.webhook.received
+    title: webhooks entrega en el exchange del dueño
+    description: 'El dueño de los pagos es payments, así que el aviso va a merkaly.payments. La routing key es el nombre del mensaje.'
+    term: payment-asaas-webhook-received
+  - from: x-payments
+    to: webhooks
+    kind: reply
+    label: confirm
+    title: El broker confirma
+    description: 'Publish con confirm y mandatory: el broker dice "quedó en al menos una cola". Recién ahí webhooks responde 200 a Asaas. Si algo falla, responde 5xx y Asaas reintenta.'
+    term: mandatory
+  - from: x-payments
+    to: q-payments-asaas
+    kind: event
+    label: payment.asaas.webhook.received
+    title: El exchange copia a la cola suscrita
+    description: Solo merkaly.payments-asaas está ligada a esa routing key.
+    term: routing-key
+  - from: q-payments-asaas
+    to: payments
+    kind: event
+    label: '@HandleEvent'
+    title: payments consume y traduce
+    description: 'El mapper de Asaas convierte PAYMENT_RECEIVED en payment.received, con el id del cobro y en el vocabulario de Merkaly.'
+  - from: payments
+    to: x-payments
+    kind: event
+    label: emit payment.received
+    title: payments emite el hecho
+    description: 'emit publica en su propio exchange. payments no sabe quién escucha: pub/sub.'
+    term: payment-received
+  - from: x-payments
+    to: q-api-payments
+    kind: event
+    label: payment.received
+    title: Llega a la cola del api
+    description: 'merkaly.api-payments vive en el api pero está ligada al exchange de payments (from: "payments").'
+    term: merkaly-api-payments
+  - from: q-api-payments
+    to: api
+    kind: event
+    label: '@HandleEvent'
+    title: El api toma el aviso
+    description: 'El evento solo dispara: el api no confía en el contenido, relee el cobro.'
+  - from: api
+    to: x-payments
+    kind: invoke
+    label: invoke payment.charge.read
+    title: El api pregunta el estado real
+    description: 'Un invoke es una pregunta con respuesta. Va a merkaly.payments-invokes y el api espera hasta 25 s.'
+    term: payment-charge-read
+  - from: x-payments
+    to: q-payments-invokes
+    kind: invoke
+    label: payment.charge.read
+    title: Cola de invokes de payments
+    term: merkaly-payments-invokes
+  - from: q-payments-invokes
+    to: payments
+    kind: invoke
+    label: '@HandleInvoke'
+    title: payments lee el cobro en Asaas
+  - from: payments
+    to: api
+    kind: reply
+    label: PaymentCharge
+    title: La respuesta vuelve directo
+    description: 'Por amq.rabbitmq.reply-to, sin pasar por ningún exchange.'
+  - node: api
+    kind: event
+    label: pago confirmado
+    title: El api guarda el pago
+    description: 'El pago pasa a pagado y la venta avanza. Si el mensaje llega dos veces, el segundo no cambia nada.'
+  - from: api
+    to: x-api
+    kind: event
+    label: emit order.sale.paid
+    title: El api avisa en su propio exchange
+    description: 'Después de guardar, nunca dentro de la transacción. Si este publish falla queda en el log y el pago no se deshace.'
+    term: order-sale-paid
+  - from: x-api
+    to: q-api-procurement
+    kind: event
+    label: order.sale.paid
+    title: Arranca la compra automática
+    description: Sigue en el flujo "Mensajes de la compra automática".
+    term: merkaly-api-procurement
+map: messaging

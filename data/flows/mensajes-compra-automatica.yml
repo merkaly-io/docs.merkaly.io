@@ -1,0 +1,79 @@
+title: 'Mensajes de la compra automática'
+domain: plataforma
+summary: 'order.sale.paid arma las compras en la cola merkaly.api-procurement y deja un comando order.purchase.place por compra en la misma cola. Cada compra se pide a AliExpress y se reintenta por su cuenta.'
+order: 2
+steps:
+  - from: api
+    to: x-api
+    kind: event
+    label: emit order.sale.paid
+    title: El pago online quedó confirmado
+    description: 'El api publica el hecho en su propio exchange, merkaly.api. Una venta importada nunca lo publica.'
+    term: order-sale-paid
+  - from: x-api
+    to: q-api-procurement
+    kind: event
+    label: order.sale.paid
+    title: El exchange lo deja en procurement
+    description: 'merkaly.api-procurement está ligada a merkaly.api con la routing key order.sale.paid.'
+    term: merkaly-api-procurement
+  - from: q-api-procurement
+    to: api
+    kind: event
+    label: '@HandleEvent'
+    title: Paso 1, armar las compras
+    description: 'Agrupa los ítems por cuenta del proveedor y recotiza el costo real. Si la venta ya tiene compras (mensaje repetido o compra a mano), no hace nada.'
+    term: procurement
+  - from: api
+    to: aliexpress
+    kind: http
+    label: ds.freight.query
+    title: Cotiza en AliExpress
+    description: 'Un límite de AliExpress o una caída es pasajero: el mensaje va a la .retry y el paso 1 empieza de cero en 30 s.'
+  - from: api
+    to: x-api
+    kind: command
+    label: command order.purchase.place
+    title: Un comando por cada compra
+    description: 'Con las compras ya guardadas, el api se manda a sí mismo un comando por compra (command hacia su propio exchange). Si un publish falla, la compra queda TO_PLACE para pedirla a mano.'
+    term: order-purchase-place
+  - from: x-api
+    to: q-api-procurement
+    kind: command
+    label: order.purchase.place
+    title: Misma cola, otra routing key
+    description: 'No hace falta otra cola: merkaly.api-procurement liga las dos claves exactas de sus handlers.'
+    term: routing-key
+  - from: q-api-procurement
+    to: api
+    kind: command
+    label: '@HandleCommand'
+    title: Paso 2, pedir la compra
+    description: 'Una compra por mensaje. Si ya está pedida o cancelada, se salta.'
+    term: purchase
+  - from: api
+    to: aliexpress
+    kind: http
+    label: ds.order.create
+    title: Crea el pedido sin pagar
+    description: 'Cada intento manda el mismo id externo, así que AliExpress nunca crea un segundo pedido.'
+  - node: api
+    kind: error
+    label: .retry 30 s × 5
+    title: Si falla de forma pasajera
+    description: 'Límite de AliExpress, proveedor caído, red o base: queda anotado en la compra y el mensaje vuelve en 30 s, hasta 5 veces. Después, a la .dlq.'
+    term: retry-queue
+  - node: api
+    kind: error
+    label: ack + SUPPLIER_ORDER_FAILED
+    title: Si falla de forma definitiva
+    description: 'Cuenta bloqueada, CPF que no coincide, SKU que ya no existe: reintentar no lo arregla. El error queda en la compra, el mensaje se confirma y el admin lo marca.'
+    term: sale-attention
+  - from: aliexpress
+    to: api
+    kind: reply
+    label: un pedido por ítem
+    title: AliExpress responde
+    description: 'La compra queda AWAITING_PAYMENT. El comerciante paga en su cuenta y el aviso vuelve por el mensaje 53.'
+    term: supplier-order
+map: messaging

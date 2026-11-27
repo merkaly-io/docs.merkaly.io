@@ -1,0 +1,84 @@
+title: 'Mensajes de un pedido cancelado en AliExpress'
+domain: plataforma
+summary: 'AliExpress manda el mensaje 53. webhooks lo entrega en merkaly.api, el api relee el pedido y, si quedó cancelado, le pide el reembolso a payments con un invoke.'
+order: 3
+steps:
+  - from: aliexpress
+    to: webhooks
+    kind: http
+    label: POST /aliexpress (53)
+    title: AliExpress avisa un cambio de pedido
+    description: 'El mensaje 53 (dropshipper_order_status_update) trae el vendedor, el id del pedido y su estado. webhooks valida la firma.'
+  - from: webhooks
+    to: x-api
+    kind: event
+    label: deliver supplier.order.status_changed
+    title: webhooks entrega en merkaly.api
+    description: 'Hoy el dueño del dominio proveedor es el api. El id del mensaje sale de un hash del cuerpo: si AliExpress repite el aviso, el id es el mismo.'
+    term: supplier-order-status-changed
+  - from: x-api
+    to: webhooks
+    kind: reply
+    label: confirm
+    title: El broker confirma
+  - from: webhooks
+    to: aliexpress
+    kind: http
+    label: '200'
+    title: webhooks responde
+    description: 'Si el broker no confirma, responde 503 y AliExpress reintenta.'
+  - from: x-api
+    to: q-api-supplier
+    kind: event
+    label: supplier.order.status_changed
+    title: Cola del api para el proveedor
+    term: merkaly-api-supplier
+  - from: q-api-supplier
+    to: api
+    kind: event
+    label: '@HandleEvent'
+    title: El api encuentra la tienda
+    description: 'Resuelve la organización por el vendedor de AliExpress. Vendedor desconocido es un rechazo definitivo: ack y aviso en el log.'
+  - from: api
+    to: aliexpress
+    kind: http
+    label: ds.order.get
+    title: Relee el pedido
+    description: 'El aviso solo dispara; el estado real se lee en AliExpress, igual que el botón Sincronizar. Si la compra todavía se está pidiendo, el mensaje va a la .retry y vuelve en 30 s.'
+  - node: api
+    kind: event
+    label: pedido cancelado
+    title: El api ve la cancelación
+    description: 'Si cancelaron algunos pedidos, reembolsa esos ítems; si cayó la única compra viva, cancela la venta y reembolsa lo que queda.'
+    term: supplier-order
+  - from: api
+    to: x-payments
+    kind: invoke
+    label: invoke payment.charge.refund
+    title: Pide el reembolso a payments
+    description: 'Es un invoke: el api espera la respuesta. Los invokes no tienen .retry; si no hay respuesta, el api decide (la venta queda marcada para el comerciante).'
+    term: payment-charge-refund
+  - from: x-payments
+    to: q-payments-invokes
+    kind: invoke
+    label: payment.charge.refund
+    title: Cola de invokes de payments
+    term: merkaly-payments-invokes
+  - from: q-payments-invokes
+    to: payments
+    kind: invoke
+    label: '@HandleInvoke'
+    title: payments recibe el pedido
+  - from: payments
+    to: asaas
+    kind: http
+    label: POST /payments/{id}/refund
+    title: payments reembolsa en Asaas
+  - from: payments
+    to: api
+    kind: reply
+    label: REFUNDING
+    title: La respuesta vuelve al api
+    description: 'Cuando Asaas termine, avisará por webhooks y llegará payment.refunded a merkaly.api-payments, como en el flujo del pago.'
+    term: payment-refunded
+map: messaging

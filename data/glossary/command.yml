@@ -1,0 +1,11 @@
+name: command
+type: concept
+domain: plataforma
+summary: 'Una orden para otro servicio, sin respuesta: se publica en el exchange del destino. Ejemplos: email.send para signals y order.purchase.place, que el api se manda a sí mismo.'
+relations:
+  - emit
+  - invoke
+  - email-send
+  - order-purchase-place
+details: 'Viaja y se reintenta igual que un evento (.retry y .dlq). La diferencia es de intención: un evento cuenta algo que pasó, un comando pide que pase algo.'
+source: '@merkaly/nest src/rabbit/events.publisher.ts'

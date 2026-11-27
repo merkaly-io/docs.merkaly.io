@@ -1,0 +1,68 @@
+title: Calcular los impuestos de importación
+domain: pedidos
+summary: Cada pedido que AliExpress va a crear (uno por tienda) paga su impuesto. El api agrupa las líneas por tienda, calcula el II y el ICMS de cada pedido y los reparte entre sus líneas.
+order: 6
+map: orders
+steps:
+  - from: store
+    to: api
+    kind: http
+    label: POST /store/checkout/quotes
+    title: El store pide la cotización
+    description: También pasa por aquí la compra del store y la recotización del admin antes de comprar en AliExpress.
+  - from: api
+    to: aliexpress
+    kind: http
+    label: costo y flete por línea
+    title: El api cotiza cada línea
+    description: Costo, stock y flete de cada línea para el destino. AliExpress no devuelve impuestos.
+  - node: api
+    kind: command
+    label: un flete por grupo
+    title: Reparte el flete
+    description: Un flete por grupo de envío (Choice junto, el resto con su tienda).
+    term: shipping-group
+  - node: api
+    kind: command
+    label: un pedido por tienda
+    title: Arma los pedidos de AliExpress
+    description: 'AliExpress parte la compra en un pedido por tienda y cobra el impuesto de cada uno. El api agrupa las líneas igual. Ejemplo: dos relojes de la misma tienda son un solo pedido.'
+    term: supplier-order
+  - node: api
+    kind: command
+    label: base = costo + flete
+    title: La base de cada pedido
+    description: 'Lo que AliExpress nos cobra por ese pedido: costo del proveedor de sus líneas más su flete. No es el precio de venta. Ejemplo: R$ 367,41 + R$ 96,39 = R$ 463,80.'
+  - node: api
+    kind: error
+    label: sale de Brasil → 0
+    title: ¿Es una importación?
+    description: Si el pedido sale de un depósito del país de destino, no paga impuestos.
+  - node: api
+    kind: command
+    label: II = 60 % − US$ 30
+    title: Imposto de Importação
+    description: 'Hasta US$ 50, nada. Arriba, 60 % de la base menos US$ 30, convertidos con el tipo de cambio. Ejemplo: 60 % de R$ 463,80 es R$ 278,28; menos US$ 30 (R$ 187,26 al dólar de AliExpress de ese día, 6,24) da R$ 91,02.'
+  - node: api
+    kind: command
+    label: ICMS por dentro
+    title: ICMS del estado del comprador
+    description: '(base + II) × alícuota / (1 − alícuota), con la alícuota de la UF (tabla de Comsefaz, 17 % a 20 %). Ejemplo en SC (17 %): (463,80 + 91,02) × 0,17 / 0,83 = R$ 113,64. Total: R$ 204,66; AliExpress cobró R$ 204,71.'
+    term: import-tax
+  - node: api
+    kind: command
+    label: reparto por línea
+    title: Reparte el impuesto
+    description: Cada línea se lleva su parte según su base, así un ítem cancelado reembolsa la suya.
+  - from: api
+    to: store
+    kind: reply
+    label: total = ítems + flete + impuestos
+    title: El comprador ve el total
+    term: quoted-total
+  - from: aliexpress
+    to: api
+    kind: event
+    label: actual_tax_fee
+    title: El cargo real reemplaza la estimación
+    description: Al sincronizar cada pedido, lo que AliExpress cobró de verdad reemplaza la estimación en la compra.

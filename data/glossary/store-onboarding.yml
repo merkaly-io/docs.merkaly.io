@@ -1,5 +1,5 @@
 name: onboarding
 type: concept
 domain: tienda
-summary: 'Los tres pasos que el admin propone a una tienda nueva: cuenta de pago, conexión con AliExpress y primer producto. Todos se pueden saltar.'
+summary: 'El asistente "Do zero à primeira venda" del inicio del admin, en cinco pasos: cuenta de pago, conexión con AliExpress, primer producto, personalizar la tienda y primera venta. Los tres primeros son obligatorios: mientras falte alguno, el inicio abre el asistente (se puede saltar y vuelve desde la tarjeta del inicio). Con los tres hechos el inicio ya no lo impone; personalizar y primera venta quedan opcionales desde la tarjeta.'
 relations: [payment-account, supplier-connection, product, store-readiness]

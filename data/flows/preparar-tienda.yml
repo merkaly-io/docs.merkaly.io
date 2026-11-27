@@ -1,15 +1,15 @@
 title: Preparar la tienda para vender
 domain: tienda
-summary: Después del registro, el admin guía tres pasos (cuenta de pago, conexión con AliExpress y primer producto). La tienda está lista cuando tiene productos activos y puede cobrar.
+summary: Después del registro, el inicio del admin guía cinco pasos. Los tres primeros (cuenta de pago, conexión con AliExpress y primer producto) son obligatorios; personalizar la tienda y la primera venta son opcionales. La tienda está lista cuando tiene productos activos y puede cobrar.
 order: 1
 map: store
 steps:
   - from: merchant
     to: admin
     kind: http
-    label: /onboarding
+    label: /
     title: El comerciante llega al onboarding
-    description: www lo manda acá después de crear la tienda. Cada paso se puede saltar.
+    description: www lo manda al inicio después de crear la tienda. Mientras falte uno de los tres primeros pasos, el inicio abre el asistente en vez del panel; se puede saltar y vuelve desde la tarjeta del inicio. Con los tres hechos, el inicio muestra el panel y la tarjeta ofrece personalizar y la primera venta como opcionales.
   - from: admin
     to: api
     kind: http

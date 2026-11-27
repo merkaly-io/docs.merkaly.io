@@ -49,6 +49,12 @@ steps:
     title: Nace la venta
     description: Venta CHECKOUT esperando pago, con lo acordado (destinatario, dirección, flete e impuestos por línea). El pago queda PENDING.
     term: sale-status-awaiting-payment
+  - node: api
+    kind: command
+    label: email.send
+    title: El comprador recibe "Pedido criado"
+    description: 'Con la venta ya guardada, el api le pide a signals el email de pedido creado (número y botón "Ver pedido", donde paga el Pix). Sale una vez por venta; si signals no responde, la venta sigue igual.'
+    term: email-send
   - from: api
     to: payments
     kind: invoke

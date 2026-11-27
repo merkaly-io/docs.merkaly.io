@@ -1,7 +1,7 @@
 name: email.send
 type: command
 domain: plataforma
-summary: Pide enviar un email. Lo consume signals; nadie lo publica todavía.
+summary: Pide enviar un email. Lo consume signals; hoy lo publica el api para el email de pedido creado al comprador.
 owner: signals
 relations:
   - merkaly-signals-emails

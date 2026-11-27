@@ -98,5 +98,5 @@ steps:
     kind: error
     label: AUTO_PROCUREMENT_FAILED
     title: ¿Y si se frenó?
-    description: Si a los 30 minutos una venta pagada sigue sin compra (rechazo definitivo, mensaje en la .dlq o publicación perdida), el admin lo marca para comprar a mano. La compra y el pedido manuales quedan siempre como respaldo.
+    description: Si a los 30 minutos una venta pagada sigue sin compra (rechazo definitivo, mensaje en la .dlq o publicación perdida), el admin lo marca para comprar a mano. Comprar y pedir al proveedor desde el admin quedan siempre como respaldo.
     term: sale-attention

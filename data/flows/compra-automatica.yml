@@ -1,6 +1,6 @@
 title: Compra automática al proveedor
 domain: pedidos
-summary: Con el pago online confirmado, el api le manda al comprador el email de pedido recibido y compra al proveedor solo, en dos pasos en cola (armar las compras y pedir cada una). El pedido queda creado sin pagar; el comerciante lo paga en su cuenta del proveedor.
+summary: Con el pago online confirmado, el api compra al proveedor solo, en dos pasos en cola (armar las compras y pedir cada una). El pedido queda creado sin pagar; el comerciante lo paga en su cuenta del proveedor.
 order: 2
 map: orders
 steps:
@@ -16,12 +16,6 @@ steps:
     title: La cola arranca la compra automática
     description: Un intento por mensaje, como sistema, nunca a nombre del comprador. Si la venta ya tiene compras (repetido o comprado a mano), no hace nada.
     term: procurement
-  - node: api
-    kind: command
-    label: email.send
-    title: El comprador recibe el email de pedido recibido
-    description: Antes de comprar, el api le pide a signals un email al comprador con el número del pedido y un botón Ver pedido que abre el pedido en su cuenta de la tienda. Sale con el nombre de la tienda, nunca menciona al proveedor y sale en toda venta online pagada, aunque la compra automática esté apagada. Un solo email por venta, aunque el mensaje se repita. Si signals no está corriendo, queda en el log y la compra sigue. El comerciante no recibe email; ve la venta en el admin.
-    term: email-send
   - node: api
     kind: command
     label: una compra por cuenta

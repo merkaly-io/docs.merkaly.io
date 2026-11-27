@@ -1,0 +1,11 @@
+name: order.purchase.place
+type: command
+domain: pedidos
+summary: Pide hacer al proveedor el pedido de una compra de la compra automática. El api manda uno por compra, apenas las guardó.
+owner: api
+relations:
+  - merkaly-api-procurement
+  - procurement
+  - purchase
+details: 'Cada compra se pide y se reintenta sola. Una falla pasajera (límite de AliExpress, proveedor caído, red) vuelve por la .retry; un rechazo de la cuenta o del comprador (cuenta incompleta, CPF, dirección) queda en la compra (SUPPLIER_ORDER_FAILED) y no se reintenta. Repetir el mensaje no duplica el pedido: una compra ya pedida o cancelada se salta y AliExpress reconoce el mismo id externo.'
+source: api.merkaly.io src/domain/order/types/purchase.events.ts

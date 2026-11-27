@@ -1,13 +1,14 @@
 name: merkaly.api-procurement
 type: queue
 domain: pedidos
-summary: Cola del api que hace la compra automática al proveedor tras un pago online (order.sale.paid).
+summary: Cola del api que hace la compra automática al proveedor tras un pago online, en dos pasos: arma las compras (order.sale.paid) y pide cada una al proveedor (order.purchase.place).
 owner: api
 relations:
   - merkaly-api
   - order-sale-paid
+  - order-purchase-place
   - procurement
   - retry-queue
   - dead-letter-queue
-details: 'Una falla pasajera (límite de AliExpress, proveedor caído, red) vuelve por la .retry y termina en la .dlq. Un rechazo definitivo se confirma y queda en el log; la venta muestra AUTO_PROCUREMENT_FAILED a los 30 minutos.'
+details: 'Cada paso se reintenta por su cuenta: una falla pasajera (límite de AliExpress, proveedor caído, red) vuelve por la .retry cada 30 segundos, hasta 5 veces, y termina en la .dlq. Un rechazo definitivo se confirma: al armar las compras queda en el log y la venta muestra AUTO_PROCUREMENT_FAILED a los 30 minutos; al pedir una compra queda en la compra (SUPPLIER_ORDER_FAILED).'
 source: '@merkaly/nest docs/events.md'

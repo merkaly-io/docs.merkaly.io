@@ -2,5 +2,5 @@ name: compra automática
 type: concept
 domain: pedidos
 summary: 'Con el pago online confirmado, el api compra solo al proveedor, desde la cola merkaly.api-procurement. El pedido queda sin pagar; nunca se fuerza.'
-relations: [purchase, sale-status-to-order, sale-attention, order-sale-paid, merkaly-api-procurement]
-details: 'Corre como sistema, nunca a nombre del comprador, y nunca hace fallar el pago. Si AliExpress limita o hay una falla pasajera, la cola reintenta cada 30 segundos hasta 5 veces y después lo deja en la .dlq. Si se frena, a los 30 minutos el admin muestra AUTO_PROCUREMENT_FAILED y se compra a mano.'
+relations: [purchase, sale-status-to-order, sale-attention, order-sale-paid, order-purchase-place, merkaly-api-procurement]
+details: 'Corre como sistema, nunca a nombre del comprador, y nunca hace fallar el pago. Son dos pasos en la cola: armar las compras y, después, un pedido al proveedor por compra. Si AliExpress limita o hay una falla pasajera, cada paso se reintenta cada 30 segundos hasta 5 veces y después queda en la .dlq. Un rechazo de la cuenta o del comprador no se reintenta. Si se frena al armar, a los 30 minutos el admin muestra AUTO_PROCUREMENT_FAILED; si se frena al pedir, la compra queda con SUPPLIER_ORDER_FAILED. En los dos casos se sigue a mano.'

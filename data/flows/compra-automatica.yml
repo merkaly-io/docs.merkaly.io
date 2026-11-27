@@ -1,6 +1,6 @@
 title: Compra automática al proveedor
 domain: pedidos
-summary: Con el pago online confirmado, el api compra al proveedor solo. El pedido queda creado sin pagar; el comerciante lo paga en su cuenta del proveedor.
+summary: Con el pago online confirmado, el api compra al proveedor solo, en dos pasos en cola (armar las compras y pedir cada una). El pedido queda creado sin pagar; el comerciante lo paga en su cuenta del proveedor.
 order: 2
 map: orders
 steps:
@@ -22,18 +22,36 @@ steps:
     title: Arma las compras
     description: Agrupa los ítems por cuenta del proveedor (una compra por cuenta) y recotiza el costo real. La compra nace TO_PLACE.
     term: purchase
+  - node: api
+    kind: error
+    label: .retry → .dlq
+    title: ¿Y si AliExpress limita al cotizar?
+    description: Un límite de AliExpress o una falla pasajera (proveedor caído, red) vuelve a la cola cada 30 segundos, hasta 5 veces, y empieza de cero. Después el mensaje termina en la .dlq. Un rechazo definitivo (sin cuenta conectada, cotización que no cierra) no se reintenta.
+    term: retry-queue
+  - node: api
+    kind: command
+    label: order.purchase.place
+    title: Un pedido en la cola por cada compra
+    description: Con las compras ya guardadas, el api manda un mensaje por compra a la misma cola. Cada compra se pide y se reintenta sola; si el mensaje se pierde, la compra queda TO_PLACE para pedirla a mano.
+    term: order-purchase-place
   - from: api
     to: aliexpress
     kind: http
     label: ds.order.create
     title: Pide al proveedor
-    description: Un solo pedido con todas las líneas, sin pagar. Si falla, el error queda en la compra (SUPPLIER_ORDER_FAILED) y se reintenta a mano.
+    description: Un solo pedido con todas las líneas de la compra, sin pagar. Una compra ya pedida o cancelada se salta, y AliExpress reconoce el mismo id externo, así que repetir nunca duplica el pedido.
   - node: api
     kind: error
     label: .retry → .dlq
-    title: ¿Y si AliExpress limita?
-    description: Un límite de AliExpress o una falla pasajera (proveedor caído, red) vuelve a la cola cada 30 segundos, hasta 5 veces. Después el mensaje termina en la .dlq. Un rechazo definitivo (sin cuenta conectada, cotización que no cierra) no se reintenta.
+    title: ¿Y si falla al pedir?
+    description: Una falla pasajera (límite de AliExpress, proveedor caído, red) queda anotada en la compra y vuelve a la cola cada 30 segundos, hasta 5 veces; después, a la .dlq.
     term: retry-queue
+  - node: api
+    kind: error
+    label: SUPPLIER_ORDER_FAILED
+    title: ¿Y si AliExpress rechaza la cuenta o al comprador?
+    description: Cuenta de AliExpress incompleta o bloqueada, sesión vencida, CPF que no coincide con el nombre o dirección inválida no se arreglan reintentando. El error queda en la compra, el admin lo marca y el comerciante lo corrige y pide de nuevo con el botón.
+    term: sale-attention
   - from: aliexpress
     to: api
     kind: reply
@@ -80,5 +98,5 @@ steps:
     kind: error
     label: AUTO_PROCUREMENT_FAILED
     title: ¿Y si se frenó?
-    description: Si a los 30 minutos una venta pagada sigue sin compra (rechazo definitivo, mensaje en la .dlq o publicación perdida), el admin lo marca para pedir a mano. La compra manual queda siempre como respaldo.
+    description: Si a los 30 minutos una venta pagada sigue sin compra (rechazo definitivo, mensaje en la .dlq o publicación perdida), el admin lo marca para comprar a mano. La compra y el pedido manuales quedan siempre como respaldo.
     term: sale-attention

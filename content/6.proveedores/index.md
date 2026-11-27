@@ -29,7 +29,7 @@ De dónde salen los productos y a quién se le compra cada venta.
 
 ## Lo que AliExpress no dice
 
-- **Choice**: no hay un campo que lo diga. Solo el flete lo insinúa (puede ser envío de plataforma) y trae el umbral de envío gratis en la moneda del mercado. Sin ese dato, la línea paga el flete de su tienda.
+- **Choice**: no hay un campo que lo diga. Solo el flete lo insinúa (puede ser envío de plataforma) y trae el umbral de envío gratis en la moneda del mercado. Un umbral de 0 (como en AliExpress Selection Standard) se cotiza como envío gratis: en los pedidos reales AliExpress descuenta todo el flete. Sin ese dato, la línea paga el flete de su tienda. El flete cobrado se mide en cada pedido (flete base y descuento) y se avisa si un envío cotizado gratis termina cobrado.
 - **Impuesto de importación**: ninguna llamada lo cotiza. Se usan tramos medidos en pedidos reales (Brasil: 20,6 % hasta US$ 50, 34 % arriba). Un envío desde el mismo país no paga.
 - **Ciudades**: solo acepta las de su propia lista. El checkout y la edición de la entrega la validan; si la lista no responde, aceptan la ciudad con un aviso.
 - **Plazo de pago**: cada pedido sin pagar tiene el suyo, de 2 horas a 20 días.

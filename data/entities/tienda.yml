@@ -29,8 +29,8 @@ entities:
         note: el mercado (país, moneda, idioma)
       - name: sequence
         note: numeración de ventas y compras
-      - name: payments
-        note: la cuenta de pago (nunca se sirve)
+      - name: payment
+        note: gateway principal, respaldo y métodos (solo valores)
   - id: profile
     label: Perfil de la tienda
     caption: público

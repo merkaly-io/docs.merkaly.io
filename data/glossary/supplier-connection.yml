@@ -3,6 +3,6 @@ type: entity
 domain: proveedores
 summary: 'La cuenta de AliExpress de la organización (la cuenta del proveedor), autorizada a Merkaly. Toda llamada al proveedor la usa; no hay cuenta compartida de respaldo.'
 owner: api
-relations: [supplier-account, aliexpress, supplier-vendor, market]
-details: 'Guarda los tokens (nunca salen en una respuesta), su vencimiento y el id de vendedor, que también se guarda en la organización de Auth0 para que los avisos encuentren la tienda. Una cuenta de AliExpress conectada a dos tiendas resuelve solo a una.'
-source: api.merkaly.io src/domain/integration/supplier
+relations: [provider, supplier-account, aliexpress, supplier-vendor, market]
+details: 'Se conecta y desconecta solo desde el dashboard, por el equipo de Merkaly. Guarda los tokens (nunca salen en una respuesta), su vencimiento y el id de vendedor, que también se guarda en la organización de Auth0 para que los avisos encuentren la tienda. Una cuenta de AliExpress conectada a dos tiendas resuelve solo a una.'
+source: api.merkaly.io src/domain/provider

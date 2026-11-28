@@ -1,26 +1,27 @@
 title: Conectar la cuenta de AliExpress
 domain: proveedores
-summary: Se conecta la cuenta de AliExpress de la organización (creada por Merkaly) desde su admin. Sin esa conexión, ninguna llamada al proveedor funciona.
+summary: El equipo de Merkaly conecta desde el dashboard la cuenta de AliExpress que creó para la organización. Sin esa conexión, ninguna llamada al proveedor funciona; el comerciante no puede conectarla ni desconectarla.
 order: 1
 map: catalog
 steps:
-  - from: merchant
-    to: admin
+  - from: staff
+    to: dashboard
     kind: http
     label: Conectar
     title: Se pide la conexión
-    description: 'Integraciones > Proveedores, en el admin de la organización. Por ahora lo hace alguien del equipo de Merkaly; más adelante, desde el dashboard.'
-  - from: admin
+    description: 'Clientes > la organización > Proveedores, en el dashboard. Solo el equipo de Merkaly; el admin de la tienda solo ve si la cuenta está lista.'
+  - from: dashboard
     to: aliexpress
     kind: http
     label: oauth/authorize
     title: AliExpress pide permiso
-    description: 'Se entra con la cuenta de la organización y se autoriza a Merkaly; vuelve al admin con un código. Antes, la cuenta tiene que haber aceptado los términos del Dropshipping Center. Si el navegador muestra un error propio (no de AliExpress), son cookies viejas de aliexpress.com: incógnito o borrarlas.'
-  - from: admin
+    description: 'Se entra con la cuenta de la organización y se autoriza a Merkaly; vuelve al dashboard con un código. Antes, la cuenta tiene que haber aceptado los términos del Dropshipping Center. Si el navegador muestra un error propio (no de AliExpress), son cookies viejas de aliexpress.com: incógnito o borrarlas.'
+  - from: dashboard
     to: api
     kind: http
-    label: POST .../connection { code }
-    title: El admin manda el código
+    label: POST /dashboard/clients/:client/providers/aliexpress/connection { code }
+    title: El dashboard manda el código
+    description: El api lo hace en la base de esa organización.
   - from: api
     to: aliexpress
     kind: http

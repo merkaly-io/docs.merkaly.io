@@ -6,4 +6,4 @@ relations:
   - merkaly-api
   - payments
   - frontends
-source: api.merkaly.io src/domain/integration/payment/README.md
+source: api.merkaly.io src/domain/payment/README.md

@@ -1,6 +1,6 @@
 ---
 title: Proveedores
-description: 'La conexión de cada tienda con su proveedor de productos.'
+description: 'El proveedor de cada tienda: de dónde salen los productos y dónde se hacen los pedidos.'
 navigation:
   title: Resumen
   icon: i-lucide-layers
@@ -10,7 +10,8 @@ navigation:
 
 De dónde salen los productos y a quién se le compra cada venta.
 
-- Hoy el único proveedor es [AliExpress](/glosario/aliexpress), con **una cuenta por organización**, creada y operada por Merkaly ([cuenta del proveedor](/glosario/supplier-account)). No hay una cuenta compartida de respaldo.
+- Un [proveedor](/glosario/provider) es una fuente de dropshipping: su catálogo aparece en la tienda y los pedidos se hacen ahí automáticamente. No es una [integración](/glosario/integration) ni [configuración](/glosario/settings) ([la decisión](/proveedores/decisiones/proveedor-no-es-integracion)).
+- Hoy el único proveedor es [AliExpress](/glosario/aliexpress), con **una cuenta por organización**, creada y operada por Merkaly ([cuenta del proveedor](/glosario/supplier-account)), que se conecta desde el dashboard. No hay una cuenta compartida de respaldo.
 - El proveedor alimenta el [catálogo](/catalogo) (importar y sincronizar) y los [pedidos](/pedidos) (cotizar, comprar, seguir y cancelar).
 - Cada tienda vende en un solo [mercado](/glosario/market) (hoy Brasil). Las lecturas usan ese país; el costo real se recotiza con el destino del pedido.
 - El comprador nunca ve al proveedor. Los documentos internos sí lo nombran.
@@ -68,6 +69,7 @@ Toca una entidad para ver sus campos clave y con qué se relaciona. Las punteada
 
 ## Decisiones
 
+- [El proveedor no es una integración](/proveedores/decisiones/proveedor-no-es-integracion)
 - [Una cuenta de AliExpress por organización](/proveedores/decisiones/cuenta-por-organizacion)
 - [Solo la cuenta propia del comerciante](/proveedores/decisiones/solo-cuenta-propia) (reemplazada)
 - [Un solo mercado por tienda](/proveedores/decisiones/mercado-unico)
@@ -76,8 +78,9 @@ Toca una entidad para ver sus campos clave y con qué se relaciona. Las punteada
 
 | Dónde | Qué hay |
 | --- | --- |
-| [api.merkaly.io `src/domain/integration/supplier`](https://github.com/merkaly-io/api.merkaly.io/tree/master/src/domain/integration/supplier) | Conexión, importación, sincronización, cotización y pedidos |
-| [api.merkaly.io `src/domain/integration/supplier/providers/aliexpress`](https://github.com/merkaly-io/api.merkaly.io/tree/master/src/domain/integration/supplier/providers/aliexpress) | Un archivo por rol: transporte, conexión, adaptadores y mappers |
+| [api.merkaly.io `src/domain/provider`](https://github.com/merkaly-io/api.merkaly.io/tree/master/src/domain/provider) | Cuenta del proveedor, importación, sincronización, cotización y pedidos |
+| [api.merkaly.io `src/domain/provider/aliexpress`](https://github.com/merkaly-io/api.merkaly.io/tree/master/src/domain/provider/aliexpress) | Un archivo por rol: transporte, conexión, adaptadores y mappers |
+| [api.merkaly.io `src/application/dashboard/providers`](https://github.com/merkaly-io/api.merkaly.io/tree/master/src/application/dashboard/providers) | Conexión de la cuenta desde el dashboard (solo el equipo de Merkaly) |
 | [webhooks.merkaly.io `src`](https://github.com/merkaly-io/webhooks.merkaly.io/tree/master/src) | La puerta de los avisos de AliExpress |
 
 ## Glosario

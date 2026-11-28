@@ -1,0 +1,8 @@
+name: proveedor
+type: concept
+domain: proveedores
+summary: 'Una fuente de dropshipping: su catálogo aparece en la tienda y los pedidos se hacen ahí automáticamente. Hoy AliExpress; después TikTok Shop, Shopee o Amazon.'
+owner: api
+relations: [aliexpress, supplier-account, supplier-connection, gateway, integration, settings]
+details: 'Merkaly crea y opera una cuenta en cada proveedor por organización; el comerciante no la conecta ni la desconecta. No es una integración (eso es lo opcional que conecta el comerciante) ni configuración (tiene secretos, tokens que se renuevan seguido y estado operativo que el comerciante no puede editar). En el api es un dominio propio, con una entrada por proveedor en cada tienda (colección providers) y su cuenta en account.'
+source: api.merkaly.io src/domain/provider

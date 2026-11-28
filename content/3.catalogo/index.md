@@ -84,7 +84,7 @@ Toca una entidad para ver sus campos clave y con qué se relaciona. Las punteada
 | --- | --- |
 | [api.merkaly.io `src/domain/catalog`](https://github.com/merkaly-io/api.merkaly.io/tree/master/src/domain/catalog) | Productos, variantes, categorías, marcas y la regla de precio |
 | [api.merkaly.io `src/domain/content`](https://github.com/merkaly-io/api.merkaly.io/tree/master/src/domain/content) | Páginas de la tienda |
-| [api.merkaly.io `src/domain/integration/supplier`](https://github.com/merkaly-io/api.merkaly.io/tree/master/src/domain/integration/supplier) | Importación y sincronización desde el proveedor |
+| [api.merkaly.io `src/domain/provider`](https://github.com/merkaly-io/api.merkaly.io/tree/master/src/domain/provider) | Importación y sincronización desde el proveedor |
 
 ## Glosario
 

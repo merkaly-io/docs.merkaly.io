@@ -9,17 +9,18 @@ entities:
     summary: La tienda. Guarda en Auth0 el id de vendedor de su cuenta de AliExpress.
   - id: supplier
     label: Proveedor
-    caption: integration.suppliers
+    caption: providers
     col: 1
     row: 0
-    summary: Una plataforma de la que la tienda compra. Uno por proveedor en cada tienda; hoy AliExpress.
+    term: provider
+    summary: Una fuente de dropshipping de la tienda. Uno por proveedor en cada tienda; hoy AliExpress.
   - id: connection
     label: Conexión
-    caption: cuenta por organización, OAuth
+    caption: account, una por organización, OAuth
     col: 2
     row: 0
     term: supplier-connection
-    summary: La cuenta de AliExpress del comerciante. Sin ella, nada funciona.
+    summary: La cuenta de AliExpress que Merkaly opera para la tienda, conectada desde el dashboard. Sin ella, nada funciona.
     fields:
       - name: tokens
         note: nunca salen en una respuesta

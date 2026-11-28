@@ -3,4 +3,4 @@ type: concept
 domain: pedidos
 summary: 'El checkout cobra el total que el comprador confirmó. Si al crear la venta el total recotizado es otro, responde 409 con este código y no crea nada.'
 relations: [sale, import-tax, shipping-group]
-details: 'La cotización relee el costo de cada línea; si cambió, recalcula el precio de venta con el margen de la variante y lo guarda. El total es ítems + flete + impuestos; la tarifa del pago se suma aparte para el comprador.'
+details: 'La cotización relee el costo de cada línea; si cambió, recalcula el precio de venta con el margen de la variante y lo guarda. El total es ítems + flete + impuestos; la tarifa del pago se suma aparte para el comprador. Detalle y ejemplos en /pedidos/cobro.'

@@ -15,6 +15,7 @@ Cómo una venta pasa del carrito a la puerta del comprador.
 - El proveedor despacha en uno o varios [envíos](/glosario/shipment), cada uno con su seguimiento.
 - El estado de la venta **se deriva** del pago, las compras y los envíos. Nadie lo escribe.
 - El comprador nunca ve al proveedor: ni su nombre, ni sus links, ni sus códigos.
+- Cómo se arma lo que paga el comprador (productos, flete, impuestos y tarifa) y qué cobra el proveedor: [Cómo se arma el cobro](/pedidos/cobro).
 
 ## Tres dominios, una venta
 

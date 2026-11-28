@@ -82,6 +82,7 @@ La compra automática, paso a paso:
 
 - [El estado de la venta se deriva](/pedidos/decisiones/estado-derivado)
 - [No hay "marcar como entregado"](/pedidos/decisiones/sin-entregado-manual)
+- [Los descuentos del proveedor son de Merkaly](/pedidos/decisiones/descuentos-del-proveedor)
 
 ## En el código
 

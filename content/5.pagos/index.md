@@ -90,6 +90,8 @@ El reembolso de una venta pagada:
 - [Cobrar en la cuenta de Merkaly con split del 100 %](/pagos/decisiones/cobro-en-cuenta-merkaly)
 - [Retiros solo manuales](/pagos/decisiones/retiros-manuales)
 - [Merkaly presta lo que falta de un reembolso](/pagos/decisiones/merkaly-presta-reembolsos)
+- [El split manda a la tienda solo su lucro](/pagos/decisiones/split-solo-el-lucro)
+- [Quién absorbe la tarifa del Pix en un reembolso](/pagos/decisiones/tarifa-en-reembolsos)
 
 ## Por confirmar
 

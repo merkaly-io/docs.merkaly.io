@@ -14,6 +14,7 @@ La [organización](/glosario/organization) vista como tienda.
 - Se ve en `<nombre>.merkaly.store` (o un dominio propio). El host dice qué tienda es; nunca el cliente.
 - Vende en un solo [mercado](/glosario/market) (hoy Brasil, BRL, pt).
 - Está lista para vender cuando tiene productos activos y su cuenta de pago puede cobrar ([readiness](/glosario/store-readiness)).
+- Paga a Merkaly según su plan: Empezando, Vendiendo o Escalando ([Planes](/tienda/planes)).
 
 ## Las apps
 

@@ -1,6 +1,6 @@
 title: Conexión con el proveedor
 domain: proveedores
-summary: 'Cada tienda usa su propia cuenta de AliExpress. No hay cuenta de Merkaly de respaldo: sin conexión, toda llamada responde 409 antes de llamar al proveedor.'
+summary: 'Cada organización usa su propia cuenta de AliExpress (la cuenta del proveedor). No hay cuenta compartida de respaldo: sin conexión, toda llamada responde 409 antes de llamar al proveedor.'
 term: supplier-connection
 order: 1
 states:
@@ -8,7 +8,7 @@ states:
   - { id: READY, col: 1, row: 0, summary: 'Conectada y vigente. El token se renueva solo antes de vencer.' }
   - { id: EXPIRED, col: 2, row: 0, summary: 'Venció y no se pudo renovar (SUPPLIER_CONNECTION_EXPIRED). Hay que reconectar.' }
 transitions:
-  - { from: NOT_CONNECTED, to: READY, by: aliexpress, trigger: 'El comerciante autoriza su cuenta' }
+  - { from: NOT_CONNECTED, to: READY, by: aliexpress, trigger: 'Se autoriza la cuenta de la organización desde su admin' }
   - { from: READY, to: EXPIRED, by: aliexpress, trigger: 'Vence el token y el refresh ya no sirve' }
   - { from: EXPIRED, to: READY, by: aliexpress, trigger: 'Reconecta' }
-  - { from: READY, to: NOT_CONNECTED, trigger: 'El comerciante desconecta: se borra la conexión y el vendedor de la tienda' }
+  - { from: READY, to: NOT_CONNECTED, trigger: 'Se desconecta: se borra la conexión y el vendedor de la tienda' }

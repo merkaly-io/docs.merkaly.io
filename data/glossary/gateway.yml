@@ -1,0 +1,8 @@
+name: gateway
+type: concept
+domain: pagos
+summary: 'Quien procesa el cobro de una venta. Hoy Asaas; después un gateway de respaldo (por ejemplo Woovi). Cada tienda tiene una cuenta de pago por gateway, operada por Merkaly.'
+owner: api
+relations: [asaas, payment-account, payment-charge, payments, settings, provider]
+details: 'El gateway principal y el orden de respaldo están en la configuración payment de la tienda. Un respaldo exige que la tienda tenga una cuenta aprobada en ese gateway. Cada cobro guarda su gateway: sus reembolsos, avisos y split pasan siempre por él, aunque después cambie el principal. El api nunca habla con el gateway: lo hace payments.merkaly.io.'
+source: api.merkaly.io src/domain/payment

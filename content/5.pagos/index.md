@@ -10,7 +10,8 @@ navigation:
 
 Cómo la tienda recibe el dinero de sus ventas, lo devuelve y lo retira.
 
-- Merkaly tiene la [cuenta principal](/glosario/merkaly-main-account) en el proveedor de pagos ([Asaas](/glosario/asaas) hoy). Cada tienda tiene su [cuenta de pago](/glosario/payment-account), que solo sirve para recibir.
+- Merkaly tiene la [cuenta principal](/glosario/merkaly-main-account) en el [gateway](/glosario/gateway) ([Asaas](/glosario/asaas) hoy). Cada tienda tiene una [cuenta de pago](/glosario/payment-account) por gateway, que solo sirve para recibir.
+- Qué gateway cobra y con qué métodos lo dice la [configuración](/glosario/settings) `payment` de la tienda (hoy Asaas, Pix, sin respaldo).
 - Cada [cobro](/glosario/payment-charge) se crea en la cuenta de Merkaly con un [split](/glosario/split) del 100 % a la tienda. Merkaly no cobra comisión.
 - El comprador paga con Pix (hoy el único método) y paga la [tarifa Pix](/glosario/pix-fee) encima del pedido.
 - El comerciante pasa su saldo a su llave Pix con un [retiro](/glosario/withdrawal), siempre manual.
@@ -84,6 +85,7 @@ El reembolso de una venta pagada:
 
 ## Decisiones
 
+- [El proveedor no es una integración](/proveedores/decisiones/proveedor-no-es-integracion) (proveedor, gateway, integración y configuración)
 - [payments no guarda estado](/pagos/decisiones/payments-sin-estado)
 - [Un solo estado del cobro](/pagos/decisiones/un-solo-estado-del-cobro)
 - [Un mensaje por proveedor de pagos](/pagos/decisiones/un-mensaje-por-proveedor)
@@ -102,7 +104,7 @@ El reembolso de una venta pagada:
 
 | Dónde | Qué hay |
 | --- | --- |
-| [api.merkaly.io `src/domain/integration/payment`](https://github.com/merkaly-io/api.merkaly.io/tree/master/src/domain/integration/payment) | Cuenta de pago, cobros, retiros y el puente con payments |
+| [api.merkaly.io `src/domain/payment`](https://github.com/merkaly-io/api.merkaly.io/tree/master/src/domain/payment) | Cuenta de pago por gateway, cobros, retiros y el puente con payments |
 | [api.merkaly.io `src/domain/finance`](https://github.com/merkaly-io/api.merkaly.io/tree/master/src/domain/finance) | Registros: pagos, reembolsos, retiros, contracargos y deudas; saldo retirable |
 | [api.merkaly.io `src/application/dashboard/finance`](https://github.com/merkaly-io/api.merkaly.io/tree/master/src/application/dashboard/finance) | Reportes del dashboard: pagos de todas las tiendas y caja de Merkaly |
 | [payments.merkaly.io `docs/contract.md`](https://github.com/merkaly-io/payments.merkaly.io/blob/master/docs/contract.md) | Contrato entre api, webhooks y payments |

@@ -21,11 +21,28 @@ nodes:
     h: 56
   - id: admin
     label: admin
-    caption: Catálogo e Integraciones
+    caption: catálogo
     kind: app
     term: frontends
     x: 200
     y: 110
+    w: 150
+    h: 56
+  - id: staff
+    label: Equipo Merkaly
+    caption: opera las cuentas
+    kind: actor
+    x: 20
+    y: 255
+    w: 130
+    h: 56
+  - id: dashboard
+    label: dashboard
+    caption: clientes y proveedores
+    kind: app
+    term: frontends
+    x: 200
+    y: 255
     w: 150
     h: 56
   - id: buyer
@@ -47,7 +64,7 @@ nodes:
     h: 56
   - id: api
     label: api
-    caption: catálogo e integración
+    caption: catálogo y proveedor
     kind: service
     term: api
     x: 420
@@ -56,7 +73,7 @@ nodes:
     h: 490
   - id: aliexpress
     label: AliExpress
-    caption: cuenta del comerciante
+    caption: cuenta operada por Merkaly
     kind: provider
     term: aliexpress
     x: 710

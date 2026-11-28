@@ -8,18 +8,20 @@ entities:
     summary: El comerciante. Recibe el dinero de las ventas de su tienda en su propia cuenta de pago.
   - id: account
     label: Cuenta de pago
-    caption: settings.payments
+    caption: payment.accounts
     col: 1
     row: 0
     term: payment-account
-    summary: La subcuenta de la tienda en el proveedor de pagos. Una por organización; se crea desde el admin y solo sirve para recibir.
+    summary: La subcuenta de la tienda en un gateway. Una por gateway en cada organización (hoy Asaas); se crea desde el admin y solo sirve para recibir.
     fields:
       - name: holder
         note: titular, persona física o empresa
       - name: pixKey
         note: la llave Pix a la que van los retiros
       - name: gateway
-        note: id de la subcuenta, wallet, credenciales y aprobación (KYC) en el proveedor
+        note: el gateway de la cuenta (ASAAS)
+      - name: external
+        note: id de la subcuenta, wallet, credenciales y aprobación (KYC) en el gateway
   - id: withdrawal
     label: Retiro
     caption: finance.withdrawals

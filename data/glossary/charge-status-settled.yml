@@ -6,4 +6,4 @@ owner: api
 relations:
   - payment-charge
   - payment-received
-source: api.merkaly.io src/domain/integration/payment/enums/charge.enum.ts
+source: api.merkaly.io src/domain/payment/enums/charge.enum.ts

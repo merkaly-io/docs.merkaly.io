@@ -1,0 +1,6 @@
+name: integración
+type: concept
+domain: tienda
+summary: 'Solo lo opcional que conecta el comerciante: píxeles, webhooks, dominio propio. Todavía no hay ninguna implementada.'
+relations: [settings, provider, gateway]
+details: 'El proveedor (AliExpress) y el gateway (Asaas) no son integraciones: los opera Merkaly y la tienda no funciona sin ellos. Cuando existan, sus valores irán en la clave integrations de la configuración.'

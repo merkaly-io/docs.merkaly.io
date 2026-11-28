@@ -1,0 +1,8 @@
+name: configuración (settings)
+type: concept
+domain: tienda
+summary: 'Los valores de la tienda, por clave: organization (perfil, marca, contacto, mercado) y payment (gateway principal, orden de respaldo, métodos habilitados por gateway). Después, integrations. Solo valores, nunca secretos.'
+owner: api
+relations: [organization-settings, gateway, provider, integration, payment-account]
+details: 'Las cuentas que opera Merkaly no son configuración: la cuenta del proveedor vive en el dominio proveedor y las cuentas de pago, una por gateway, en el dominio pagos, porque tienen credenciales. La clave payment empieza con Asaas como principal, sin respaldo y con Pix.'
+source: api.merkaly.io src/domain/settings

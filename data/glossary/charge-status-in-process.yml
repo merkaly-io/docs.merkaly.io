@@ -5,4 +5,4 @@ summary: El proveedor todavía decide, o llegó un estado desconocido. Nunca cue
 owner: api
 relations:
   - payment-charge
-source: api.merkaly.io src/domain/integration/payment/enums/charge.enum.ts
+source: api.merkaly.io src/domain/payment/enums/charge.enum.ts

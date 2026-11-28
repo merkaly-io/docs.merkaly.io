@@ -3,6 +3,6 @@ type: entity
 domain: proveedores
 summary: 'La cuenta de compradora de AliExpress de una organización, creada y operada por Merkaly con el email <org_id>@procurement.merkaly.store y los datos del owner. Una por organización, nunca compartida.'
 owner: api
-relations: [supplier-connection, aliexpress]
-details: 'El alta es manual porque AliExpress no expone una API para crear cuentas: crear, verificar, aceptar los términos del Dropshipping Center y autorizar la app. Los emails de esas cuentas llegan por el ruteo de correo del subdominio procurement.merkaly.store. El equipo ve el estado de cada una en el dashboard (Clientes → Provedores). Si AliExpress bloquea una cuenta, solo esa organización deja de comprar.'
-source: api.merkaly.io src/domain/integration/supplier
+relations: [provider, supplier-connection, aliexpress]
+details: 'El alta es manual porque AliExpress no expone una API para crear cuentas: crear, verificar, aceptar los términos del Dropshipping Center y autorizar la app (la autorización se hace desde el dashboard, nunca desde el admin del comerciante). Los emails de esas cuentas llegan por el ruteo de correo del subdominio procurement.merkaly.store. El equipo ve el estado de cada una en el dashboard (Clientes → Provedores). Si AliExpress bloquea una cuenta, solo esa organización deja de comprar.'
+source: api.merkaly.io src/domain/provider

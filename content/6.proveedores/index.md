@@ -10,7 +10,7 @@ navigation:
 
 De dónde salen los productos y a quién se le compra cada venta.
 
-- Hoy el único proveedor es [AliExpress](/glosario/aliexpress), con la **cuenta propia** de cada comerciante. No hay cuenta de Merkaly de respaldo.
+- Hoy el único proveedor es [AliExpress](/glosario/aliexpress), con **una cuenta por organización**, creada y operada por Merkaly ([cuenta del proveedor](/glosario/supplier-account)). No hay una cuenta compartida de respaldo.
 - El proveedor alimenta el [catálogo](/catalogo) (importar y sincronizar) y los [pedidos](/pedidos) (cotizar, comprar, seguir y cancelar).
 - Cada tienda vende en un solo [mercado](/glosario/market) (hoy Brasil). Las lecturas usan ese país; el costo real se recotiza con el destino del pedido.
 - El comprador nunca ve al proveedor. Los documentos internos sí lo nombran.
@@ -68,7 +68,8 @@ Toca una entidad para ver sus campos clave y con qué se relaciona. Las punteada
 
 ## Decisiones
 
-- [Solo la cuenta propia del comerciante](/proveedores/decisiones/solo-cuenta-propia)
+- [Una cuenta de AliExpress por organización](/proveedores/decisiones/cuenta-por-organizacion)
+- [Solo la cuenta propia del comerciante](/proveedores/decisiones/solo-cuenta-propia) (reemplazada)
 - [Un solo mercado por tienda](/proveedores/decisiones/mercado-unico)
 
 ## En el código

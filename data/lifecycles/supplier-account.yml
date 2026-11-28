@@ -1,0 +1,29 @@
+title: Cuenta del proveedor de la organización
+domain: proveedores
+summary: 'Cada organización tiene su propia cuenta de compradora en AliExpress, creada y operada por Merkaly. Los primeros pasos son manuales (AliExpress no tiene API para crear cuentas); después el estado sale de la conexión y de los pedidos.'
+term: supplier-account
+order: 2
+flags:
+  - id: manual
+    label: paso manual
+    description: 'Lo hace una persona del equipo de Merkaly y lo marca en el dashboard (Clientes → Provedores).'
+  - id: working
+    label: opera
+    description: 'Se puede importar, sincronizar, cotizar y pedir.'
+states:
+  - { id: TO_CREATE, col: 0, row: 0, initial: true, flags: [manual], summary: 'La organización existe y todavía no tiene cuenta. El email es <org_id>@procurement.merkaly.store y los datos son los del owner (nombre, CPF).' }
+  - { id: VERIFYING, col: 1, row: 0, flags: [manual], summary: 'Cuenta creada; AliExpress la está verificando (email, SMS al owner).' }
+  - { id: TERMS_PENDING, col: 2, row: 0, flags: [manual], summary: 'Verificada; falta aceptar los términos del Dropshipping Center. Sin eso la autorización de la app falla.' }
+  - { id: TO_CONNECT, col: 3, row: 0, flags: [manual], summary: 'Lista para autorizar la app de Merkaly (OAuth). Por ahora se conecta desde el admin de la organización.' }
+  - { id: CONNECTED, col: 4, row: 0, flags: [working], summary: 'Conectada y vigente (la conexión está READY).' }
+  - { id: EXPIRED, col: 4, row: 1, summary: 'El token venció y no se pudo renovar. Hay que reconectar.' }
+  - { id: BLOCKED, col: 4, row: 2, summary: 'AliExpress no deja comprar con la cuenta (por ejemplo A006_INVALID_ACCOUNT_INFO). Se resuelve con el soporte de AliExpress.' }
+transitions:
+  - { from: TO_CREATE, to: VERIFYING, by: operador, trigger: 'Crea la cuenta en AliExpress y la marca como creada' }
+  - { from: VERIFYING, to: TERMS_PENDING, by: operador, trigger: 'AliExpress verificó la cuenta' }
+  - { from: TERMS_PENDING, to: TO_CONNECT, by: operador, trigger: 'Acepta los términos en ds.aliexpress.com' }
+  - { from: TO_CONNECT, to: CONNECTED, by: aliexpress, trigger: 'Autoriza la app de Merkaly (OAuth) desde el admin de la organización' }
+  - { from: CONNECTED, to: EXPIRED, by: aliexpress, trigger: 'Vence el token y el refresh ya no sirve' }
+  - { from: EXPIRED, to: CONNECTED, by: aliexpress, trigger: 'Reconecta' }
+  - { from: CONNECTED, to: BLOCKED, by: api, trigger: 'Un pedido falla con un error de cuenta (A006, USER_ACCOUNT_DISABLED, BLACKLIST_BUYER_IN_LIST)' }
+  - { from: BLOCKED, to: CONNECTED, by: operador, trigger: 'Soporte de AliExpress libera la cuenta y un pedido vuelve a pasar' }

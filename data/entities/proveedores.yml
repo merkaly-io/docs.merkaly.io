@@ -15,7 +15,7 @@ entities:
     summary: Una plataforma de la que la tienda compra. Uno por proveedor en cada tienda; hoy AliExpress.
   - id: connection
     label: Conexión
-    caption: cuenta propia, OAuth
+    caption: cuenta por organización, OAuth
     col: 2
     row: 0
     term: supplier-connection

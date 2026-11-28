@@ -1,6 +1,6 @@
 title: Conectar la cuenta de AliExpress
 domain: proveedores
-summary: Cada tienda conecta su propia cuenta de AliExpress. Sin esa conexión, ninguna llamada al proveedor funciona.
+summary: Se conecta la cuenta de AliExpress de la organización (creada por Merkaly) desde su admin. Sin esa conexión, ninguna llamada al proveedor funciona.
 order: 1
 map: catalog
 steps:
@@ -8,14 +8,14 @@ steps:
     to: admin
     kind: http
     label: Conectar
-    title: El comerciante conecta
-    description: Integraciones > Proveedores.
+    title: Se pide la conexión
+    description: 'Integraciones > Proveedores, en el admin de la organización. Por ahora lo hace alguien del equipo de Merkaly; más adelante, desde el dashboard.'
   - from: admin
     to: aliexpress
     kind: http
     label: oauth/authorize
     title: AliExpress pide permiso
-    description: El comerciante entra con su cuenta y autoriza a Merkaly. Vuelve al admin con un código.
+    description: 'Se entra con la cuenta de la organización y se autoriza a Merkaly; vuelve al admin con un código. Antes, la cuenta tiene que haber aceptado los términos del Dropshipping Center. Si el navegador muestra un error propio (no de AliExpress), son cookies viejas de aliexpress.com: incógnito o borrarlas.'
   - from: admin
     to: api
     kind: http
